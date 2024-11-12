@@ -13,6 +13,7 @@ Michelle Chen - Chaotic Cooking!
 
 
 ### Version Control
+I plan to back up my files through regularly pushing to a GitHub respository.
 
 
 ### Tech List
