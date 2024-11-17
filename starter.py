@@ -5,7 +5,23 @@ from PIL import Image
 def onAppStart(app):
     app.keyHeld = None
 
-def redrawAll(app):
+################
+# start screen
+################
+
+def start_redrawAll(app):
+    drawLabel('Welcome!', 200, 160, size=24, bold=True)
+
+
+def start_onKeyPress(app, key):
+    if key == 'space':
+        setActiveScreen('game')
+
+################
+# game screen
+################
+
+def game_redrawAll(app):
     drawImage('./images/cafeImage.PNG', 0, 0, width=640, height=640)
     addCafeCustomerDesks()
     addCafeKitchenDesksBottom()
@@ -25,17 +41,19 @@ def redrawAll(app):
     print(amuro.playerPosX, amuro.playerPosY)
     # print(amuro.selection)
 
-def onStep(app):
+def game_onStep(app):
     if app.keyHeld in ['up', 'down', 'left', 'right']:
         amuro.move(app.keyHeld)
 
-def onKeyPress(app, key):
+def game_onKeyPress(app, key):
     app.keyHeld = key
     if key == 'space':
         amuro.doSelectionDesk()
         amuro.doSelectionFood()
+    if key == 'escape':
+        setActiveScreen('start')
 
-def onKeyRelease(app, key):
+def game_onKeyRelease(app, key):
     if app.keyHeld == key:
         app.keyHeld = None
 
@@ -94,7 +112,8 @@ def drawSelectionFood():
 
 
 def main():
-    runApp(width=640, height=640)
+    runAppWithScreens(width=640, height=640, initialScreen='start')
+    # runApp(width=640, height=640)
 
 
 
