@@ -1,0 +1,8 @@
+### 11/17
+
+* 设置伪3D遮盖 done
+* 加入选择框 
+* 做pop-up窗口
+* 做introduction窗口
+* 做拿起食物跟随动画
+* 设置Plate的class
