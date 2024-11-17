@@ -10,7 +10,7 @@ def onAppStart(app):
 ################
 
 def start_redrawAll(app):
-    drawLabel('Welcome!', 200, 160, size=24, bold=True)
+    drawImage('./images/startScreenImage.PNG', 0, 0, width=640, height=640)
 
 
 def start_onKeyPress(app, key):
