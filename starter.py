@@ -1,6 +1,10 @@
 from cmu_graphics import *
-from player import *
 from PIL import Image
+
+from player import *
+from dish import *
+from plate import *
+from menu import *
 
 # All of the images used are drawn by me.
 
@@ -26,7 +30,7 @@ def start_onKeyPress(app, key):
 ################
 
 def instructions_redrawAll(app):
-    pass
+    drawImage('./images/instructionsScreenImage.PNG', 0, 0, width=640, height=640)
 
 def instructions_onKeyPress(app, key):
     if key == 'space':

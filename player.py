@@ -1,6 +1,9 @@
 from cmu_graphics import *
 from PIL import Image
+from plate import *
+from dish import *
 
+# class for the character the player is controlling
 class Player():
 
     # initialize player
@@ -12,6 +15,7 @@ class Player():
         self.validSpaceImage = './images/cafeValidMovementImage.PNG'
         self.validBoard = [ [1]*640 for row in range(640) ]
         self.selection = (0,0)
+        self.currentPlate = Plate()
 
     
     # move the player
@@ -50,6 +54,7 @@ class Player():
                 if pixel == (0,0,0,0):
                     self.validBoard[x][y] = 0
 
+    # select the desk
     def doSelectionDesk(self):
         if (216 <= self.playerPosX <= 256 and 224 <= self.playerPosY <= 240 and
              self.playerDirX == 0 and self.playerDirY == 1):
@@ -94,7 +99,8 @@ class Player():
                 self.selection = (7,2)
             else:
                 self.selection = (0,0)
-            
+
+    # select the ingredient 
     def doSelectionFood(self):
         if (216 <= self.playerPosX <= 224 and 184 <= self.playerPosY <= 216 and
              self.playerDirX == 0 and self.playerDirY == -1):
@@ -133,5 +139,24 @@ class Player():
             else:
                 self.selection = (0,0)
 
-        
-        
+    # pick up ingredient and add to current plate  
+    def pickUpIngredient(self):
+        if self.selection == (0,0):
+            pass
+        elif self.selection == (3,2):
+            self.currentPlate.addIngredients('plate')
+        elif self.selection == (3.5,2):
+            self.currentPlate.addIngredients('sauce')
+        elif self.selection == (4,2):
+            self.currentPlate.addIngredients('bread')
+        elif self.selection == (4.5,2):
+            self.currentPlate.addIngredients('mayonnaise')
+        elif self.selection == (5,2):
+            self.currentPlate.addIngredients('ham')
+        elif self.selection == (5.5,2):
+            self.currentPlate.addIngredients('lettuce')
+
+    # throw away the current plate
+    def throwAwayPlate(self):
+        if self.selection == (7,2):
+            self.currentPlate.throwAway()
