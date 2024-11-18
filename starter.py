@@ -2,6 +2,8 @@ from cmu_graphics import *
 from player import *
 from PIL import Image
 
+# All of the images used are drawn by me.
+
 def onAppStart(app):
     app.keyHeld = None
 
@@ -16,6 +18,21 @@ def start_redrawAll(app):
 def start_onKeyPress(app, key):
     if key == 'space':
         setActiveScreen('game')
+    elif key == 'enter':
+        setActiveScreen('instructions')
+
+################
+# instructions screen
+################
+
+def instructions_redrawAll(app):
+    pass
+
+def instructions_onKeyPress(app, key):
+    if key == 'space':
+        setActiveScreen('game')
+    elif key == 'escape':
+        setActiveScreen('start')
 
 ################
 # game screen
@@ -113,7 +130,6 @@ def drawSelectionFood():
 
 def main():
     runAppWithScreens(width=640, height=640, initialScreen='start')
-    # runApp(width=640, height=640)
 
 
 
