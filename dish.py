@@ -12,6 +12,7 @@ class Dish:
         self.name = name
 
         # ingredientsNeeded is a list of all the ingredients needed to cook the dish
+        # ingredients should be of the class Ingredient
         self.ingredientsNeeded = ingredientsNeeded
 
     # check if the plate (food cooked by player) is the same dish as the customer ordered

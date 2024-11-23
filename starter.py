@@ -5,6 +5,7 @@ from player import *
 from dish import *
 from plate import *
 from menu import *
+from initializer import *
 
 # All of the images used are drawn by me.
 
@@ -49,7 +50,7 @@ def game_redrawAll(app):
     addTrashCan()
 
     drawSelectionTrashCan()
-    drawSelectionFood()
+    drawSelectionIngredient()
 
     # draw moving amuro
     drawImage('./images/amuroImage.PNG', amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
@@ -59,8 +60,10 @@ def game_redrawAll(app):
 
     drawSelectionDesk()
 
-    print(amuro.playerPosX, amuro.playerPosY)
+    # print(amuro.playerPosX, amuro.playerPosY)
     # print(amuro.selection)
+
+    drawHoldIngredient()
 
 def game_onStep(app):
     if app.keyHeld in ['up', 'down', 'left', 'right']:
@@ -70,7 +73,9 @@ def game_onKeyPress(app, key):
     app.keyHeld = key
     if key == 'space':
         amuro.doSelectionDesk()
-        amuro.doSelectionFood()
+        amuro.doSelectionIngredient()
+        amuro.holdIngredients()
+
     if key == 'escape':
         setActiveScreen('start')
 
@@ -78,6 +83,8 @@ def game_onKeyRelease(app, key):
     if app.keyHeld == key:
         app.keyHeld = None
 
+##########
+# draw things
 
 def addCafeCustomerDesks():
     drawImage('./images/desk1Image.PNG', 96, 544, width=64, height=64, align='center')
@@ -86,18 +93,14 @@ def addCafeCustomerDesks():
     drawImage('./images/desk1Image.PNG', 416, 544, width=64, height=64, align='center')
 
 def addCafeKitchenDesksTop():
-    drawImage('./images/desk2TopImage.PNG', 224, 288, width=64, height=64, align='center')
-    drawImage('./images/desk2TopImage.PNG', 288, 288, width=64, height=64, align='center')
-    drawImage('./images/desk2TopImage.PNG', 352, 288, width=64, height=64, align='center')
-    drawImage('./images/desk2TopImage.PNG', 416, 288, width=64, height=64, align='center')
+    for i in range(224, 417, 64):
+        drawImage('./images/desk2TopImage.PNG', i, 288, width=64, height=64, align='center')
 
 def addCafeKitchenDesksBottom():
     drawImage('./images/desk2Image.PNG', 160, 224, width=64, height=64, align='center')
     drawImage('./images/desk2Image.PNG', 160, 288, width=64, height=64, align='center')
-    drawImage('./images/desk2BottomImage.PNG', 224, 288, width=64, height=64, align='center')
-    drawImage('./images/desk2BottomImage.PNG', 288, 288, width=64, height=64, align='center')
-    drawImage('./images/desk2BottomImage.PNG', 352, 288, width=64, height=64, align='center')
-    drawImage('./images/desk2BottomImage.PNG', 416, 288, width=64, height=64, align='center')
+    for i in range(224,417,64):
+        drawImage('./images/desk2BottomImage.PNG', i, 288, width=64, height=64, align='center')
 
 def addCafeChairs():
     drawImage('./images/chairImage.PNG', 96, 480, width=64, height=64, align='center')
@@ -117,7 +120,7 @@ def drawSelectionTrashCan():
         drawImage('./images/selectionDeskImage.PNG', amuro.selection[0]*64, amuro.selection[1]*64, width=64, height=64, opacity=40)
 
 
-def drawSelectionFood():
+def drawSelectionIngredient():
     if amuro.selection == (3,2):
         drawImage('./images/selectionFoodImage.PNG', 204, 130, width=64, height=64, opacity=40)
     elif amuro.selection == (3.5,2):
@@ -130,16 +133,15 @@ def drawSelectionFood():
         drawImage('./images/selectionFoodImage.PNG', 332, 130, width=64, height=64, opacity=40)
     elif amuro.selection == (5.5,2):
         drawImage('./images/selectionFoodImage.PNG', 356, 130, width=64, height=64, opacity=40)
+    elif amuro.selection == (6,2):
+        drawImage('./images/selectionFoodImage.PNG', 390, 130, width=64, height=64, opacity=40)
 
+def drawHoldIngredient():
+    if amuro.curentHoldIngredient != None:
+        drawImage('./images/hold/holdBGImage.PNG', amuro.playerPosX, amuro.playerPosY, width=64, height=64)
+        drawImage(amuro.curentHoldIngredient.image, amuro.playerPosX, amuro.playerPosY, width=64, height=64)
 
 def main():
     runAppWithScreens(width=640, height=640, initialScreen='start')
-
-
-
-amuro = Player(32, 280, 'amuro')
-amuro.getCafeValidMovement()
-
-
 
 main()

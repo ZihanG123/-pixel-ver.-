@@ -2,6 +2,7 @@ from cmu_graphics import *
 from PIL import Image
 from plate import *
 from dish import *
+from ingredient import *
 
 # class for the character the player is controlling
 class Player():
@@ -15,7 +16,17 @@ class Player():
         self.validSpaceImage = './images/cafeValidMovementImage.PNG'
         self.validBoard = [ [1]*640 for row in range(640) ]
         self.selection = (0,0)
-        self.currentPlate = Plate()
+
+        # the plate on the table
+        self.currentPlate = Plate
+
+        self.curentHoldIngredient = None
+
+        self.validIngredientSelection = [(3,2), (3.5,2), (4,2), (4.5,2), (5,2), (5.5,2), (6,2)]
+        self.ingredientTOSelection = {'ketchup':(3,2), 'curry':(3.5,2), 'bread':(4,2), 'mayonnaise':(4.5,2), 
+                                      'ham':(5,2), 'lettuce':(5.5,2), 'plate':(6,2)}
+        self.selectionToIngredient = {(3,2):'ketchup', (3.5,2):'curry', (4,2):'bread', (4.5,2):'mayonnaise', 
+                                      (5,2):'ham', (5.5,2):'lettuce', (6,2):'plate'}
 
     
     # move the player
@@ -101,7 +112,7 @@ class Player():
                 self.selection = (0,0)
 
     # select the ingredient 
-    def doSelectionFood(self):
+    def doSelectionIngredient(self):
         if (216 <= self.playerPosX <= 224 and 184 <= self.playerPosY <= 216 and
              self.playerDirX == 0 and self.playerDirY == -1):
             if self.selection == (0,0):
@@ -139,24 +150,44 @@ class Player():
             else:
                 self.selection = (0,0)
 
-    # pick up ingredient and add to current plate  
-    def pickUpIngredient(self):
-        if self.selection == (0,0):
-            pass
-        elif self.selection == (3,2):
-            self.currentPlate.addIngredients('plate')
-        elif self.selection == (3.5,2):
-            self.currentPlate.addIngredients('sauce')
-        elif self.selection == (4,2):
-            self.currentPlate.addIngredients('bread')
-        elif self.selection == (4.5,2):
-            self.currentPlate.addIngredients('mayonnaise')
-        elif self.selection == (5,2):
-            self.currentPlate.addIngredients('ham')
-        elif self.selection == (5.5,2):
-            self.currentPlate.addIngredients('lettuce')
+        elif (392 <= self.playerPosX <= 416 and 184 <= self.playerPosY <= 216):
+            if self.selection == (0,0):
+                self.selection = (6,2)
+            else:
+                self.selection = (0,0)
+        
 
     # throw away the current plate
     def throwAwayPlate(self):
         if self.selection == (7,2):
             self.currentPlate.throwAway()
+
+    # pick up ingredients
+    # only one ingredient can be held at a time
+    def holdIngredients(self):
+
+        if self.selection == (0,0):
+            pass
+        
+        if self.selection in self.validIngredientSelection:
+            if self.curentHoldIngredient == None:
+
+                # temp1 will output the ingredient name
+                temp1 = self.selectionToIngredient[self.selection]
+                self.curentHoldIngredient = Ingredient(temp1)
+            
+            else:
+                # get the selection of the ingredient the player currently has
+                # temp2 will output the selection of this ingredient
+                temp2 = self.ingredientTOSelection[self.curentHoldIngredient.name]
+                if self.selection == temp2:
+                    self.curentHoldIngredient = None
+                
+        
+
+
+    # put the ingredient currently have to the table
+    # needs to have a plate
+    def putIngredientToTable(self):
+        if self.selection == (0,0):
+            pass
