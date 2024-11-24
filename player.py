@@ -14,8 +14,9 @@ class Player():
         self.playerPosX = playerPosX
         self.playerPosY = playerPosY
         self.name = name
+        self.speed = 8
         self.validSpaceImage = './images/cafeValidMovementImage.PNG'
-        self.validBoard = [ [1]*640 for row in range(640) ]
+        self.validBoard = [[1]*640 for row in range(640)]
         self.selection = (0,0)
 
         self.select1selection = (5,4)
@@ -51,8 +52,6 @@ class Player():
         {'posX': (328, 352), 'posY': (184, 216), 'dirX': 0, 'dirY': -1, 'selection': (5, 2)},
         {'posX': (360, 384), 'posY': (184, 216), 'dirX': 0, 'dirY': -1, 'selection': (5.5, 2)},
         {'posX': (392, 416), 'posY': (184, 216), 'dirX': 0, 'dirY': -1, 'selection': (6, 2)},]
-
-
     
     # move the player
     def move(self,key):
@@ -67,8 +66,8 @@ class Player():
         elif key == 'right':
             self.playerDirX, self.playerDirY = 1, 0
 
-        newPosX = self.playerPosX + self.playerDirX * 8
-        newPosY = self.playerPosY + self.playerDirY * 8
+        newPosX = self.playerPosX + self.playerDirX * self.speed
+        newPosY = self.playerPosY + self.playerDirY * self.speed
         if 0 <= newPosX < len(self.validBoard) and 0 <= newPosY < len(self.validBoard[0]):
             if self.validBoard[newPosX][newPosY] == 1:
                 self.playerPosX = newPosX

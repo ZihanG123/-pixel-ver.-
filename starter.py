@@ -6,12 +6,20 @@ from dish import *
 from plate import *
 from menu import *
 from ingredient import *
-# from initializer import *
+from customer import *
 
 # All of the images used are drawn by me.
 
 def onAppStart(app):
     app.keyHeld = None
+
+    app.chairs = [(1, 7), (3, 7), (5, 7), (6, 7)]
+    app.desks = [(1, 8), (3, 8), (5, 8), (6, 8)]
+    app.availableSeating = [(1, 7), (1, 9), (3, 7), (3, 9), (5, 7), (5, 9), (6, 7), (6, 9)]
+
+    app.currentCustomerStep = 0
+
+    app.counter = 0
 
 ################
 # start screen
@@ -46,7 +54,7 @@ def instructions_onKeyPress(app, key):
 
 def game_redrawAll(app):
     drawImage('./images/cafeImage.PNG', 0, 0, width=640, height=640)
-    addCafeCustomerDesks()
+    addCafeCustomerDesks(app)
     addCafeKitchenDesksBottom()
     addTrashCan()
 
@@ -57,7 +65,7 @@ def game_redrawAll(app):
     drawImage('./images/amuroImage.PNG', amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
 
     addCafeKitchenDesksTop()
-    addCafeChairs()
+    addCafeChairs(app)
 
     drawSelectionDesk()
 
@@ -70,9 +78,21 @@ def game_redrawAll(app):
 
     drawHoldPlate()
 
+    drawCustomers(app)
+
+
+
 def game_onStep(app):
     if app.keyHeld in ['up', 'down', 'left', 'right']:
         amuro.move(app.keyHeld)
+
+    if app.counter >= 60:
+        if app.currentCustomerStep < len(currentCustomer.pixelPath) - 1:
+            app.currentCustomerStep += 1
+
+    app.counter += 1
+
+
 
 def game_onKeyPress(app, key):
     app.keyHeld = key
@@ -91,6 +111,11 @@ def game_onKeyPress(app, key):
             amuro.select1selection = (5, amuro.select1selection[1] + 1)
             if amuro.select1selection[1] >= 6:
                 amuro.select1selection = (5, 4)
+        if amuro.selection == (6,4):
+            amuro.select2selection = (6, amuro.select2selection[1] + 1)
+            if amuro.select2selection[1] >= 7:
+                amuro.select2selection = (6, 4)
+
 
     if key == 'enter':
         if (amuro.currentPlate.currentIngredients != [] and amuro.selection == (3,4) and 
@@ -108,11 +133,9 @@ def game_onKeyRelease(app, key):
 ##########
 # draw things
 
-def addCafeCustomerDesks():
-    drawImage('./images/desk1Image.PNG', 96, 544, width=64, height=64, align='center')
-    drawImage('./images/desk1Image.PNG', 224, 544, width=64, height=64, align='center')
-    drawImage('./images/desk1Image.PNG', 352, 544, width=64, height=64, align='center')
-    drawImage('./images/desk1Image.PNG', 416, 544, width=64, height=64, align='center')
+def addCafeCustomerDesks(app):
+    for i in app.desks:
+         drawImage('./images/desk1Image.PNG', i[0]*64, i[1]*64, width=64, height=64)
 
 def addCafeKitchenDesksTop():
     for i in range(224, 417, 64):
@@ -124,11 +147,9 @@ def addCafeKitchenDesksBottom():
     for i in range(224,417,64):
         drawImage('./images/desk2BottomImage.PNG', i, 288, width=64, height=64, align='center')
 
-def addCafeChairs():
-    drawImage('./images/chairImage.PNG', 96, 480, width=64, height=64, align='center')
-    drawImage('./images/chairImage.PNG', 224, 480, width=64, height=64, align='center')
-    drawImage('./images/chairImage.PNG', 352, 480, width=64, height=64, align='center')
-    drawImage('./images/chairImage.PNG', 416, 480, width=64, height=64, align='center')
+def addCafeChairs(app):
+    for i in app.chairs:
+        drawImage('./images/chairImage.PNG', i[0]*64, i[1]*64, width=64, height=64)
 
 def addTrashCan():
     drawImage('./images/trashcanImage.PNG', 480, 160, width=64, height=64, align='center')
@@ -140,6 +161,11 @@ def drawSelectionDesk():
     if amuro.selection == (5,4):
         drawImage('./images/select1Image.PNG', amuro.selection[0]*64, amuro.selection[1]*64, width=64, height=128)
         drawImage('./images/selectionDeskImage.PNG', amuro.select1selection[0]*64, amuro.select1selection[1]*64, width=64, height=64, opacity=40)
+
+    if amuro.selection == (6,4):
+        drawImage('./images/select2Image.PNG', amuro.selection[0]*64, amuro.selection[1]*64, width=64, height=192)
+        drawImage('./images/selectionDeskImage.PNG', amuro.select2selection[0]*64, amuro.select2selection[1]*64, width=64, height=64, opacity=40)
+
 
 def drawSelectionTrashCan():
     if amuro.selection == (7,2):
@@ -171,15 +197,17 @@ def drawHoldIngredient():
 def drawPlate():
     if len(amuro.currentPlate.currentIngredients) != 0:
         for item in amuro.currentPlate.currentIngredients:
-            drawImage(f'./images/cooked1/{item.name}CookedImage.PNG', 3*64, 4*64, width=64, height=64)
+            drawImage(f'./images/sandwich/{item.name}CookedImage.PNG', 3*64, 4*64, width=64, height=64)
 
 # draw the plate when picked up
 def drawHoldPlate():
     if len(amuro.currentHoldPlate.currentIngredients) != 0:
         for item in amuro.currentHoldPlate.currentIngredients:
-            drawImage(f'./images/cooked1/{item.name}CookedImage.PNG', amuro.playerPosX, amuro.playerPosY, width=64, height=64)
+            drawImage(f'./images/sandwich/{item.name}CookedImage.PNG', amuro.playerPosX, amuro.playerPosY, width=64, height=64)
 
-
+def drawCustomers(app):
+    posX, posY = currentCustomer.pixelPath[app.currentCustomerStep]
+    drawImage(currentCustomer.image, posX+35, posY+21, width=128, height=128, align='center')
 
 def main():
     runAppWithScreens(width=640, height=640, initialScreen='start')

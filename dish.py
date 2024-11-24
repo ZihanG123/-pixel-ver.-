@@ -42,3 +42,16 @@ class Dish:
 #######
 
 sandwich = Dish('sandwich',[plate, bread, mayonnaise, ham, lettuce])
+
+chickenCurryRice = Dish('chicken curry rice', [plate, rice, curry, chicken])
+tonkatsuCurryRice = Dish('tonkatsu curry rice', [plate, rice, curry, tonkatsu])
+tempuraCurryRice = Dish('tempura curry rice', [plate, rice, curry, tempura])
+
+chickenCurrySpaghetti = Dish('chicken curry spaghetti', [plate, spaghetti, curry, chicken])
+tonkatsuCurrySpaghetti = Dish('tonkatsu curry spaghetti', [plate, spaghetti, curry, tonkatsu])
+tempuraCurrySpaghetti = Dish('tempura curry spaghetti', [plate, spaghetti, curry, tempura])
+
+chickenTomatoSauceSpaghetti = Dish('chicken tomato sauce spaghetti', [plate, spaghetti, ketchup, chicken])
+tonkatsuTomatoSauceSpaghetti = Dish('tonkatsu tomato sauce spaghetti', [plate, spaghetti, ketchup, tonkatsu])
+tempuraTomatoSauceSpaghetti = Dish('tempura tomato sauce spaghetti', [plate, spaghetti, ketchup, tempura])
+
