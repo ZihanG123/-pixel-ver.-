@@ -60,22 +60,26 @@ def game_redrawAll(app):
     drawImage('./images/cafeImage.PNG', 0, 0, width=640, height=640)
     addCafeCustomerDesks(app)
     addCafeKitchenDesksBottom()
+    addKitchenWareBottom()
     addTrashCan()
 
     drawSelectionTrashCan()
     drawSelectionIngredient()
 
     # draw moving amuro
-    # drawImage('./images/amuroImage.PNG', amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
-    drawImage(amuro.spriteAnimatedImages[app.spriteIndex], amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
+    if amuro.isMoving:
+            drawImage(amuro.spriteAnimatedImages[app.spriteIndex], amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
+    else:
+        drawImage('./images/amuroImage.PNG', amuro.playerPosX, amuro.playerPosY-8, width=128, height=128, align='center')
 
 
     addCafeKitchenDesksTop()
+    addKitchenWareTop()
     addCafeChairs(app)
 
     drawSelectionDesk()
 
-    # print(amuro.playerPosX, amuro.playerPosY)
+    print(amuro.playerPosX, amuro.playerPosY)
     # print(amuro.selection)
 
     drawHoldIngredient()
@@ -91,6 +95,9 @@ def game_redrawAll(app):
 def game_onStep(app):
     if app.keyHeld in ['up', 'down', 'left', 'right']:
         amuro.move(app.keyHeld)
+        amuro.isMoving = True
+    else:
+        amuro.isMoving = False
 
     if app.counterCustomer >= 60:
         if app.currentCustomerStep < len(currentCustomer.pixelPath) - 1:
@@ -170,6 +177,17 @@ def addCafeChairs(app):
 
 def addTrashCan():
     drawImage('./images/trashcanImage.PNG', 480, 160, width=64, height=64, align='center')
+
+def addKitchenWareTop():
+    drawImage('./images/fryerTopImage.PNG', 6*64, 4*64, width=64, height=64)
+    drawImage('./images/panTopImage.PNG', 5*64, 4*64, width=64, height=64)
+    drawImage('./images/choppingTopImage.PNG', 4*64, 4*64, width=64, height=64)
+
+def addKitchenWareBottom():
+    drawImage('./images/fryerBottomImage.PNG', 6*64, 4*64, width=64, height=64)
+    drawImage('./images/panBottomImage.PNG', 5*64, 4*64, width=64, height=64)
+    drawImage('./images/choppingBottomImage.PNG', 4*64, 4*64, width=64, height=64)
+
 
 def drawSelectionDesk():
     if amuro.selection != (0,0) and amuro.selection in [(3,4), (4,4), (5,4), (6,4), (2,3)]:

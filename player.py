@@ -15,6 +15,7 @@ class Player():
         self.playerPosY = playerPosY
         self.name = name
         self.speed = 8
+        self.isMoving = False
         self.validSpaceImage = './images/cafeValidMovementImage.PNG'
         self.validBoard = [[1]*640 for row in range(640)]
         self.selection = (0,0)

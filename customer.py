@@ -10,7 +10,7 @@ class Customer:
         self.customerPosX = 0
         self.customerPosY = 4
 
-        self.speed = 8
+        self.speed = 5
         self.validBoard = validBoard
 
         self.targetX = target[0]
@@ -18,7 +18,7 @@ class Customer:
 
         self.visited = set()
         self.path = []
-        self.pixelPath = [(-self.speed*v, 256) for v in range(10,0,-1)]
+        self.pixelPath = [(-self.speed*v, 256) for v in range(80//self.speed+1,0,-1)]
 
         self.isSeated = False
         self.seat = None
