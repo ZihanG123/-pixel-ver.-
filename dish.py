@@ -35,8 +35,10 @@ class Dish:
     def __repr__(self):
         return f'{self.name}: ' + ', '.join(self.ingredientsNeeded)
     
+
+    
 #######
 # initialize dishes
 #######
 
-sandwich = Dish('sandwich',[plate, bread, lettuce, mayonnaise, ham])
+sandwich = Dish('sandwich',[plate, bread, mayonnaise, ham, lettuce])

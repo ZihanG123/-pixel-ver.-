@@ -68,6 +68,8 @@ def game_redrawAll(app):
 
     drawPlate()
 
+    drawHoldPlate()
+
 def game_onStep(app):
     if app.keyHeld in ['up', 'down', 'left', 'right']:
         amuro.move(app.keyHeld)
@@ -78,7 +80,8 @@ def game_onKeyPress(app, key):
         amuro.doSelectionDesk()
         amuro.doSelectionIngredient()
         amuro.holdIngredients()
-        amuro.putIngredientToTable()
+        amuro.makeSandwich()
+        amuro.throwAwayPlate()
 
     if key == 'escape':
         setActiveScreen('start')
@@ -88,6 +91,15 @@ def game_onKeyPress(app, key):
             amuro.select1selection = (5, amuro.select1selection[1] + 1)
             if amuro.select1selection[1] >= 6:
                 amuro.select1selection = (5, 4)
+
+    if key == 'enter':
+        if (amuro.currentPlate.currentIngredients != [] and amuro.selection == (3,4) and 
+            amuro.currentHoldPlate.currentIngredients == []):
+            amuro.pickUpDish()
+        
+        elif (amuro.currentHoldPlate.currentIngredients != [] and amuro.selection == (3,4) and
+            amuro.currentPlate.currentIngredients == []):
+            amuro.putBackDish()
 
 def game_onKeyRelease(app, key):
     if app.keyHeld == key:
@@ -129,12 +141,9 @@ def drawSelectionDesk():
         drawImage('./images/select1Image.PNG', amuro.selection[0]*64, amuro.selection[1]*64, width=64, height=128)
         drawImage('./images/selectionDeskImage.PNG', amuro.select1selection[0]*64, amuro.select1selection[1]*64, width=64, height=64, opacity=40)
 
-
-
 def drawSelectionTrashCan():
     if amuro.selection == (7,2):
         drawImage('./images/selectionDeskImage.PNG', amuro.selection[0]*64, amuro.selection[1]*64, width=64, height=64, opacity=40)
-
 
 def drawSelectionIngredient():
     if amuro.selection == (3,2):
@@ -162,7 +171,14 @@ def drawHoldIngredient():
 def drawPlate():
     if len(amuro.currentPlate.currentIngredients) != 0:
         for item in amuro.currentPlate.currentIngredients:
-            drawImage('./images/plateImage.PNG', 3*64, 4*64, width=64, height=64)
+            drawImage(f'./images/cooked1/{item.name}CookedImage.PNG', 3*64, 4*64, width=64, height=64)
+
+# draw the plate when picked up
+def drawHoldPlate():
+    if len(amuro.currentHoldPlate.currentIngredients) != 0:
+        for item in amuro.currentHoldPlate.currentIngredients:
+            drawImage(f'./images/cooked1/{item.name}CookedImage.PNG', amuro.playerPosX, amuro.playerPosY, width=64, height=64)
+
 
 
 def main():

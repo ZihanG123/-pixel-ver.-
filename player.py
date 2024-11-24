@@ -23,8 +23,10 @@ class Player():
 
         # the plate on the table
         self.currentPlate = Plate()
+        self.currentHoldPlate = Plate()
 
         self.curentHoldIngredient = None
+
 
         self.validIngredientSelection = [(3,2), (3.5,2), (4,2), (4.5,2), (5,2), (5.5,2), (6,2)]
         self.ingredientTOSelection = {'ketchup':(3,2), 'curry':(3.5,2), 'bread':(4,2), 'mayonnaise':(4.5,2), 
@@ -113,7 +115,7 @@ class Player():
     # throw away the current plate
     def throwAwayPlate(self):
         if self.selection == (7,2):
-            self.currentPlate.throwAway()
+            self.currentHoldPlate.throwAway()
 
     # pick up ingredients
     # only one ingredient can be held at a time
@@ -146,18 +148,37 @@ class Player():
                 
         return False
 
-    # put the ingredient currently have to the table
+    # put the ingredient currently have to the table (3,4)
     # needs to have a plate
-    def putIngredientToTable(self):
+    def makeSandwich(self):
         if self.selection == (0,0):
             pass
 
-        # have to first put down plate
-        if self.curentHoldIngredient == plate:
-            if self.currentPlate.currentIngredients == [] and self.selection == (3,4):
-                self.currentPlate.addIngredients(plate)
-                self.curentHoldIngredient = None
+        # make sandwich
+        # ingredients have to be put in order
+        if self.curentHoldIngredient != None and self.selection == (3,4):
+            nextIndex = len(self.currentPlate.currentIngredients)
+            if nextIndex < len(sandwich.ingredientsNeeded):
+                requiredIngredient = sandwich.ingredientsNeeded[nextIndex]
+                if self.curentHoldIngredient == requiredIngredient:
+                    self.currentPlate.addIngredients(self.curentHoldIngredient)
+                    self.curentHoldIngredient = None
 
+    # pick up the dish currently have to the table (3,4)
+    def pickUpDish(self):
+        if (self.currentPlate.currentIngredients != [] and self.selection == (3,4) and 
+            self.currentHoldPlate.currentIngredients == []):
+
+            self.currentHoldPlate = self.currentPlate
+            self.currentPlate = Plate()
+
+    # put back the dish to the table (3,4)
+    def putBackDish(self):
+        if (self.currentHoldPlate.currentIngredients != [] and self.selection == (3,4) and
+            self.currentPlate.currentIngredients == []):
+
+            self.currentPlate = self.currentHoldPlate
+            self.currentHoldPlate = Plate()
 
 
 #######
