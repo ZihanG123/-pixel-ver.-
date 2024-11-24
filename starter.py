@@ -102,6 +102,11 @@ def game_onStep(app):
         app.spriteIndex = (app.spriteIndex + 1) % len(amuro.spriteAnimatedImages)
     app.counterSprite += 1
 
+    customerControll(app)
+
+    if currentCustomer.ordered == False:
+        currentCustomer.startToOrder(cafeMenu)
+
 def game_onKeyPress(app, key):
     app.keyHeld = key
     if key == 'space':
@@ -221,10 +226,12 @@ def drawHoldPlate():
 def drawCustomers(app):
     posX, posY = currentCustomer.pixelPath[app.currentCustomerStep]
     drawImage(currentCustomer.image, posX+35, posY+21, width=128, height=128, align='center')
-    print(posX, posY)
+
+def customerControll(app):
+    posX, posY = currentCustomer.pixelPath[app.currentCustomerStep]
     if (posX, posY) == (currentCustomer.targetX*64, currentCustomer.targetY*64):
         currentCustomer.isSeated = True
-    print(currentCustomer.isSeated)
+
 
 def main():
     runAppWithScreens(width=640, height=640, initialScreen='start')
