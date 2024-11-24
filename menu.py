@@ -10,7 +10,7 @@ class Menu:
 
     # menu should be a list
     def __init__(self, menu):
-        self.cafeMenu = menu
+        self.menu = menu
 
 cafeMenu = Menu([sandwich, chickenCurryRice, tonkatsuCurryRice, tempuraCurryRice, chickenCurrySpaghetti, 
             tonkatsuCurrySpaghetti, tempuraCurrySpaghetti, chickenTomatoSauceSpaghetti, tonkatsuTomatoSauceSpaghetti, 

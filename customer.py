@@ -85,8 +85,12 @@ class Customer:
         if self.isSeated == True and self.ordered == False:
             self.orderNumber = random.randint(1,3)
             self.ordered = True
+            for i in range(self.orderNumber):
+                self.orderDishes.append(cafeMenu.menu[random.randint(0,9)])
         
-        print(self.orderNumber)
+        if self.orderNumber != 0:
+            print(self.orderNumber)
+            print(self.orderDishes)
 
 
 ##########
@@ -129,6 +133,6 @@ currentCustomer = customers[random.randint(0, 9)]
 
 currentCustomer.moveCustomer()
 currentCustomer.boardPathToPixelPath()
-# print(akai.path)
+
 # print(currentCustomer.pixelPath)
 print(currentCustomer.seat)

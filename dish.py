@@ -33,7 +33,7 @@ class Dish:
     
     # print name + ingredients
     def __repr__(self):
-        return f'{self.name}: ' + ', '.join(self.ingredientsNeeded)
+        return f'{self.name}: ' + ', '.join(str(ingredient) for ingredient in self.ingredientsNeeded)
     
 
     
