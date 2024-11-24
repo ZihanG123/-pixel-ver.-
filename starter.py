@@ -75,7 +75,7 @@ def game_redrawAll(app):
 
     drawSelectionDesk()
 
-    print(amuro.playerPosX, amuro.playerPosY)
+    # print(amuro.playerPosX, amuro.playerPosY)
     # print(amuro.selection)
 
     drawHoldIngredient()
@@ -221,6 +221,10 @@ def drawHoldPlate():
 def drawCustomers(app):
     posX, posY = currentCustomer.pixelPath[app.currentCustomerStep]
     drawImage(currentCustomer.image, posX+35, posY+21, width=128, height=128, align='center')
+    print(posX, posY)
+    if (posX, posY) == (currentCustomer.targetX*64, currentCustomer.targetY*64):
+        currentCustomer.isSeated = True
+    print(currentCustomer.isSeated)
 
 def main():
     runAppWithScreens(width=640, height=640, initialScreen='start')

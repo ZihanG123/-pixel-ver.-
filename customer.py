@@ -19,6 +19,12 @@ class Customer:
         self.visited = set()
         self.path = []
         self.pixelPath = [(-self.speed*v, 256) for v in range(10,0,-1)]
+
+        self.isSeated = False
+        self.seat = None
+
+        self.orderNumber = 0
+        self.orderDishes = []
         
     def isValidMove(self, x, y):
             return (0 <= x < len(self.validBoard) and 0 <= y < len(self.validBoard[0]) 
@@ -54,9 +60,6 @@ class Customer:
         self.visited.remove((x, y))
         self.path.pop()
         return False
-
-    def isSeated(self):
-        return (self.customerPosX, self.customerPosY) == (self.targetX, self.targetY)
     
     def boardPathToPixelPath(self):
 
@@ -64,18 +67,19 @@ class Customer:
             start = self.path[i]
             end = self.path[i + 1]
 
-            dx = (end[0] - start[0]) * 64
-            dy = (end[1] - start[1]) * 64
+            dx = (end[0] - start[0])*64
+            dy = (end[1] - start[1])*64
 
             totalDistance = max(abs(dx), abs(dy))
             steps = totalDistance // self.speed 
             for step in range(steps):
-                px = start[0] * 64 + (dx // steps) * step
-                py = start[1] * 64 + (dy // steps) * step
+                px = start[0]*64 + (dx//steps) * step
+                py = start[1]*64 + (dy//steps) * step
                 self.pixelPath.append((px, py))
 
-        self.pixelPath.append((self.path[-1][0] * 64, self.path[-1][1] * 64))
-
+        self.pixelPath.append((self.path[-1][0]*64, self.path[-1][1]*64))
+        if self.pixelPath[-1] == (self.targetX*64, self.targetY*64):
+            self.seat = (self.targetX, self.targetY)
     
 
 
@@ -121,4 +125,4 @@ currentCustomer.moveCustomer()
 currentCustomer.boardPathToPixelPath()
 # print(akai.path)
 # print(currentCustomer.pixelPath)
-
+print(currentCustomer.seat)
