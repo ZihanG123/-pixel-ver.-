@@ -54,4 +54,3 @@ tempuraCurrySpaghetti = Dish('tempura curry spaghetti', [plate, spaghetti, curry
 chickenTomatoSauceSpaghetti = Dish('chicken tomato sauce spaghetti', [plate, spaghetti, ketchup, chicken])
 tonkatsuTomatoSauceSpaghetti = Dish('tonkatsu tomato sauce spaghetti', [plate, spaghetti, ketchup, tonkatsu])
 tempuraTomatoSauceSpaghetti = Dish('tempura tomato sauce spaghetti', [plate, spaghetti, ketchup, tempura])
-

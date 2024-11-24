@@ -120,5 +120,5 @@ currentCustomer = customers[random.randint(0, 9)]
 currentCustomer.moveCustomer()
 currentCustomer.boardPathToPixelPath()
 # print(akai.path)
-print(currentCustomer.pixelPath)
+# print(currentCustomer.pixelPath)
 

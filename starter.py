@@ -93,7 +93,6 @@ def game_onStep(app):
     app.counter += 1
 
 
-
 def game_onKeyPress(app, key):
     app.keyHeld = key
     if key == 'space':
@@ -102,6 +101,7 @@ def game_onKeyPress(app, key):
         amuro.holdIngredients()
         amuro.makeSandwich()
         amuro.throwAwayPlate()
+        amuro.putDownIngredients()
 
     if key == 'escape':
         setActiveScreen('start')
@@ -125,6 +125,9 @@ def game_onKeyPress(app, key):
         elif (amuro.currentHoldPlate.currentIngredients != [] and amuro.selection == (3,4) and
             amuro.currentPlate.currentIngredients == []):
             amuro.putBackDish()
+
+    if key == 'a':
+        amuro.holdFood()
 
 def game_onKeyRelease(app, key):
     if app.keyHeld == key:
@@ -197,13 +200,14 @@ def drawHoldIngredient():
 def drawPlate():
     if len(amuro.currentPlate.currentIngredients) != 0:
         for item in amuro.currentPlate.currentIngredients:
-            drawImage(f'./images/sandwich/{item.name}CookedImage.PNG', 3*64, 4*64, width=64, height=64)
+            drawImage(f'./images/cooked/{item.name}CookedImage.PNG', 3*64, 4*64, width=64, height=64)
+
 
 # draw the plate when picked up
 def drawHoldPlate():
     if len(amuro.currentHoldPlate.currentIngredients) != 0:
         for item in amuro.currentHoldPlate.currentIngredients:
-            drawImage(f'./images/sandwich/{item.name}CookedImage.PNG', amuro.playerPosX, amuro.playerPosY, width=64, height=64)
+            drawImage(f'./images/cooked/{item.name}CookedImage.PNG', amuro.playerPosX, amuro.playerPosY, width=64, height=64)
 
 def drawCustomers(app):
     posX, posY = currentCustomer.pixelPath[app.currentCustomerStep]
