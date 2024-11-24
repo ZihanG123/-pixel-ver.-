@@ -1,5 +1,6 @@
 from cmu_graphics import *
 from PIL import Image
+from urllib.request import urlopen
 
 from player import *
 from dish import *
@@ -19,7 +20,10 @@ def onAppStart(app):
 
     app.currentCustomerStep = 0
 
-    app.counter = 0
+    app.counterCustomer = 0
+
+    app.spriteIndex = 0
+    app.counterSprite = 0
 
 ################
 # start screen
@@ -62,14 +66,16 @@ def game_redrawAll(app):
     drawSelectionIngredient()
 
     # draw moving amuro
-    drawImage('./images/amuroImage.PNG', amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
+    # drawImage('./images/amuroImage.PNG', amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
+    drawImage(amuro.spriteAnimatedImages[app.spriteIndex], amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
+
 
     addCafeKitchenDesksTop()
     addCafeChairs(app)
 
     drawSelectionDesk()
 
-    # print(amuro.playerPosX, amuro.playerPosY)
+    print(amuro.playerPosX, amuro.playerPosY)
     # print(amuro.selection)
 
     drawHoldIngredient()
@@ -86,12 +92,15 @@ def game_onStep(app):
     if app.keyHeld in ['up', 'down', 'left', 'right']:
         amuro.move(app.keyHeld)
 
-    if app.counter >= 60:
+    if app.counterCustomer >= 60:
         if app.currentCustomerStep < len(currentCustomer.pixelPath) - 1:
             app.currentCustomerStep += 1
 
-    app.counter += 1
+    app.counterCustomer += 1
 
+    if app.counterSprite % 5 == 0:
+        app.spriteIndex = (app.spriteIndex + 1) % len(amuro.spriteAnimatedImages)
+    app.counterSprite += 1
 
 def game_onKeyPress(app, key):
     app.keyHeld = key

@@ -56,6 +56,18 @@ class Player():
         {'posX': (328, 352), 'posY': (184, 216), 'dirX': 0, 'dirY': -1, 'selection': (5, 2)},
         {'posX': (360, 384), 'posY': (184, 216), 'dirX': 0, 'dirY': -1, 'selection': (5.5, 2)},
         {'posX': (392, 416), 'posY': (184, 216), 'dirX': 0, 'dirY': -1, 'selection': (6, 2)},]
+
+        self.spritePilImages = []
+        self.spriteAnimatedImages = []
+        self.loadSpritePilImages()
+        self.spriteAnimatedImages = [CMUImage(pilImage) for pilImage in self.spritePilImages]
+
+        self.customerDeskSelections = [
+        {'posX': (464, 480), 'posY': (504, 568), 'dirX': -1, 'dirY': 0, 'selection': (6, 8)},
+        {'posX': (392, 480), 'posY': (560, 568), 'dirX': 0, 'dirY': -1, 'selection': (6, 8)},
+        {'posX': (296, 384), 'posY': (560, 568), 'dirX': 0, 'dirY': -1, 'selection': (5, 8)},
+        {'posX': (296, 384), 'posY': (560, 568), 'dirX': 0, 'dirY': -1, 'selection': (5, 8)}
+        ]
     
     # move the player
     def move(self,key):
@@ -76,6 +88,15 @@ class Player():
             if self.validBoard[newPosX][newPosY] == 1:
                 self.playerPosX = newPosX
                 self.playerPosY = newPosY
+
+    def loadSpritePilImages(self):
+        spritestrip = Image.open('./images/amuroAnimationImage.PNG')
+        spritestrip = spritestrip.resize((512,128))
+        for i in range(4):
+            spriteImage = spritestrip.crop((0+128*i, 0, 128+128*i, 128))
+            self.spritePilImages.append(spriteImage)
+        return self.spritePilImages
+
 
     # get the valid coordinates that the player can move
     def getCafeValidMovement(self):
