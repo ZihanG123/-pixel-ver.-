@@ -5,7 +5,8 @@ from player import *
 from dish import *
 from plate import *
 from menu import *
-from initializer import *
+from ingredient import *
+# from initializer import *
 
 # All of the images used are drawn by me.
 
@@ -65,6 +66,8 @@ def game_redrawAll(app):
 
     drawHoldIngredient()
 
+    drawPlate()
+
 def game_onStep(app):
     if app.keyHeld in ['up', 'down', 'left', 'right']:
         amuro.move(app.keyHeld)
@@ -75,9 +78,16 @@ def game_onKeyPress(app, key):
         amuro.doSelectionDesk()
         amuro.doSelectionIngredient()
         amuro.holdIngredients()
+        amuro.putIngredientToTable()
 
     if key == 'escape':
         setActiveScreen('start')
+
+    if key == 's' or key == 'w':
+        if amuro.selection == (5,4):
+            amuro.select1selection = (5, amuro.select1selection[1] + 1)
+            if amuro.select1selection[1] >= 6:
+                amuro.select1selection = (5, 4)
 
 def game_onKeyRelease(app, key):
     if app.keyHeld == key:
@@ -115,6 +125,12 @@ def drawSelectionDesk():
     if amuro.selection != (0,0) and amuro.selection in [(3,4), (4,4), (5,4), (6,4), (2,3)]:
         drawImage('./images/selectionDeskImage.PNG', amuro.selection[0]*64, amuro.selection[1]*64, width=64, height=64, opacity=40)
 
+    if amuro.selection == (5,4):
+        drawImage('./images/select1Image.PNG', amuro.selection[0]*64, amuro.selection[1]*64, width=64, height=128)
+        drawImage('./images/selectionDeskImage.PNG', amuro.select1selection[0]*64, amuro.select1selection[1]*64, width=64, height=64, opacity=40)
+
+
+
 def drawSelectionTrashCan():
     if amuro.selection == (7,2):
         drawImage('./images/selectionDeskImage.PNG', amuro.selection[0]*64, amuro.selection[1]*64, width=64, height=64, opacity=40)
@@ -136,10 +152,18 @@ def drawSelectionIngredient():
     elif amuro.selection == (6,2):
         drawImage('./images/selectionFoodImage.PNG', 390, 130, width=64, height=64, opacity=40)
 
+# draw the ingredient that the player is currently holding
 def drawHoldIngredient():
     if amuro.curentHoldIngredient != None:
         drawImage('./images/hold/holdBGImage.PNG', amuro.playerPosX, amuro.playerPosY, width=64, height=64)
         drawImage(amuro.curentHoldIngredient.image, amuro.playerPosX, amuro.playerPosY, width=64, height=64)
+
+# draw the plate at position (3,4)
+def drawPlate():
+    if len(amuro.currentPlate.currentIngredients) != 0:
+        for item in amuro.currentPlate.currentIngredients:
+            drawImage('./images/plateImage.PNG', 3*64, 4*64, width=64, height=64)
+
 
 def main():
     runAppWithScreens(width=640, height=640, initialScreen='start')

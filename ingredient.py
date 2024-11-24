@@ -1,9 +1,6 @@
 from cmu_graphics import *
 from PIL import Image
 
-from plate import *
-from dish import *
-from player import *
 
 class Ingredient:
 
@@ -22,4 +19,17 @@ class Ingredient:
 
     def __eq__(self,other):
         return (isinstance(other, Ingredient) and self.name == other.name)
+    
+
+########
+# initialize ingredients
+########
+
+ketchup = Ingredient('ketchup')
+curry = Ingredient('curry')
+bread = Ingredient('bread')
+mayonnaise = Ingredient('mayonnaise')
+ham = Ingredient('ham')
+lettuce = Ingredient('lettuce')
+plate = Ingredient('plate')
 

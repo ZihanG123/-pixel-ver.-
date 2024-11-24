@@ -4,6 +4,7 @@ from plate import *
 from dish import *
 from ingredient import *
 
+
 # class for the character the player is controlling
 class Player():
 
@@ -17,8 +18,11 @@ class Player():
         self.validBoard = [ [1]*640 for row in range(640) ]
         self.selection = (0,0)
 
+        self.select1selection = (5,4)
+        self.select2selection = (6,4)
+
         # the plate on the table
-        self.currentPlate = Plate
+        self.currentPlate = Plate()
 
         self.curentHoldIngredient = None
 
@@ -27,6 +31,25 @@ class Player():
                                       'ham':(5,2), 'lettuce':(5.5,2), 'plate':(6,2)}
         self.selectionToIngredient = {(3,2):'ketchup', (3.5,2):'curry', (4,2):'bread', (4.5,2):'mayonnaise', 
                                       (5,2):'ham', (5.5,2):'lettuce', (6,2):'plate'}
+        
+        self.deskSelections = [
+        {'posX': (216, 256), 'posY': (224, 240), 'dirX': 0, 'dirY': 1, 'selection': (3, 4)},
+        {'posX': (264, 320), 'posY': (224, 240), 'dirX': 0, 'dirY': 1, 'selection': (4, 4)},
+        {'posX': (328, 384), 'posY': (224, 240), 'dirX': 0, 'dirY': 1, 'selection': (5, 4)},
+        {'posX': (392, 448), 'posY': (224, 240), 'dirX': 0, 'dirY': 1, 'selection': (6, 4)},
+        {'posX': (216, 232), 'posY': (192, 240), 'dirX': -1, 'dirY': 0, 'selection': (2, 3)},
+        {'posX': (464, 512), 'posY': (184, 224), 'dirX': 0, 'dirY': -1, 'selection': (7, 2)},
+        {'posX': (528, 536), 'posY': (120, 176), 'dirX': -1, 'dirY': 0, 'selection': (7, 2)},]
+
+        self.ingredientSelections = [
+        {'posX': (216, 224), 'posY': (184, 216), 'dirX': 0, 'dirY': -1, 'selection': (3, 2)},
+        {'posX': (232, 256), 'posY': (184, 216), 'dirX': 0, 'dirY': -1, 'selection': (3.5, 2)},
+        {'posX': (264, 288), 'posY': (184, 216), 'dirX': 0, 'dirY': -1, 'selection': (4, 2)},
+        {'posX': (296, 320), 'posY': (184, 216), 'dirX': 0, 'dirY': -1, 'selection': (4.5, 2)},
+        {'posX': (328, 352), 'posY': (184, 216), 'dirX': 0, 'dirY': -1, 'selection': (5, 2)},
+        {'posX': (360, 384), 'posY': (184, 216), 'dirX': 0, 'dirY': -1, 'selection': (5.5, 2)},
+        {'posX': (392, 416), 'posY': (184, 216), 'dirX': 0, 'dirY': -1, 'selection': (6, 2)},]
+
 
     
     # move the player
@@ -34,17 +57,13 @@ class Player():
         if key not in ['up','down','left','right']:
             pass
         if key == 'up':
-            self.playerDirY = -1
-            self.playerDirX = 0
+            self.playerDirX, self.playerDirY = 0, -1
         elif key == 'down':
-            self.playerDirY = 1
-            self.playerDirX = 0
+            self.playerDirX, self.playerDirY = 0, 1
         elif key == 'left':
-            self.playerDirX = -1
-            self.playerDirY = 0
+            self.playerDirX, self.playerDirY = -1, 0
         elif key == 'right':
-            self.playerDirX = 1
-            self.playerDirY = 0
+            self.playerDirX, self.playerDirY = 1, 0
 
         newPosX = self.playerPosX + self.playerDirX * 8
         newPosY = self.playerPosY + self.playerDirY * 8
@@ -67,95 +86,29 @@ class Player():
 
     # select the desk
     def doSelectionDesk(self):
-        if (216 <= self.playerPosX <= 256 and 224 <= self.playerPosY <= 240 and
-             self.playerDirX == 0 and self.playerDirY == 1):
-            if self.selection == (0,0):
-                self.selection = (3,4)
-            else:
-                self.selection = (0,0)
-
-        elif (264 <= self.playerPosX <= 320 and 224 <= self.playerPosY <= 240 and
-             self.playerDirX == 0 and self.playerDirY == 1):
-            if self.selection == (0,0):
-                self.selection = (4,4)
-            else:
-                self.selection = (0,0)
-            
-        elif (328 <= self.playerPosX <= 384 and 224 <= self.playerPosY <= 240 and
-             self.playerDirX == 0 and self.playerDirY == 1):
-            if self.selection == (0,0):
-                self.selection = (5,4)
-            else:
-                self.selection = (0,0)
-            
-        elif (392 <= self.playerPosX <= 448 and 224 <= self.playerPosY <= 240 and
-             self.playerDirX == 0 and self.playerDirY == 1):
-            if self.selection == (0,0):
-                self.selection = (6,4)
-            else:
-                self.selection = (0,0)
-
-        elif (216 <= self.playerPosX <= 232 and 192 <= self.playerPosY <= 240 and
-             self.playerDirX == -1 and self.playerDirY == 0):
-            if self.selection == (0,0):
-                self.selection = (2,3)
-            else:
-                self.selection = (0,0)
-
-        elif ((464 <= self.playerPosX <= 512 and 184 <= self.playerPosY <= 224 and
-             self.playerDirX == 0 and self.playerDirY == -1) or 
-             (528 <= self.playerPosX <= 536 and 120 <= self.playerPosY <= 176 and
-             self.playerDirX == -1 and self.playerDirY == 0)):
-            if self.selection == (0,0):
-                self.selection = (7,2)
-            else:
-                self.selection = (0,0)
+        for desk in self.deskSelections:
+            if (desk['posX'][0] <= self.playerPosX <= desk['posX'][1] and
+                desk["posY"][0] <= self.playerPosY <= desk["posY"][1] and
+                self.playerDirX == desk['dirX'] and self.playerDirY == desk['dirY']):
+                
+                if self.selection == (0, 0):
+                    self.selection = desk['selection']
+                else:
+                    self.selection = (0, 0)
+                break
 
     # select the ingredient 
     def doSelectionIngredient(self):
-        if (216 <= self.playerPosX <= 224 and 184 <= self.playerPosY <= 216 and
-             self.playerDirX == 0 and self.playerDirY == -1):
-            if self.selection == (0,0):
-                self.selection = (3,2)
-            else:
-                self.selection = (0,0)
+        for ingredient in self.ingredientSelections:
+            if (ingredient['posX'][0] <= self.playerPosX <= ingredient['posX'][1] and
+                ingredient['posY'][0] <= self.playerPosY <= ingredient['posY'][1] and
+                self.playerDirX == ingredient['dirX'] and self.playerDirY == ingredient['dirY']):
 
-        elif (232 <= self.playerPosX <= 256 and 184 <= self.playerPosY <= 216):
-            if self.selection == (0,0):
-                self.selection = (3.5,2)
-            else:
-                self.selection = (0,0)
-
-        elif (264 <= self.playerPosX <= 288 and 184 <= self.playerPosY <= 216):
-            if self.selection == (0,0):
-                self.selection = (4,2)
-            else:
-                self.selection = (0,0)
-        
-        elif (296 <= self.playerPosX <= 320 and 184 <= self.playerPosY <= 216):
-            if self.selection == (0,0):
-                self.selection = (4.5,2)
-            else:
-                self.selection = (0,0)
-
-        elif (328 <= self.playerPosX <= 352 and 184 <= self.playerPosY <= 216):
-            if self.selection == (0,0):
-                self.selection = (5,2)
-            else:
-                self.selection = (0,0)
-
-        elif (360 <= self.playerPosX <= 384 and 184 <= self.playerPosY <= 216):
-            if self.selection == (0,0):
-                self.selection = (5.5,2)
-            else:
-                self.selection = (0,0)
-
-        elif (392 <= self.playerPosX <= 416 and 184 <= self.playerPosY <= 216):
-            if self.selection == (0,0):
-                self.selection = (6,2)
-            else:
-                self.selection = (0,0)
-        
+                if self.selection == (0, 0):
+                    self.selection = ingredient['selection']
+                else:
+                    self.selection = (0, 0)
+                break
 
     # throw away the current plate
     def throwAwayPlate(self):
@@ -165,29 +118,52 @@ class Player():
     # pick up ingredients
     # only one ingredient can be held at a time
     def holdIngredients(self):
-
-        if self.selection == (0,0):
-            pass
-        
         if self.selection in self.validIngredientSelection:
             if self.curentHoldIngredient == None:
 
-                # temp1 will output the ingredient name
-                temp1 = self.selectionToIngredient[self.selection]
-                self.curentHoldIngredient = Ingredient(temp1)
+                # ingredient1 will output the ingredient name
+                ingredient1 = self.selectionToIngredient[self.selection]
+                self.curentHoldIngredient = Ingredient(ingredient1)
+
             
             else:
                 # get the selection of the ingredient the player currently has
                 # temp2 will output the selection of this ingredient
-                temp2 = self.ingredientTOSelection[self.curentHoldIngredient.name]
-                if self.selection == temp2:
+                selection1 = self.ingredientTOSelection[self.curentHoldIngredient.name]
+                if self.selection == selection1 and self.validUnselection():
+                    # self.selection = (0,0)
                     self.curentHoldIngredient = None
-                
         
+    # check to see if the unselection is valid
+    def validUnselection(self):
+        for ingredient in self.ingredientSelections:
+            if (ingredient['posX'][0] <= self.playerPosX <= ingredient['posX'][1] and
+                ingredient['posY'][0] <= self.playerPosY <= ingredient['posY'][1] and
+                self.playerDirX == ingredient['dirX'] and self.playerDirY == ingredient['dirY']):
 
+                if self.selection == ingredient['selection']:
+                    return True
+                
+        return False
 
     # put the ingredient currently have to the table
     # needs to have a plate
     def putIngredientToTable(self):
         if self.selection == (0,0):
             pass
+
+        # have to first put down plate
+        if self.curentHoldIngredient == plate:
+            if self.currentPlate.currentIngredients == [] and self.selection == (3,4):
+                self.currentPlate.addIngredients(plate)
+                self.curentHoldIngredient = None
+
+
+
+#######
+# initialize player
+#######
+
+# amuro = Player(32, 280, 'amuro')
+amuro = Player(480, 216, 'amuro')
+amuro.getCafeValidMovement()

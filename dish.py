@@ -1,5 +1,6 @@
 from cmu_graphics import *
 from PIL import Image
+from ingredient import *
 
 # class for all the dishes in the menu
 class Dish:
@@ -33,3 +34,9 @@ class Dish:
     # print name + ingredients
     def __repr__(self):
         return f'{self.name}: ' + ', '.join(self.ingredientsNeeded)
+    
+#######
+# initialize dishes
+#######
+
+sandwich = Dish('sandwich',[plate, bread, lettuce, mayonnaise, ham])
