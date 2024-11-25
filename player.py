@@ -248,7 +248,7 @@ class Player():
             pass
 
         if self.curentHoldIngredient != None and self.currentPlate.currentIngredients != [] and self.selection == (3,4):
-            if self.currentPlate.currentIngredients[0] == plate:
+            if self.currentPlate.currentIngredients[0] == plate and self.curentHoldIngredient not in self.currentPlate.currentIngredients:
                 self.currentPlate.addIngredients(self.curentHoldIngredient)
                 self.curentHoldIngredient = None
 
