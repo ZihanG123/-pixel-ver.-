@@ -41,7 +41,7 @@ class Customer:
         else:
             return None
 
-        
+    # find path from the door (0,4) to the customer's seat (backtracking)    
     def move(self, x, y, directions):
         if (x, y) == (self.targetX, self.targetY):
             self.path.append((x, y))
@@ -62,6 +62,7 @@ class Customer:
         self.path.pop()
         return False
     
+    # make the path to pixel path so the customer can move more smoothly
     def boardPathToPixelPath(self):
         for i in range(len(self.path) - 1):
             start = self.path[i]
@@ -81,6 +82,7 @@ class Customer:
         if self.pixelPath[-1] == (self.targetX*64, self.targetY*64):
             self.seat = (self.targetX, self.targetY)
     
+    # customer order
     def startToOrder(self, cafeMenu):
         if self.isSeated == True and self.ordered == False:
             self.orderNumber = random.randint(1,3)

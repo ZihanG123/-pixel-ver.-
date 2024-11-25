@@ -90,6 +90,7 @@ class Player():
                 self.playerPosX = newPosX
                 self.playerPosY = newPosY
 
+    # this part of the code referenced the TP-related demos in the course notes
     def loadSpritePilImages(self):
         spritestrip = Image.open('./images/amuroAnimationImage.PNG')
         spritestrip = spritestrip.resize((512,128))
