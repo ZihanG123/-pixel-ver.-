@@ -79,7 +79,7 @@ def game_redrawAll(app):
 
     drawSelectionDesk()
 
-    print(amuro.playerPosX, amuro.playerPosY)
+    # print(amuro.playerPosX, amuro.playerPosY)
     # print(amuro.selection)
 
     drawHoldIngredient()
