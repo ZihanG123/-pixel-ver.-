@@ -93,6 +93,17 @@ class Player():
     # this part of the code referenced the TP-related demos in the course notes
     def loadSpritePilImages(self):
         spritestrip = Image.open('./images/amuroAnimationFrontImage.PNG')
+        self.spritePilImages = []
+        if self.playerDirX == 0 and self.playerDirY == 1:
+            spritestrip = Image.open('./images/amuroAnimationFrontImage.PNG')
+        elif self.playerDirX == 0 and self.playerDirY == -1:
+            spritestrip = Image.open('./images/amuroAnimationBackImage.PNG')
+        elif self.playerDirX == 1 and self.playerDirY == 0:
+            spritestrip = Image.open('./images/amuroAnimationRightImage.PNG')
+        elif self.playerDirX == -1 and self.playerDirY == 0:
+            spritestrip = Image.open('./images/amuroAnimationLeftImage.PNG')
+        
+                
         spritestrip = spritestrip.resize((512,128))
         for i in range(4):
             spriteImage = spritestrip.crop((0+128*i, 0, 128+128*i, 128))

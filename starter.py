@@ -68,10 +68,21 @@ def game_redrawAll(app):
 
     # draw moving amuro
     if amuro.isMoving:
-            drawImage(amuro.spriteAnimatedImages[app.spriteIndex], amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
+        amuro.loadSpritePilImages()
+        amuro.spriteAnimatedImages = [CMUImage(pilImage) for pilImage in amuro.spritePilImages]
+        drawImage(amuro.spriteAnimatedImages[app.spriteIndex], amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
     else:
-        drawImage('./images/amuroImage.PNG', amuro.playerPosX, amuro.playerPosY-8, width=128, height=128, align='center')
-
+        if amuro.playerDirX == 0 and amuro.playerDirY == 1:
+            drawImage('./images/amuroFrontImage.PNG', amuro.playerPosX, amuro.playerPosY-8, width=128, height=128, align='center')
+        elif amuro.playerDirX == 0 and amuro.playerDirY == -1:
+            drawImage('./images/amuroBackImage.PNG', amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
+        elif amuro.playerDirX == 1 and amuro.playerDirY == 0:
+            drawImage('./images/amuroRightImage.PNG', amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
+        elif amuro.playerDirX == -1 and amuro.playerDirY == 0:
+            drawImage('./images/amuroLeftImage.PNG', amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
+        elif amuro.playerDirX == 0 and amuro.playerDirY == 0:
+            drawImage('./images/amuroFrontImage.PNG', amuro.playerPosX, amuro.playerPosY-8, width=128, height=128, align='center')
+    
 
     addCafeKitchenDesksTop()
     addKitchenWareTop()
@@ -95,6 +106,7 @@ def game_redrawAll(app):
 def game_onStep(app):
     if app.keyHeld in ['up', 'down', 'left', 'right']:
         amuro.move(app.keyHeld)
+        # amuro.loadSpritePilImages()
         amuro.isMoving = True
     else:
         amuro.isMoving = False
