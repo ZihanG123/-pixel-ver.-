@@ -3,6 +3,7 @@ from PIL import Image
 from plate import *
 from dish import *
 from ingredient import *
+from kitchen import *
 
 
 # class for the character the player is controlling
@@ -31,32 +32,32 @@ class Player():
 
 
         self.validIngredientSelection = [(3,2), (3.5,2), (4,2), (4.5,2), (5,2), (5.5,2), (6,2)]
-        self.ingredientToSelection = {'ketchup':(3,2), 'curry':(3.5,2), 'bread':(4,2), 'mayonnaise':(4.5,2), 
-                                      'ham':(5,2), 'lettuce':(5.5,2), 'plate':(6,2), 'rice':(5,4), 
-                                      'spaghetti':(5,5), 'tonkatsu':(6,4), 'chicken':(6,5), 'tempura':(6,6)}
-        self.selectionToIngredient = {(3,2):'ketchup', (3.5,2):'curry', (4,2):'bread', (4.5,2):'mayonnaise', 
-                                      (5,2):'ham', (5.5,2):'lettuce', (6,2):'plate', (5,4):'rice', (5,5):'spaghetti', 
-                                      (6,4):'tonkatsu', (6,5):'chicken', (6,6):'tempura'}
+        self.ingredientToSelection = {ketchup:(3,2), curry:(3.5,2), bread:(4,2), mayonnaise:(4.5,2), 
+                                      ham:(5,2), lettuce:(5.5,2), plate:(6,2), rice:(5,4), 
+                                      spaghetti:(5,5), tonkatsu:(6,4), chicken:(6,5), tempura:(6,6)}
+        self.selectionToIngredient = {(3,2):ketchup, (3.5,2):curry, (4,2):bread, (4.5,2):mayonnaise, 
+                                      (5,2):ham, (5.5,2):lettuce, (6,2):plate, (5,4):rice, (5,5):spaghetti, 
+                                      (6,4):tonkatsu, (6,5):chicken, (6,6):tempura}
         
         self.validDeskSelection = [(3,4), (4,4), (5,4), (6,4)]
         
         self.deskSelections = [
-        {'posX': (216, 256), 'posY': (224, 240), 'dirX': 0, 'dirY': 1, 'selection': (3, 4)},
-        {'posX': (264, 320), 'posY': (224, 240), 'dirX': 0, 'dirY': 1, 'selection': (4, 4)},
-        {'posX': (328, 384), 'posY': (224, 240), 'dirX': 0, 'dirY': 1, 'selection': (5, 4)},
-        {'posX': (392, 448), 'posY': (224, 240), 'dirX': 0, 'dirY': 1, 'selection': (6, 4)},
-        {'posX': (216, 232), 'posY': (192, 240), 'dirX': -1, 'dirY': 0, 'selection': (2, 3)},
-        {'posX': (464, 512), 'posY': (184, 224), 'dirX': 0, 'dirY': -1, 'selection': (7, 2)},
-        {'posX': (528, 536), 'posY': (120, 176), 'dirX': -1, 'dirY': 0, 'selection': (7, 2)},]
+        {'posX':(216,256), 'posY':(224,240), 'dirX':0, 'dirY':1, 'selection':(3,4)},
+        {'posX':(264,320), 'posY':(224,240), 'dirX':0, 'dirY':1, 'selection':(4,4)},
+        {'posX':(328,384), 'posY':(224,240), 'dirX':0, 'dirY':1, 'selection':(5,4)},
+        {'posX':(392,448), 'posY':(224,240), 'dirX':0, 'dirY':1, 'selection':(6,4)},
+        {'posX':(216,232), 'posY':(192,240), 'dirX':-1, 'dirY':0, 'selection':(2,3)},
+        {'posX':(464,512), 'posY':(184,224), 'dirX':0, 'dirY':-1, 'selection':(7,2)},
+        {'posX':(528,536), 'posY':(120,176), 'dirX':-1, 'dirY':0, 'selection':(7,2)},]
 
         self.ingredientSelections = [
-        {'posX': (216, 224), 'posY': (184, 216), 'dirX': 0, 'dirY': -1, 'selection': (3, 2)},
-        {'posX': (232, 256), 'posY': (184, 216), 'dirX': 0, 'dirY': -1, 'selection': (3.5, 2)},
-        {'posX': (264, 288), 'posY': (184, 216), 'dirX': 0, 'dirY': -1, 'selection': (4, 2)},
-        {'posX': (296, 320), 'posY': (184, 216), 'dirX': 0, 'dirY': -1, 'selection': (4.5, 2)},
-        {'posX': (328, 352), 'posY': (184, 216), 'dirX': 0, 'dirY': -1, 'selection': (5, 2)},
-        {'posX': (360, 384), 'posY': (184, 216), 'dirX': 0, 'dirY': -1, 'selection': (5.5, 2)},
-        {'posX': (392, 416), 'posY': (184, 216), 'dirX': 0, 'dirY': -1, 'selection': (6, 2)},]
+        {'posX':(216,224), 'posY':(184,216), 'selection':(3,2)},
+        {'posX':(232,256), 'posY':(184,216), 'selection':(3.5,2)},
+        {'posX':(264,288), 'posY':(184,216), 'selection':(4,2)},
+        {'posX':(296,320), 'posY':(184,216), 'selection':(4.5,2)},
+        {'posX':(328,352), 'posY':(184,216), 'selection':(5,2)},
+        {'posX':(360,384), 'posY':(184,216), 'selection':(5.5,2)},
+        {'posX':(392,416), 'posY':(184,216), 'selection':(6,2)},]
 
         self.spritePilImages = []
         self.spriteAnimatedImages = []
@@ -64,11 +65,18 @@ class Player():
         self.spriteAnimatedImages = [CMUImage(pilImage) for pilImage in self.spritePilImages]
 
         self.customerDeskSelections = [
-        {'posX': (464, 480), 'posY': (504, 568), 'dirX': -1, 'dirY': 0, 'selection': (6, 8)},
-        {'posX': (392, 480), 'posY': (560, 568), 'dirX': 0, 'dirY': -1, 'selection': (6, 8)},
-        {'posX': (296, 384), 'posY': (560, 568), 'dirX': 0, 'dirY': -1, 'selection': (5, 8)},
-        {'posX': (296, 384), 'posY': (560, 568), 'dirX': 0, 'dirY': -1, 'selection': (5, 8)}
+        {'posX':(464,480), 'posY':(504,568), 'dirX':-1, 'dirY':0, 'selection':(6,8)},
+        {'posX':(392,480), 'posY':(560,568), 'dirX':0, 'dirY':-1, 'selection':(6,8)},
+        {'posX':(296,384), 'posY':(560,568), 'dirX':0, 'dirY':-1, 'selection':(5,8)},
+        {'posX':(296,384), 'posY':(560,568), 'dirX':0, 'dirY':-1, 'selection':(5,8)}
         ]
+
+        self.cookFoodSelections = [
+        {'posX':(264,320), 'posY':(224,240), 'dirX':0, 'dirY':1, 'selection':(4,4,0)},
+        {'posX':(328,384), 'posY':(224,240), 'dirX':0, 'dirY':1, 'selection':(5,4,0)},
+        {'posX':(392,448), 'posY':(224,240), 'dirX':0, 'dirY':1, 'selection':(6,4,0)},
+        ]
+
     
     # move the player
     def move(self,key):
@@ -139,15 +147,14 @@ class Player():
     # select the ingredient 
     def doSelectionIngredient(self):
         for ingredient in self.ingredientSelections:
-            if (ingredient['posX'][0] <= self.playerPosX <= ingredient['posX'][1] and
-                ingredient['posY'][0] <= self.playerPosY <= ingredient['posY'][1] and
-                self.playerDirX == ingredient['dirX'] and self.playerDirY == ingredient['dirY']):
-
-                if self.selection == (0, 0):
-                    self.selection = ingredient['selection']
-                else:
-                    self.selection = (0, 0)
-                break
+            if self.playerDirX == 0 and self.playerDirY == -1:
+                if (ingredient['posX'][0] <= self.playerPosX <= ingredient['posX'][1] and
+                    ingredient['posY'][0] <= self.playerPosY <= ingredient['posY'][1]):
+                    if self.selection == (0, 0):
+                        self.selection = ingredient['selection']
+                    else:
+                        self.selection = (0, 0)
+                    break
 
     # throw away the current plate
     def throwAwayPlate(self):
@@ -160,9 +167,9 @@ class Player():
         if self.selection in self.validIngredientSelection:
             if self.curentHoldIngredient == None:
 
-                # ingredient1 will output the ingredient name
+                # ingredient1 will output the ingredient
                 ingredient1 = self.selectionToIngredient[self.selection]
-                self.curentHoldIngredient = Ingredient(ingredient1)
+                self.curentHoldIngredient = ingredient1
 
             
             else:
@@ -238,7 +245,7 @@ class Player():
                 if self.curentHoldIngredient == None:
 
                     ingredient1 = self.selectionToIngredient[self.select1selection]
-                    self.curentHoldIngredient = Ingredient(ingredient1)
+                    self.curentHoldIngredient = ingredient1
 
                 else:
                     selection1 = self.ingredientToSelection[self.curentHoldIngredient.name]
@@ -248,7 +255,7 @@ class Player():
                 if self.curentHoldIngredient == None:
 
                     ingredient1 = self.selectionToIngredient[self.select2selection]
-                    self.curentHoldIngredient = Ingredient(ingredient1)
+                    self.curentHoldIngredient = ingredient1
                 
                 else:
                     selection1 = self.ingredientToSelection[self.curentHoldIngredient.name]
@@ -259,10 +266,26 @@ class Player():
         if self.selection == (0,0):
             pass
 
-        if self.curentHoldIngredient != None and self.currentPlate.currentIngredients != [] and self.selection == (3,4):
-            if self.currentPlate.currentIngredients[0] == plate and self.curentHoldIngredient not in self.currentPlate.currentIngredients:
+        if (self.curentHoldIngredient != None and 
+            self.currentPlate.currentIngredients != [] and 
+            self.selection == (3,4)):
+            if (self.currentPlate.currentIngredients[0] == plate and 
+                self.curentHoldIngredient not in self.currentPlate.currentIngredients):
                 self.currentPlate.addIngredients(self.curentHoldIngredient)
                 self.curentHoldIngredient = None
+
+    def doCookFoodSelection(self):
+        for desk in self.cookFoodSelections:
+            if (desk['posX'][0] <= self.playerPosX <= desk['posX'][1] and
+                desk["posY"][0] <= self.playerPosY <= desk["posY"][1] and
+                self.playerDirX == desk['dirX'] and self.playerDirY == desk['dirY']):
+                
+                if self.selection == (0, 0):
+                    self.selection = desk['selection']
+                else:
+                    self.selection = (0, 0)
+                break
+
 
 #######
 # initialize player

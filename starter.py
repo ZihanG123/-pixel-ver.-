@@ -8,6 +8,7 @@ from plate import *
 from menu import *
 from ingredient import *
 from customer import *
+from kitchen import *
 
 # All of the images used are drawn by me.
 
@@ -24,6 +25,12 @@ def onAppStart(app):
 
     app.spriteIndex = 0
     app.counterSprite = 0
+
+    #######
+    # cook food counters
+    app.choppingCounter = 0
+    app.panCounter = 0
+    app.fryerCounter = 0
 
 ################
 # start screen
@@ -101,6 +108,7 @@ def game_redrawAll(app):
 
     drawCustomers(app)
 
+    drawSelectionCookFood()
 
 
 def game_onStep(app):
@@ -162,6 +170,9 @@ def game_onKeyPress(app, key):
     if key == 'a':
         amuro.holdFood()
 
+    if key == 'l':
+        amuro.doCookFoodSelection()
+
 def game_onKeyRelease(app, key):
     if app.keyHeld == key:
         app.keyHeld = None
@@ -213,6 +224,10 @@ def drawSelectionDesk():
         drawImage('./images/select2Image.PNG', amuro.selection[0]*64, amuro.selection[1]*64, width=64, height=192)
         drawImage('./images/selectionDeskImage.PNG', amuro.select2selection[0]*64, amuro.select2selection[1]*64, width=64, height=64, opacity=40)
 
+def drawSelectionCookFood():
+    if amuro.selection != (0,0) and amuro.selection in [(4,4,0), (5,4,0), (6,4,0)]:
+        drawImage('./images/selectionDeskImage.PNG', amuro.selection[0]*64, amuro.selection[1]*64, width=64, height=64, opacity=40)
+
 
 def drawSelectionTrashCan():
     if amuro.selection == (7,2):
@@ -262,7 +277,16 @@ def customerControll(app):
     if (posX, posY) == (currentCustomer.targetX*64, currentCustomer.targetY*64):
         currentCustomer.isSeated = True
 
+def cookFood(app):
+    if (amuro.selection in [(4,4,0), (5,4,0), (6,4,0)] and 
+        amuro.curentHoldIngredient != None and 
+        amuro.currentHoldPlate == Plate()):
+        if not amuro.curentHoldIngredient.cooked:
+            if amuro.selection == amuro.curentHoldIngredient.cookingUtensil.selectionCoor:
+                
 
+
+###################
 def main():
     runAppWithScreens(width=640, height=640, initialScreen='start')
 
