@@ -51,13 +51,13 @@ class Player():
         {'posX':(528,536), 'posY':(120,176), 'dirX':-1, 'dirY':0, 'selection':(7,2)},]
 
         self.ingredientSelections = [
-        {'posX':(216,224), 'posY':(184,216), 'selection':(3,2)},
-        {'posX':(232,256), 'posY':(184,216), 'selection':(3.5,2)},
-        {'posX':(264,288), 'posY':(184,216), 'selection':(4,2)},
-        {'posX':(296,320), 'posY':(184,216), 'selection':(4.5,2)},
-        {'posX':(328,352), 'posY':(184,216), 'selection':(5,2)},
-        {'posX':(360,384), 'posY':(184,216), 'selection':(5.5,2)},
-        {'posX':(392,416), 'posY':(184,216), 'selection':(6,2)},]
+        {'posX':(216,224), 'posY':(184,216), 'dirX':0, 'dirY':-1, 'selection':(3,2)},
+        {'posX':(232,256), 'posY':(184,216), 'dirX':0, 'dirY':-1, 'selection':(3.5,2)},
+        {'posX':(264,288), 'posY':(184,216), 'dirX':0, 'dirY':-1, 'selection':(4,2)},
+        {'posX':(296,320), 'posY':(184,216), 'dirX':0, 'dirY':-1, 'selection':(4.5,2)},
+        {'posX':(328,352), 'posY':(184,216), 'dirX':0, 'dirY':-1, 'selection':(5,2)},
+        {'posX':(360,384), 'posY':(184,216), 'dirX':0, 'dirY':-1, 'selection':(5.5,2)},
+        {'posX':(392,416), 'posY':(184,216), 'dirX':0, 'dirY':-1, 'selection':(6,2)},]
 
         self.spritePilImages = []
         self.spriteAnimatedImages = []
@@ -175,7 +175,7 @@ class Player():
             else:
                 # get the selection of the ingredient the player currently has
                 # temp2 will output the selection of this ingredient
-                selection1 = self.ingredientToSelection[self.curentHoldIngredient.name]
+                selection1 = self.ingredientToSelection[self.curentHoldIngredient]
                 if self.selection == selection1 and self.validUnselection():
                     # self.selection = (0,0)
                     self.curentHoldIngredient = None
@@ -287,17 +287,25 @@ class Player():
                 break
 
     def cookFood(self):
-        print('self.selection', self.selection)
-        print('self.curentHoldIngredient', self.curentHoldIngredient)
-        print('self.currentHoldPlate', self.currentHoldPlate)
+        # print('self.selection', self.selection)
+        # print('self.curentHoldIngredient', self.curentHoldIngredient)
+        # print('self.currentHoldPlate', self.currentHoldPlate)
         if (self.selection in [(4,4,0), (5,4,0), (6,4,0)] and 
             self.curentHoldIngredient != None):
-            print('heyhey')
             if not self.curentHoldIngredient.cooked:
-                print('yayyay')
-                if self.selection == self.curentHoldIngredient.cookingUtensil.selectionCoor:
-                    self.curentHoldIngredient.cookingUtensil.isCooking = True
-                    print(self.curentHoldIngredient.cookingUtensil.isCooking)
+                if self.curentHoldIngredient.cookingUtensil != None:
+                    if self.selection == self.curentHoldIngredient.cookingUtensil.selectionCoor:
+                        if not self.curentHoldIngredient.cookingUtensil.isCooking:
+                            self.curentHoldIngredient.isCooking = True
+                            self.curentHoldIngredient.inUtensil = True
+                            self.curentHoldIngredient.cookingUtensil.isCooking = True
+                            # print(self.curentHoldIngredient.cookingUtensil.isCooking)
+
+    def pickUpCookedFood(self):
+        # if (self.selection in [(4,4,0), (5,4,0), (6,4,0)] and 
+        #     self.curentHoldIngredient.inUtensil = True):
+        #     pass
+        pass
 
 
 #######

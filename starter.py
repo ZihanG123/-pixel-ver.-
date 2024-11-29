@@ -11,6 +11,7 @@ from customer import *
 from kitchen import *
 
 # All of the images used are drawn by me.
+# The images are based on Detective Conan by Gosho Aoyama.
 
 def onAppStart(app):
     app.keyHeld = None
@@ -31,6 +32,8 @@ def onAppStart(app):
     app.choppingCounter = 0
     app.panCounter = 0
     app.fryerCounter = 0
+
+    app.cookingOnStepCounter = 0
 
 ################
 # start screen
@@ -101,10 +104,11 @@ def game_redrawAll(app):
     # print(amuro.playerPosX, amuro.playerPosY)
     print(amuro.selection)
     print(amuro.curentHoldIngredient)
-    if amuro.curentHoldIngredient != None:
-        print(amuro.curentHoldIngredient.cookingUtensil)
-        print(amuro.curentHoldIngredient.cookingUtensil.isCooking)
-        print('   ',amuro.curentHoldIngredient.cookingUtensil.selectionCoor)
+    if amuro.curentHoldIngredient != None and amuro.curentHoldIngredient.cookingUtensil != None:
+        pass
+        # print(amuro.curentHoldIngredient.cookingUtensil)
+        # print(amuro.curentHoldIngredient.cookingUtensil.isCooking)
+        # print('   ',amuro.curentHoldIngredient.cookingUtensil.selectionCoor)
 
 
     drawHoldIngredient()
@@ -116,6 +120,8 @@ def game_redrawAll(app):
     drawCustomers(app)
 
     drawSelectionCookFood()
+
+    drawCookingIngredient()
 
 
 def game_onStep(app):
@@ -141,11 +147,29 @@ def game_onStep(app):
     if currentCustomer.ordered == False:
         currentCustomer.startToOrder(cafeMenu)
 
-    if amuro.curentHoldIngredient != None and not amuro.curentHoldIngredient.cooked:
+    if (amuro.curentHoldIngredient != None and 
+        not amuro.curentHoldIngredient.cooked and 
+        amuro.curentHoldIngredient.cookingUtensil != None):
         if amuro.curentHoldIngredient.cookingUtensil.isCooking:
-            utensil = amuro.curentHoldIngredient.cookingUtensil
-            utensil.cookingCounter += 1
-            print(utensil.cookingCounter)
+            if app.cookingOnStepCounter <= amuro.curentHoldIngredient.cookTime*30:
+                app.cookingOnStepCounter += 1
+                if app.cookingOnStepCounter % 30 == 0:
+                    amuro.curentHoldIngredient.cookingUtensil.cookingCounter += 1
+
+                # print(app.cookingOnStepCounter)
+                # print('utensil.cookingCounter', amuro.curentHoldIngredient.cookingUtensil.cookingCounter)
+
+            else:
+                amuro.curentHoldIngredient.cooked = True
+                amuro.curentHoldIngredient.isCooking = False
+                app.cookingOnStepCounter = 0
+                amuro.curentHoldIngredient.cookingUtensil.cookingCounter = 0
+                amuro.curentHoldIngredient.cookingUtensil.isCooking = False
+                amuro.curentHoldIngredient.cookedOnce = True
+
+                # print('     ',app.cookingOnStepCounter)
+                # print('      utensil.cookingCounter', amuro.curentHoldIngredient.cookingUtensil.cookingCounter)
+
 
 def game_onKeyPress(app, key):
     app.keyHeld = key
@@ -265,9 +289,24 @@ def drawSelectionIngredient():
 
 # draw the ingredient that the player is currently holding
 def drawHoldIngredient():
-    if amuro.curentHoldIngredient != None:
+    if (amuro.curentHoldIngredient != None and 
+        not amuro.curentHoldIngredient.isCooking and 
+        not amuro.curentHoldIngredient.inUtensil):
         drawImage('./images/hold/holdBGImage.PNG', amuro.playerPosX, amuro.playerPosY, width=64, height=64)
         drawImage(amuro.curentHoldIngredient.image, amuro.playerPosX, amuro.playerPosY, width=64, height=64)
+
+def drawCookingIngredient():
+    if (amuro.curentHoldIngredient != None and  
+        amuro.curentHoldIngredient.inUtensil):
+        utensil = amuro.curentHoldIngredient.cookingUtensil
+        if amuro.curentHoldIngredient.cookTime-utensil.cookingCounter > 0 and not amuro.curentHoldIngredient.cookedOnce:
+            drawImage(amuro.curentHoldIngredient.image, utensil.selectionCoor[0]*64, utensil.selectionCoor[1]*64, width=64, height=64)
+            drawLabel(str(amuro.curentHoldIngredient.cookTime-utensil.cookingCounter), 
+                    utensil.selectionCoor[0]*64+8, utensil.selectionCoor[1]*64+8, 
+                    size=20, align='center', font='monospace', bold=True)
+        elif amuro.curentHoldIngredient.cookedOnce:
+            drawImage(amuro.curentHoldIngredient.image, utensil.selectionCoor[0]*64, utensil.selectionCoor[1]*64, width=64, height=64)
+
 
 # draw the plate at position (3,4)
 def drawPlate():

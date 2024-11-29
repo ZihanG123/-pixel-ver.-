@@ -15,6 +15,9 @@ class Ingredient:
         self.cookTime = cookTime
         self.cookingUtensil = utensil
         self.isCooking = False
+        self.inUtensil = False
+        self.cookedOnce = False
+        
 
     def __repr__(self):
         return f'{self.name}'
@@ -40,7 +43,7 @@ ham = Ingredient('ham', False, 3, chopping)
 lettuce = Ingredient('lettuce', False, 3, chopping)
 plate = Ingredient('plate', True, None, None)
 rice = Ingredient('rice', False, 7, pan)
-chicken = Ingredient('chicken', False, 5, fryer)
+chicken = Ingredient('chicken', False, 3, fryer)
 tonkatsu = Ingredient('tonkatsu', False, 5, fryer)
 tempura = Ingredient('tempura', False, 5, fryer)
 spaghetti = Ingredient('spaghetti', False, 7, pan)
