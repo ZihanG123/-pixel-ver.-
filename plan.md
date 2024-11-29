@@ -1,7 +1,4 @@
-### 11/24
+### 11/29
 
-
-* 做instructions窗口
-* 做menu
-* 做player各个方向animation
-* customer order
+* 改cooked食物image区别
+* multiple customers

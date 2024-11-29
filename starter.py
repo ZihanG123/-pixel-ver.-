@@ -79,14 +79,10 @@ def game_redrawAll(app):
 
     #########################
     # print(amuro.playerPosX, amuro.playerPosY)
-    print(amuro.selection)
-    print(amuro.currentHoldIngredient)
-    for utensil in [chopping, pan, fryer]:
-        print(f'{utensil.name}', utensil.ingredientInside)
-    # if amuro.currentHoldIngredient != None and amuro.currentHoldIngredient.cookingUtensil != None:
-    #     print(amuro.currentHoldIngredient.cookingUtensil)
-    #     print(amuro.currentHoldIngredient.cookingUtensil.isCooking)
-    #     print('   ',amuro.currentHoldIngredient.cookingUtensil.selectionCoor)
+    # print(amuro.selection)
+    # print(amuro.currentHoldIngredient)
+    # for utensil in [chopping, pan, fryer]:
+    #     print(f'{utensil.name}', utensil.ingredientInside)
 
 
     drawHoldIngredient()
@@ -214,12 +210,16 @@ def drawSelectionDesk():
         drawImage('./images/selectionDeskImage.PNG', amuro.selection[0]*64, amuro.selection[1]*64, width=64, height=64, opacity=40)
 
     if amuro.selection == (5,4):
-        drawImage('./images/select1Image.PNG', amuro.selection[0]*64, amuro.selection[1]*64, width=64, height=128)
-        drawImage('./images/selectionDeskImage.PNG', amuro.select1selection[0]*64, amuro.select1selection[1]*64, width=64, height=64, opacity=40)
+        utensil = amuro.selectionToUtensil[(5,4,0)]
+        if utensil.ingredientInside == None:
+            drawImage('./images/select1Image.PNG', amuro.selection[0]*64, amuro.selection[1]*64, width=64, height=128)
+            drawImage('./images/selectionDeskImage.PNG', amuro.select1selection[0]*64, amuro.select1selection[1]*64, width=64, height=64, opacity=40)
 
     if amuro.selection == (6,4):
-        drawImage('./images/select2Image.PNG', amuro.selection[0]*64, amuro.selection[1]*64, width=64, height=192)
-        drawImage('./images/selectionDeskImage.PNG', amuro.select2selection[0]*64, amuro.select2selection[1]*64, width=64, height=64, opacity=40)
+        utensil = amuro.selectionToUtensil[(6,4,0)]
+        if utensil.ingredientInside == None:
+            drawImage('./images/select2Image.PNG', amuro.selection[0]*64, amuro.selection[1]*64, width=64, height=192)
+            drawImage('./images/selectionDeskImage.PNG', amuro.select2selection[0]*64, amuro.select2selection[1]*64, width=64, height=64, opacity=40)
 
 def drawSelectionCookFood():
     if amuro.selection != (0,0) and amuro.selection in [(4,4,0), (5,4,0), (6,4,0)]:
