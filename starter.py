@@ -27,14 +27,6 @@ def onAppStart(app):
     app.spriteIndex = 0
     app.counterSprite = 0
 
-    #######
-    # cook food counters
-    app.choppingCounter = 0
-    app.panCounter = 0
-    app.fryerCounter = 0
-
-    app.cookingOnStepCounter = 0
-
 ################
 # start screen
 ################
@@ -77,22 +69,7 @@ def game_redrawAll(app):
     drawSelectionIngredient()
 
     # draw moving amuro
-    if amuro.isMoving:
-        amuro.loadSpritePilImages()
-        amuro.spriteAnimatedImages = [CMUImage(pilImage) for pilImage in amuro.spritePilImages]
-        drawImage(amuro.spriteAnimatedImages[app.spriteIndex], amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
-    else:
-        if amuro.playerDirX == 0 and amuro.playerDirY == 1:
-            drawImage('./images/amuroFrontImage.PNG', amuro.playerPosX, amuro.playerPosY-8, width=128, height=128, align='center')
-        elif amuro.playerDirX == 0 and amuro.playerDirY == -1:
-            drawImage('./images/amuroBackImage.PNG', amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
-        elif amuro.playerDirX == 1 and amuro.playerDirY == 0:
-            drawImage('./images/amuroRightImage.PNG', amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
-        elif amuro.playerDirX == -1 and amuro.playerDirY == 0:
-            drawImage('./images/amuroLeftImage.PNG', amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
-        elif amuro.playerDirX == 0 and amuro.playerDirY == 0:
-            drawImage('./images/amuroFrontImage.PNG', amuro.playerPosX, amuro.playerPosY-8, width=128, height=128, align='center')
-    
+    drawMovingAmuro(app)    
 
     addCafeKitchenDesksTop()
     addKitchenWareTop()
@@ -103,12 +80,13 @@ def game_redrawAll(app):
     #########################
     # print(amuro.playerPosX, amuro.playerPosY)
     print(amuro.selection)
-    print(amuro.curentHoldIngredient)
-    if amuro.curentHoldIngredient != None and amuro.curentHoldIngredient.cookingUtensil != None:
-        pass
-        # print(amuro.curentHoldIngredient.cookingUtensil)
-        # print(amuro.curentHoldIngredient.cookingUtensil.isCooking)
-        # print('   ',amuro.curentHoldIngredient.cookingUtensil.selectionCoor)
+    print(amuro.currentHoldIngredient)
+    for utensil in [chopping, pan, fryer]:
+        print(f'{utensil.name}', utensil.ingredientInside)
+    # if amuro.currentHoldIngredient != None and amuro.currentHoldIngredient.cookingUtensil != None:
+    #     print(amuro.currentHoldIngredient.cookingUtensil)
+    #     print(amuro.currentHoldIngredient.cookingUtensil.isCooking)
+    #     print('   ',amuro.currentHoldIngredient.cookingUtensil.selectionCoor)
 
 
     drawHoldIngredient()
@@ -147,28 +125,8 @@ def game_onStep(app):
     if currentCustomer.ordered == False:
         currentCustomer.startToOrder(cafeMenu)
 
-    if (amuro.curentHoldIngredient != None and 
-        not amuro.curentHoldIngredient.cooked and 
-        amuro.curentHoldIngredient.cookingUtensil != None):
-        if amuro.curentHoldIngredient.cookingUtensil.isCooking:
-            if app.cookingOnStepCounter <= amuro.curentHoldIngredient.cookTime*30:
-                app.cookingOnStepCounter += 1
-                if app.cookingOnStepCounter % 30 == 0:
-                    amuro.curentHoldIngredient.cookingUtensil.cookingCounter += 1
-
-                # print(app.cookingOnStepCounter)
-                # print('utensil.cookingCounter', amuro.curentHoldIngredient.cookingUtensil.cookingCounter)
-
-            else:
-                amuro.curentHoldIngredient.cooked = True
-                amuro.curentHoldIngredient.isCooking = False
-                app.cookingOnStepCounter = 0
-                amuro.curentHoldIngredient.cookingUtensil.cookingCounter = 0
-                amuro.curentHoldIngredient.cookingUtensil.isCooking = False
-                amuro.curentHoldIngredient.cookedOnce = True
-
-                # print('     ',app.cookingOnStepCounter)
-                # print('      utensil.cookingCounter', amuro.curentHoldIngredient.cookingUtensil.cookingCounter)
+    for utensil in [chopping, pan, fryer]:
+        utensil.cookFood()
 
 
 def game_onKeyPress(app, key):
@@ -210,6 +168,7 @@ def game_onKeyPress(app, key):
     if key == 'l':
         amuro.doCookFoodSelection()
         amuro.cookFood()
+        amuro.pickUpCookedIng()
 
 def game_onKeyRelease(app, key):
     if app.keyHeld == key:
@@ -289,24 +248,21 @@ def drawSelectionIngredient():
 
 # draw the ingredient that the player is currently holding
 def drawHoldIngredient():
-    if (amuro.curentHoldIngredient != None and 
-        not amuro.curentHoldIngredient.isCooking and 
-        not amuro.curentHoldIngredient.inUtensil):
+    if (amuro.currentHoldIngredient != None):
         drawImage('./images/hold/holdBGImage.PNG', amuro.playerPosX, amuro.playerPosY, width=64, height=64)
-        drawImage(amuro.curentHoldIngredient.image, amuro.playerPosX, amuro.playerPosY, width=64, height=64)
+        drawImage(amuro.currentHoldIngredient.image, amuro.playerPosX, amuro.playerPosY, width=64, height=64)
 
 def drawCookingIngredient():
-    if (amuro.curentHoldIngredient != None and  
-        amuro.curentHoldIngredient.inUtensil):
-        utensil = amuro.curentHoldIngredient.cookingUtensil
-        if amuro.curentHoldIngredient.cookTime-utensil.cookingCounter > 0 and not amuro.curentHoldIngredient.cookedOnce:
-            drawImage(amuro.curentHoldIngredient.image, utensil.selectionCoor[0]*64, utensil.selectionCoor[1]*64, width=64, height=64)
-            drawLabel(str(amuro.curentHoldIngredient.cookTime-utensil.cookingCounter), 
-                    utensil.selectionCoor[0]*64+8, utensil.selectionCoor[1]*64+8, 
-                    size=20, align='center', font='monospace', bold=True)
-        elif amuro.curentHoldIngredient.cookedOnce:
-            drawImage(amuro.curentHoldIngredient.image, utensil.selectionCoor[0]*64, utensil.selectionCoor[1]*64, width=64, height=64)
-
+    for utensil in [chopping, pan, fryer]:
+        print(f'{utensil.name}', utensil.ingredientInside)
+        if utensil.ingredientInside != None:
+            currCookingIng = utensil.ingredientInside
+            drawImage(currCookingIng.image, utensil.selectionCoor[0]*64, utensil.selectionCoor[1]*64, width=64, height=64)
+            if not currCookingIng.cookedOnce:
+                if currCookingIng.cookTime-utensil.cookingCounterSeconds > 0:
+                    drawLabel(str(currCookingIng.cookTime-utensil.cookingCounterSeconds), 
+                        utensil.selectionCoor[0]*64+8, utensil.selectionCoor[1]*64+8, 
+                        size=20, align='center', font='monospace', bold=True)
 
 # draw the plate at position (3,4)
 def drawPlate():
@@ -329,6 +285,23 @@ def customerControll(app):
     posX, posY = currentCustomer.pixelPath[app.currentCustomerStep]
     if (posX, posY) == (currentCustomer.targetX*64, currentCustomer.targetY*64):
         currentCustomer.isSeated = True
+
+def drawMovingAmuro(app):
+    if amuro.isMoving:
+        amuro.loadSpritePilImages()
+        amuro.spriteAnimatedImages = [CMUImage(pilImage) for pilImage in amuro.spritePilImages]
+        drawImage(amuro.spriteAnimatedImages[app.spriteIndex], amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
+    else:
+        if amuro.playerDirX == 0 and amuro.playerDirY == 1:
+            drawImage('./images/amuroFrontImage.PNG', amuro.playerPosX, amuro.playerPosY-8, width=128, height=128, align='center')
+        elif amuro.playerDirX == 0 and amuro.playerDirY == -1:
+            drawImage('./images/amuroBackImage.PNG', amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
+        elif amuro.playerDirX == 1 and amuro.playerDirY == 0:
+            drawImage('./images/amuroRightImage.PNG', amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
+        elif amuro.playerDirX == -1 and amuro.playerDirY == 0:
+            drawImage('./images/amuroLeftImage.PNG', amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
+        elif amuro.playerDirX == 0 and amuro.playerDirY == 0:
+            drawImage('./images/amuroFrontImage.PNG', amuro.playerPosX, amuro.playerPosY-8, width=128, height=128, align='center')
 
 
 ###################

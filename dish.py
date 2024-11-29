@@ -28,6 +28,8 @@ class Dish:
             for i in range(len(self.ingredientsNeeded)):
                 if self.ingredientsNeeded[i] != other.currentIngredients[i]:
                     return False
+                if not self.ingredientsNeeded[i].cooked:
+                    return False
                 
         return True
     

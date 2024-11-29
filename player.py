@@ -28,7 +28,7 @@ class Player():
         self.currentPlate = Plate()
         self.currentHoldPlate = Plate()
 
-        self.curentHoldIngredient = None
+        self.currentHoldIngredient = None
 
 
         self.validIngredientSelection = [(3,2), (3.5,2), (4,2), (4.5,2), (5,2), (5.5,2), (6,2)]
@@ -68,14 +68,16 @@ class Player():
         {'posX':(464,480), 'posY':(504,568), 'dirX':-1, 'dirY':0, 'selection':(6,8)},
         {'posX':(392,480), 'posY':(560,568), 'dirX':0, 'dirY':-1, 'selection':(6,8)},
         {'posX':(296,384), 'posY':(560,568), 'dirX':0, 'dirY':-1, 'selection':(5,8)},
-        {'posX':(296,384), 'posY':(560,568), 'dirX':0, 'dirY':-1, 'selection':(5,8)}
-        ]
+        {'posX':(296,384), 'posY':(560,568), 'dirX':0, 'dirY':-1, 'selection':(5,8)}]
 
         self.cookFoodSelections = [
         {'posX':(264,320), 'posY':(224,240), 'dirX':0, 'dirY':1, 'selection':(4,4,0)},
         {'posX':(328,384), 'posY':(224,240), 'dirX':0, 'dirY':1, 'selection':(5,4,0)},
-        {'posX':(392,448), 'posY':(224,240), 'dirX':0, 'dirY':1, 'selection':(6,4,0)},
-        ]
+        {'posX':(392,448), 'posY':(224,240), 'dirX':0, 'dirY':1, 'selection':(6,4,0)},]
+
+        self.utensilToSelection = {chopping:(4,4,0), pan:(5,4,0), fryer:(6,4,0)}
+        self.selectionToUtensil = {(4,4,0):chopping, (5,4,0):pan, (6,4,0):fryer}
+        self.nameToUtensil = {'chopping':chopping, 'pan':pan, 'fryer':fryer}
 
     
     # move the player
@@ -160,25 +162,26 @@ class Player():
     def throwAwayPlate(self):
         if self.selection == (7,2):
             self.currentHoldPlate.throwAway()
+            self.currentHoldIngredient = None
 
     # pick up ingredients
     # only one ingredient can be held at a time
     def holdIngredients(self):
         if self.selection in self.validIngredientSelection:
-            if self.curentHoldIngredient == None:
+            if self.currentHoldIngredient == None:
 
                 # ingredient1 will output the ingredient
                 ingredient1 = self.selectionToIngredient[self.selection]
-                self.curentHoldIngredient = ingredient1
+                self.currentHoldIngredient = ingredient1
 
             
             else:
                 # get the selection of the ingredient the player currently has
                 # temp2 will output the selection of this ingredient
-                selection1 = self.ingredientToSelection[self.curentHoldIngredient]
+                selection1 = self.ingredientToSelection[self.currentHoldIngredient]
                 if self.selection == selection1 and self.validUnselection():
                     # self.selection = (0,0)
-                    self.curentHoldIngredient = None
+                    self.currentHoldIngredient = None
         
     # check to see if the unselection is valid
     def validUnselection(self):
@@ -198,10 +201,10 @@ class Player():
                     desk['posY'][0] <= self.playerPosY <= desk['posY'][1] and
                     self.playerDirX == desk['dirX'] and self.playerDirY == desk['dirY']):
                     if self.selection == (5,4):
-                        if self.curentHoldIngredient == self.selectionToIngredient[self.select1selection]:
+                        if self.currentHoldIngredient == self.selectionToIngredient[self.select1selection]:
                             return True
                     elif self.selection == (6,4):
-                        if self.curentHoldIngredient == self.selectionToIngredient[self.select2selection]:
+                        if self.currentHoldIngredient == self.selectionToIngredient[self.select2selection]:
                             return True
             return False
         return False
@@ -215,13 +218,13 @@ class Player():
 
         # make sandwich
         # ingredients have to be put in order
-        if self.curentHoldIngredient != None and self.selection == (3,4):
+        if self.currentHoldIngredient != None and self.selection == (3,4):
             nextIndex = len(self.currentPlate.currentIngredients)
             if nextIndex < len(sandwich.ingredientsNeeded):
                 requiredIngredient = sandwich.ingredientsNeeded[nextIndex]
-                if self.curentHoldIngredient == requiredIngredient:
-                    self.currentPlate.addIngredients(self.curentHoldIngredient)
-                    self.curentHoldIngredient = None
+                if self.currentHoldIngredient == requiredIngredient:
+                    self.currentPlate.addIngredients(self.currentHoldIngredient)
+                    self.currentHoldIngredient = None
 
     # pick up the dish currently have to the table (3,4)
     def pickUpDish(self):
@@ -242,37 +245,37 @@ class Player():
     def holdFood(self):
         if self.selection in self.validDeskSelection:
             if self.selection == (5,4):
-                if self.curentHoldIngredient == None:
+                if self.currentHoldIngredient == None:
 
                     ingredient1 = self.selectionToIngredient[self.select1selection]
-                    self.curentHoldIngredient = ingredient1
+                    self.currentHoldIngredient = ingredient1
 
                 else:
-                    selection1 = self.ingredientToSelection[self.curentHoldIngredient]
+                    selection1 = self.ingredientToSelection[self.currentHoldIngredient]
                     if self.select1selection == selection1 and self.validUnselection():
-                        self.curentHoldIngredient = None
+                        self.currentHoldIngredient = None
             elif self.selection == (6,4):
-                if self.curentHoldIngredient == None:
+                if self.currentHoldIngredient == None:
 
                     ingredient1 = self.selectionToIngredient[self.select2selection]
-                    self.curentHoldIngredient = ingredient1
+                    self.currentHoldIngredient = ingredient1
                 
                 else:
-                    selection1 = self.ingredientToSelection[self.curentHoldIngredient]
+                    selection1 = self.ingredientToSelection[self.currentHoldIngredient]
                     if self.select2selection == selection1 and self.validUnselection():
-                        self.curentHoldIngredient = None
+                        self.currentHoldIngredient = None
 
     def putDownIngredients(self):
         if self.selection == (0,0):
             pass
 
-        if (self.curentHoldIngredient != None and 
+        if (self.currentHoldIngredient != None and 
             self.currentPlate.currentIngredients != [] and 
             self.selection == (3,4)):
             if (self.currentPlate.currentIngredients[0] == plate and 
-                self.curentHoldIngredient not in self.currentPlate.currentIngredients):
-                self.currentPlate.addIngredients(self.curentHoldIngredient)
-                self.curentHoldIngredient = None
+                self.currentHoldIngredient not in self.currentPlate.currentIngredients):
+                self.currentPlate.addIngredients(self.currentHoldIngredient)
+                self.currentHoldIngredient = None
 
     def doCookFoodSelection(self):
         for desk in self.cookFoodSelections:
@@ -288,24 +291,33 @@ class Player():
 
     def cookFood(self):
         # print('self.selection', self.selection)
-        # print('self.curentHoldIngredient', self.curentHoldIngredient)
-        # print('self.currentHoldPlate', self.currentHoldPlate)
+        # print('self.currentHoldIngredient', self.currentHoldIngredient)
         if (self.selection in [(4,4,0), (5,4,0), (6,4,0)] and 
-            self.curentHoldIngredient != None):
-            if not self.curentHoldIngredient.cooked:
-                if self.curentHoldIngredient.cookingUtensil != None:
-                    if self.selection == self.curentHoldIngredient.cookingUtensil.selectionCoor:
-                        if not self.curentHoldIngredient.cookingUtensil.isCooking:
-                            self.curentHoldIngredient.isCooking = True
-                            self.curentHoldIngredient.inUtensil = True
-                            self.curentHoldIngredient.cookingUtensil.isCooking = True
-                            # print(self.curentHoldIngredient.cookingUtensil.isCooking)
+            self.currentHoldIngredient != None):
+            if not self.currentHoldIngredient.cooked:
+                if self.currentHoldIngredient.cookingUtensil != None:
+                    utensil = self.nameToUtensil[self.currentHoldIngredient.cookingUtensil]
+                    if self.selection == utensil.selectionCoor:
+                        if not utensil.isCooking:
+                            self.currentHoldIngredient.isCooking = True
+                            self.currentHoldIngredient.inUtensil = True
+                            utensil.isCooking = True
+                            utensil.ingredientInside = self.currentHoldIngredient
+                            self.currentHoldIngredient = None
+                            # print(self.currentHoldIngredient.cookingUtensil.isCooking)
 
-    def pickUpCookedFood(self):
-        # if (self.selection in [(4,4,0), (5,4,0), (6,4,0)] and 
-        #     self.curentHoldIngredient.inUtensil = True):
-        #     pass
-        pass
+    def pickUpCookedIng(self):
+        if self.selection in [(4,4,0), (5,4,0), (6,4,0)]:
+            utensil = self.selectionToUtensil[self.selection]
+            print('curr utensil.........',utensil.name, utensil.isCooking)
+            if self.currentHoldIngredient == None:
+                print('heyheyheyheyheyheyhey')
+                if not utensil.isCooking and utensil.ingredientInside != None:
+                    utensil.ingredientInside.inUtensil = False
+                    self.currentHoldIngredient = utensil.ingredientInside
+                    utensil.ingredientInside = None
+
+        
 
 
 #######

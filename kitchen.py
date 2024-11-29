@@ -1,9 +1,13 @@
+from ingredient import *
+
 class Kitchen:
     def __init__(self, name, selection):
         self.name = name
         self.isCooking = False
         self.selectionCoor = selection
         self.cookingCounter = 0
+        self.cookingCounterSeconds = 0
+        self.ingredientInside = None
 
     def __repr__(self):
         return f'{self.name}'
@@ -13,6 +17,22 @@ class Kitchen:
 
     def __eq__(self, other):
         return (isinstance(other, Kitchen) and self.name == other.name)
+    
+    def cookFood(self):
+        if self.ingredientInside != None:
+            currCookingIng = self.ingredientInside
+            if self.cookingCounter <= currCookingIng.cookTime*30:
+                self.cookingCounter += 1
+                if self.cookingCounter % 30 == 0:
+                    self.cookingCounterSeconds += 1
+            else:
+                currCookingIng.cooked = True
+                currCookingIng.isCooking = False
+                self.cookingCounter = 0
+                self.cookingCounterSeconds = 0
+                self.isCooking = False
+                currCookingIng.cookedOnce = True
+
 
 
 #########

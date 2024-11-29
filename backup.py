@@ -303,3 +303,33 @@
 
 # # print(currentCustomer.isSeated)
 # print(currentCustomer.seat)
+
+
+    # if (amuro.currentHoldIngredient != None and 
+    #     not amuro.currentHoldIngredient.cooked and 
+    #     amuro.currentHoldIngredient.cookingUtensil != None):
+    #     if amuro.currentHoldIngredient.cookingUtensil.isCooking:
+    #         if app.cookingOnStepCounter <= amuro.currentHoldIngredient.cookTime*30:
+    #             app.cookingOnStepCounter += 1
+    #             if app.cookingOnStepCounter % 30 == 0:
+    #                 amuro.currentHoldIngredient.cookingUtensil.cookingCounter += 1
+
+    #             #######
+    #             # print(app.cookingOnStepCounter)
+    #             # print('utensil.cookingCounter', amuro.currentHoldIngredient.cookingUtensil.cookingCounter)
+
+
+    #         else:
+    #             amuro.currentHoldIngredient.cooked = True
+    #             amuro.currentHoldIngredient.isCooking = False
+    #             app.cookingOnStepCounter = 0
+    #             amuro.currentHoldIngredient.cookingUtensil.cookingCounter = 0
+    #             amuro.currentHoldIngredient.cookingUtensil.isCooking = False
+    #             amuro.currentHoldIngredient.cookedOnce = True
+
+    #             # print('     ',app.cookingOnStepCounter)
+    #             # print('      utensil.cookingCounter', amuro.currentHoldIngredient.cookingUtensil.cookingCounter)
+
+#  and 
+#         not amuro.currentHoldIngredient.isCooking and 
+#         not amuro.currentHoldIngredient.inUtensil
