@@ -198,10 +198,10 @@ class Player():
                     desk['posY'][0] <= self.playerPosY <= desk['posY'][1] and
                     self.playerDirX == desk['dirX'] and self.playerDirY == desk['dirY']):
                     if self.selection == (5,4):
-                        if self.curentHoldIngredient.name == self.selectionToIngredient[self.select1selection]:
+                        if self.curentHoldIngredient == self.selectionToIngredient[self.select1selection]:
                             return True
                     elif self.selection == (6,4):
-                        if self.curentHoldIngredient.name == self.selectionToIngredient[self.select2selection]:
+                        if self.curentHoldIngredient == self.selectionToIngredient[self.select2selection]:
                             return True
             return False
         return False
@@ -248,7 +248,7 @@ class Player():
                     self.curentHoldIngredient = ingredient1
 
                 else:
-                    selection1 = self.ingredientToSelection[self.curentHoldIngredient.name]
+                    selection1 = self.ingredientToSelection[self.curentHoldIngredient]
                     if self.select1selection == selection1 and self.validUnselection():
                         self.curentHoldIngredient = None
             elif self.selection == (6,4):
@@ -258,7 +258,7 @@ class Player():
                     self.curentHoldIngredient = ingredient1
                 
                 else:
-                    selection1 = self.ingredientToSelection[self.curentHoldIngredient.name]
+                    selection1 = self.ingredientToSelection[self.curentHoldIngredient]
                     if self.select2selection == selection1 and self.validUnselection():
                         self.curentHoldIngredient = None
 
@@ -285,6 +285,19 @@ class Player():
                 else:
                     self.selection = (0, 0)
                 break
+
+    def cookFood(self):
+        print('self.selection', self.selection)
+        print('self.curentHoldIngredient', self.curentHoldIngredient)
+        print('self.currentHoldPlate', self.currentHoldPlate)
+        if (self.selection in [(4,4,0), (5,4,0), (6,4,0)] and 
+            self.curentHoldIngredient != None):
+            print('heyhey')
+            if not self.curentHoldIngredient.cooked:
+                print('yayyay')
+                if self.selection == self.curentHoldIngredient.cookingUtensil.selectionCoor:
+                    self.curentHoldIngredient.cookingUtensil.isCooking = True
+                    print(self.curentHoldIngredient.cookingUtensil.isCooking)
 
 
 #######

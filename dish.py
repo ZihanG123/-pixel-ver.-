@@ -19,7 +19,7 @@ class Dish:
     # check if the plate (food cooked by player) is the same dish as the customer ordered
     # check if every ingredient in plate is the same as every ingredient in dish
     # other is Plate
-    def __eq__(self,other):
+    def __eq__(self, other):
         self.ingredientsNeeded = sorted(self.ingredientsNeeded)
         other.currentIngredients = sorted(other.currentIngredients)
         if len(self.ingredientsNeeded) != other.currentIngredients:

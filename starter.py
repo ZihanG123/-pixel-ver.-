@@ -97,8 +97,15 @@ def game_redrawAll(app):
 
     drawSelectionDesk()
 
+    #########################
     # print(amuro.playerPosX, amuro.playerPosY)
-    # print(amuro.selection)
+    print(amuro.selection)
+    print(amuro.curentHoldIngredient)
+    if amuro.curentHoldIngredient != None:
+        print(amuro.curentHoldIngredient.cookingUtensil)
+        print(amuro.curentHoldIngredient.cookingUtensil.isCooking)
+        print('   ',amuro.curentHoldIngredient.cookingUtensil.selectionCoor)
+
 
     drawHoldIngredient()
 
@@ -133,6 +140,12 @@ def game_onStep(app):
 
     if currentCustomer.ordered == False:
         currentCustomer.startToOrder(cafeMenu)
+
+    if amuro.curentHoldIngredient != None and not amuro.curentHoldIngredient.cooked:
+        if amuro.curentHoldIngredient.cookingUtensil.isCooking:
+            utensil = amuro.curentHoldIngredient.cookingUtensil
+            utensil.cookingCounter += 1
+            print(utensil.cookingCounter)
 
 def game_onKeyPress(app, key):
     app.keyHeld = key
@@ -172,6 +185,7 @@ def game_onKeyPress(app, key):
 
     if key == 'l':
         amuro.doCookFoodSelection()
+        amuro.cookFood()
 
 def game_onKeyRelease(app, key):
     if app.keyHeld == key:
@@ -276,14 +290,6 @@ def customerControll(app):
     posX, posY = currentCustomer.pixelPath[app.currentCustomerStep]
     if (posX, posY) == (currentCustomer.targetX*64, currentCustomer.targetY*64):
         currentCustomer.isSeated = True
-
-def cookFood(app):
-    if (amuro.selection in [(4,4,0), (5,4,0), (6,4,0)] and 
-        amuro.curentHoldIngredient != None and 
-        amuro.currentHoldPlate == Plate()):
-        if not amuro.curentHoldIngredient.cooked:
-            if amuro.selection == amuro.curentHoldIngredient.cookingUtensil.selectionCoor:
-                
 
 
 ###################

@@ -23,7 +23,9 @@ class Ingredient:
         return hash(str(self))
 
     def __eq__(self, other):
-        return (isinstance(other, Ingredient) and self.name == other.name)
+        return (isinstance(other, Ingredient) and 
+                self.name == other.name and 
+                self.cooked == other.cooked)
     
 
 ########
