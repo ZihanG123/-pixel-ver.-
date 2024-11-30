@@ -162,7 +162,16 @@ class Player():
     def throwAwayPlate(self):
         if self.selection == (7,2):
             self.currentHoldPlate.throwAway()
-            self.currentHoldIngredient = None
+            if self.currentHoldIngredient != None:
+                self.currentHoldIngredient.isCooking = False
+                self.currentHoldIngredient.inUtensil = False
+                self.currentHoldIngredient.cookedOnce = False
+                if self.currentHoldIngredient.name in ['ketchup', 'curry', 'mayonnaise', 'plate']:
+                    self.currentHoldIngredient.cooked =  True
+                else:
+                    self.currentHoldIngredient.cooked = False
+                self.currentHoldIngredient = None
+
 
     # pick up ingredients
     # only one ingredient can be held at a time

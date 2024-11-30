@@ -262,7 +262,7 @@ def drawCookingIngredient():
                 if currCookingIng.cookTime-utensil.cookingCounterSeconds > 0:
                     drawLabel(str(currCookingIng.cookTime-utensil.cookingCounterSeconds), 
                         utensil.selectionCoor[0]*64+8, utensil.selectionCoor[1]*64+8, 
-                        size=20, align='center', font='monospace', bold=True)
+                        size=20, align='center', font='monospace', bold=True, fill='white')
 
 # draw the plate at position (3,4)
 def drawPlate():

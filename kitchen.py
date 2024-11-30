@@ -32,6 +32,7 @@ class Kitchen:
                 self.cookingCounterSeconds = 0
                 self.isCooking = False
                 currCookingIng.cookedOnce = True
+                # currCookingIng.image = f'./images/cooked/{currCookingIng.name}CookedImage.PNG'
 
 
 

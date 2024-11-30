@@ -8,7 +8,15 @@ class Plate:
 
     # ingredient is a string
     def addIngredients(self, ingredient):
-        self.currentIngredients.append(ingredient)
+        if ingredient.cooked:
+            self.currentIngredients.append(ingredient)
+            ingredient.isCooking = False
+            ingredient.inUtensil = False
+            ingredient.cookedOnce = False
+            if ingredient.name in ['ketchup', 'curry', 'mayonnaise', 'plate']:
+                ingredient.cooked =  True
+            else:
+                ingredient.cooked =  False
 
     # throw away current plate to trash can
     def throwAway(self):
