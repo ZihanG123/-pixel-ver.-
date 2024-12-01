@@ -65,10 +65,16 @@ class Player():
         self.spriteAnimatedImages = [CMUImage(pilImage) for pilImage in self.spritePilImages]
 
         self.customerDeskSelections = [
-        {'posX':(464,480), 'posY':(504,568), 'dirX':-1, 'dirY':0, 'selection':(6,8)},
-        {'posX':(392,480), 'posY':(560,568), 'dirX':0, 'dirY':-1, 'selection':(6,8)},
-        {'posX':(296,384), 'posY':(560,568), 'dirX':0, 'dirY':-1, 'selection':(5,8)},
-        {'posX':(296,384), 'posY':(560,568), 'dirX':0, 'dirY':-1, 'selection':(5,8)}]
+        {'posX':(464,472), 'posY':(504,568), 'dirX':-1, 'dirY':0, 'selection':(6,8)},
+        {'posX':(392,456), 'posY':(560,568), 'dirX':0, 'dirY':-1, 'selection':(6,8)},
+        {'posX':(320,384), 'posY':(560,568), 'dirX':0, 'dirY':-1, 'selection':(5,8)},
+        {'posX':(296,304), 'posY':(504,568), 'dirX':1, 'dirY':0, 'selection':(5,8)},
+        {'posX':(192,264), 'posY':(560,568), 'dirX':0, 'dirY':-1, 'selection':(3,8)},
+        {'posX':(272,288), 'posY':(504,568), 'dirX':-1, 'dirY':0, 'selection':(3,8)},
+        {'posX':(160,176), 'posY':(504,568), 'dirX':1, 'dirY':0, 'selection':(3,8)},
+        {'posX':(64,136), 'posY':(560,568), 'dirX':0, 'dirY':-1, 'selection':(1,8)},
+        {'posX':(144,160), 'posY':(504,568), 'dirX':-1, 'dirY':0, 'selection':(1,8)},
+        {'posX':(32,48), 'posY':(504,568), 'dirX':1, 'dirY':0, 'selection':(1,8)},]
 
         self.cookFoodSelections = [
         {'posX':(264,320), 'posY':(224,240), 'dirX':0, 'dirY':1, 'selection':(4,4,0)},
@@ -159,6 +165,19 @@ class Player():
                     else:
                         self.selection = (0, 0)
                     break
+
+    def doSelectCustomerDesk(self):
+        for desk in self.customerDeskSelections:
+            if (desk['posX'][0] <= self.playerPosX <= desk['posX'][1] and
+                desk["posY"][0] <= self.playerPosY <= desk["posY"][1] and
+                self.playerDirX == desk['dirX'] and self.playerDirY == desk['dirY']):
+                
+                if self.selection == (0, 0):
+                    self.selection = desk['selection']
+                else:
+                    self.selection = (0, 0)
+                break
+
 
     # throw away the current plate
     def throwAwayPlate(self):

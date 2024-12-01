@@ -68,6 +68,8 @@ def game_redrawAll(app):
     drawSelectionTrashCan()
     drawSelectionIngredient()
 
+    drawSelectionCustomerDesk()
+
     # draw moving amuro
     drawMovingAmuro(app)    
 
@@ -109,17 +111,17 @@ def game_onStep(app):
         amuro.isMoving = False
 
     poirotCafe.cafeTime += 1
-    print(poirotCafe.cafeTime)
+    # print(poirotCafe.cafeTime)
         
     for i in range(len(poirotCafe.availableSeats)):
         poirotCafe.letCustomerIn()
-    print(poirotCafe.nextCustomers)
+    # print(poirotCafe.nextCustomers)
 
     if len(poirotCafe.nextCustomers) > 0:
         poirotCafe.currWalkingInCustomer = poirotCafe.nextCustomers[-1]
-    print(poirotCafe.currWalkingInCustomer)
-    if poirotCafe.currWalkingInCustomer != None:
-        print(poirotCafe.currWalkingInCustomer.isSeated)
+    # print(poirotCafe.currWalkingInCustomer)
+    # if poirotCafe.currWalkingInCustomer != None:
+        # print(poirotCafe.currWalkingInCustomer.isSeated)
 
     customerControll()
 
@@ -135,7 +137,7 @@ def game_onStep(app):
                 if poirotCafe.cafeTime >= prevCustomerStamp + customer.nextCustomerDelay:
                     customer.currentStep += 1
 
-    print(poirotCafe.customerTimeStamps)       
+    # print(poirotCafe.customerTimeStamps)       
 
     # if app.counterCustomer >= 60:
     #     if app.currentCustomerStep < len(currentCustomer.pixelPath) - 1:
@@ -169,6 +171,7 @@ def game_onKeyPress(app, key):
         amuro.makeSandwich()
         amuro.throwAwayPlate()
         amuro.putDownIngredients()
+        amuro.doSelectCustomerDesk()
 
     if key == 'escape':
         setActiveScreen('start')
@@ -256,6 +259,10 @@ def drawSelectionDesk():
             drawImage('./images/select2Image.PNG', amuro.selection[0]*64, amuro.selection[1]*64, width=64, height=192)
             drawImage('./images/selectionDeskImage.PNG', amuro.select2selection[0]*64, amuro.select2selection[1]*64, width=64, height=64, opacity=40)
 
+def drawSelectionCustomerDesk():
+    if amuro.selection != (0,0) and amuro.selection in [(1,8), (3,8), (5,8), (6,8)]:
+        drawImage('./images/selectionDeskImage.PNG', amuro.selection[0]*64, amuro.selection[1]*64, width=64, height=64, opacity=40)
+
 def drawSelectionCookFood():
     if amuro.selection != (0,0) and amuro.selection in [(4,4,0), (5,4,0), (6,4,0)]:
         drawImage('./images/selectionDeskImage.PNG', amuro.selection[0]*64, amuro.selection[1]*64, width=64, height=64, opacity=40)
@@ -308,11 +315,9 @@ def drawCustomers(app):
             if poirotCafe.customerTimeStamps != []:
                 prevCustomerStamp = poirotCafe.customerTimeStamps[-1]
                 if poirotCafe.cafeTime >= prevCustomerStamp + customer.nextCustomerDelay:
-                    print('..........')
                     posX, posY = customer.pixelPath[customer.currentStep]
                     drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
             else:
-                print('???????????')
                 posX, posY = customer.pixelPath[customer.currentStep]
                 drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
 
