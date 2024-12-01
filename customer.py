@@ -99,7 +99,7 @@ class Customer:
 # initialize customers
 ##########
 
-availableSeating = [(1, 7), (3, 7), (5, 7), (6, 7)]
+availableSeating = [(1, 6), (3, 6), (5, 6), (6, 6)]
 
 
 validBoard = [
@@ -110,7 +110,7 @@ validBoard = [
     [1, 1, 0, 0, 0, 0, 0, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 1, 0, 1, 0, 0, 1, 1, 1],
     [1, 0, 1, 0, 1, 0, 0, 1, 1, 1],
     [0, 0, 0, 0, 1, 0, 0, 0, 1, 1]
 ]
@@ -134,6 +134,7 @@ customers = [akai, ai, conan, heiji, jin, kazuha, kid, matsuda, ran, sera, suzuk
 currentCustomer = customers[random.randint(0, 9)]
 
 currentCustomer.moveCustomer()
+currentCustomer.path.append((currentCustomer.targetX, currentCustomer.targetY+1))
 currentCustomer.boardPathToPixelPath()
 
 # print(currentCustomer.pixelPath)

@@ -318,9 +318,8 @@ class Player():
     def pickUpCookedIng(self):
         if self.selection in [(4,4,0), (5,4,0), (6,4,0)]:
             utensil = self.selectionToUtensil[self.selection]
-            print('curr utensil.........',utensil.name, utensil.isCooking)
+            # print('curr utensil.........',utensil.name, utensil.isCooking)
             if self.currentHoldIngredient == None:
-                print('heyheyheyheyheyheyhey')
                 if not utensil.isCooking and utensil.ingredientInside != None:
                     utensil.ingredientInside.inUtensil = False
                     self.currentHoldIngredient = utensil.ingredientInside

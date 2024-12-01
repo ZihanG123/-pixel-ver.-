@@ -25,10 +25,10 @@ class Kitchen:
             if self.cookingCounter < currCookingIng.cookTime*30:
                 if not currCookingIng.cookedOnce:
                     self.cookingCounter += 1
-                    print(currCookingIng, self.cookingCounter)
+                    # print(currCookingIng, self.cookingCounter)
                     if self.cookingCounter % 30 == 0:
                         self.cookingCounterSeconds += 1
-                        print(self.cookingCounterSeconds)
+                        # print(self.cookingCounterSeconds)
             else:
                 self.cookingCounter = 0
                 self.cookingCounterSeconds = 0
@@ -39,7 +39,7 @@ class Kitchen:
                 # currCookingIng.image = f'./images/cooked/{currCookingIng.name}CookedImage.PNG'
 
     def drawCookingIngredient(self):
-        print(f'{self.name}', self.ingredientInside)
+        # print(f'{self.name}', self.ingredientInside)
         if self.ingredientInside != None:
             currCookingIng = self.ingredientInside
             drawImage(currCookingIng.image, self.selectionCoor[0]*64, self.selectionCoor[1]*64, width=64, height=64)
