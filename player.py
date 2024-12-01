@@ -15,7 +15,7 @@ class Player():
         self.playerPosX = playerPosX
         self.playerPosY = playerPosY
         self.name = name
-        self.speed = 8
+        self.speed = 16
         self.isMoving = False
         self.validSpaceImage = './images/cafeValidMovementImage.PNG'
         self.validBoard = [[1]*640 for row in range(640)]
@@ -347,7 +347,8 @@ class Player():
                     utensil.ingredientInside = None
 
         
-
+    def takeCustomerOrder(self):
+        pass
 
 #######
 # initialize player

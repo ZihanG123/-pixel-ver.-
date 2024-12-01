@@ -10,7 +10,7 @@ class Customer:
         self.customerPosX = 0
         self.customerPosY = 4
 
-        self.speed = 5
+        self.speed = 10
         self.validBoard = validBoard
 
         self.seat = None
@@ -33,7 +33,7 @@ class Customer:
 
         self.directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
-        self.nextCustomerDelay = random.randint(1, 10)*30
+        self.nextCustomerDelay = random.randint(1, 10)*10
         self.currentStep = 0
 
         self.timeStepRecorded = False
@@ -148,7 +148,7 @@ class Customer:
 
         self.eaten = 0
 
-        self.nextCustomerDelay = random.randint(30, 300)
+        self.nextCustomerDelay = random.randint(1, 10)*10
         self.currentStep = 0
 
         self.timeStepRecorded = False

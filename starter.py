@@ -14,6 +14,8 @@ from kitchen import *
 # The images are based on Detective Conan by Gosho Aoyama.
 
 def onAppStart(app):
+    app.stepsPerSecond = 10
+    
     app.keyHeld = None
 
     app.chairs = [(1, 7), (3, 7), (5, 7), (6, 7)]
@@ -338,6 +340,7 @@ def customerControll():
         customer.isSeated = True
         poirotCafe.insideCustomers.append(customer)
         poirotCafe.walkInOneByOne()
+
 
             
 
