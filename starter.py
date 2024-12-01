@@ -95,7 +95,7 @@ def game_redrawAll(app):
 
     drawHoldPlate()
 
-    drawCustomers(app)
+    drawCustomersWalkingIn()
 
     drawSelectionCookFood()
 
@@ -110,6 +110,8 @@ def game_redrawAll(app):
     drawTakeCustomerOrder()
 
     checkCurrDishOnDesk()
+
+    drawCustomerLeaving()
 
 
 def game_onStep(app):
@@ -137,7 +139,7 @@ def game_onStep(app):
 
     # delay 2 seconds to let the customer go into the cafe
 
-    if poirotCafe.cafeTime >= 60:
+    if poirotCafe.cafeTime >= 20:
         customer = poirotCafe.currWalkingInCustomer
         if customer.currentStep < len(customer.pixelPath) - 1:
             if poirotCafe.customerTimeStamps == []:
@@ -146,6 +148,11 @@ def game_onStep(app):
                 prevCustomerStamp = poirotCafe.customerTimeStamps[-1]
                 if poirotCafe.cafeTime >= prevCustomerStamp + customer.nextCustomerDelay:
                     customer.currentStep += 1
+
+    if poirotCafe.currLeavingCustomer != None:
+        customer = poirotCafe.currLeavingCustomer
+        if customer.currentStepLeaving < len(customer.pixelPath) - 2:
+            customer.currentStepLeaving += 1
 
     # print(poirotCafe.customerTimeStamps)       
 
@@ -166,6 +173,10 @@ def game_onStep(app):
 
         if customer.ordered == False:
             customer.startToOrder(cafeMenu)
+        
+    poirotCafe.letCustomerLeave()
+
+    customerControllLeaving()
 
     chopping.cookFood()
     pan.cookFood()
@@ -322,7 +333,7 @@ def drawHoldPlate():
         for item in amuro.currentHoldPlate.currentIngredients:
             drawImage(f'./images/cooked/{item.name}CookedImage.PNG', amuro.playerPosX, amuro.playerPosY, width=64, height=64)
 
-def drawCustomers(app):
+def drawCustomersWalkingIn():
 
     customer = poirotCafe.currWalkingInCustomer
     if customer != None:
@@ -341,6 +352,20 @@ def drawCustomers(app):
         posX, posY = insideSeatedCustomer.pixelPath[-1]
         drawImage(insideSeatedCustomer.image, posX+35, posY+21, width=128, height=128, align='center')
 
+def drawCustomerLeaving():
+
+    customer = poirotCafe.currLeavingCustomer
+    if customer != None:
+        # print(f'{customer.name} is leaving')
+        print('..............'+str(len(customer.pixelPathLeave)))
+        print(customer.currentStepLeaving)
+        posX, posY = customer.pixelPathLeave[customer.currentStepLeaving]
+        drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
+
+
+def drawCustomersEating(app):
+    pass
+
 
 def customerControll():
     # posX, posY = currentCustomer.pixelPath[app.currentCustomerStep]
@@ -352,6 +377,14 @@ def customerControll():
         customer.isSeated = True
         poirotCafe.insideCustomers.append(customer)
         poirotCafe.walkInOneByOne()
+
+def customerControllLeaving():
+    customer = poirotCafe.currLeavingCustomer
+    if customer != None:
+        posX, posY = customer.pixelPathLeave[customer.currentStepLeaving]
+        if (posX, posY) == (customer.pixelPathLeave[-1][0], customer.pixelPathLeave[-1][1]):
+            customer.hasLeft = True
+            customer.resetCustomer()
 
 
 def drawMovingAmuro(app):
@@ -386,9 +419,20 @@ def drawTakeCustomerOrder():
 
 def checkCurrDishOnDesk():
     for customer in poirotCafe.insideCustomers:
-        if customer.currDishOnDesk != Plate():
-            for item in customer.currDishOnDesk.currentIngredients:
-                drawImage(f'./images/cooked/{item.name}CookedImage.PNG', customer.currDishOnDesk.posX*64, customer.currDishOnDesk.posY*64, width=64, height=64)
+        if (customer.currDishOnDesk != Plate()):
+            if customer.eatingTimeStamps != None:
+                if poirotCafe.cafeTime <= customer.eatingTimeStamps + customer.eatingTime*10:
+                    for item in customer.currDishOnDesk.currentIngredients:
+                        drawImage(f'./images/cooked/{item.name}CookedImage.PNG', customer.currDishOnDesk.posX*64, customer.currDishOnDesk.posY*64, width=64, height=64)
+                else:
+                    customer.eatingTimeStamps = None
+                    for dish in customer.orderDishes:
+                        if customer.currDishOnDesk == dish:
+                            customer.orderDishes.remove(dish)
+                    customer.eaten += 1
+                    print(f'{customer.name} ate {customer.eaten} dish(es)')
+                    customer.currDishOnDesk = Plate()
+
 
 def drawCookingIngredient(utensil):
         # print(f'{self.name}', self.ingredientInside)

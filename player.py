@@ -286,7 +286,9 @@ class Player():
                                     customer.currDishOnDesk = self.currentHoldPlate
                                     customer.currDishOnDesk.posX, customer.currDishOnDesk.posY = self.selection[0], self.selection[1]
                                     self.currentHoldPlate = Plate()
+                                    customer.eatingTimeStamps = poirotCafe.cafeTime
                                     print(customer.currDishOnDesk)
+                                    print(customer.eatingTimeStamps)
                                     break
 
                 

@@ -11,7 +11,7 @@ class Customer:
         self.customerPosX = 0
         self.customerPosY = 4
 
-        self.speed = 10
+        self.speed = 12
         self.validBoard = validBoard
 
         self.seat = None
@@ -20,8 +20,14 @@ class Customer:
         self.targetY = None
 
         self.visited = set()
+        
+        # walking in
         self.path = []
         self.pixelPath = [(-self.speed*v, 256) for v in range(80//self.speed+1,0,-1)]
+
+        # leaving
+        self.pathLeave = []
+        self.pixelPathLeave = []
 
         self.isSeated = False
 
@@ -36,11 +42,20 @@ class Customer:
 
         self.nextCustomerDelay = random.randint(7, 14)*10
         # self.nextCustomerDelay = 40
+
+        # currentStep for walking in
         self.currentStep = 0
+
+        # currentStep for leaving
+        self.currentStepLeaving = 0
 
         self.timeStepRecorded = False
 
         self.currDishOnDesk = Plate()
+
+        self.eatingTimeStamps = None
+
+        self.hasLeft = False
 
     def __repr__(self):
         return f'{self.name}'
@@ -89,6 +104,7 @@ class Customer:
     
     # make the path to pixel path so the customer can move more smoothly
     def boardPathToPixelPath(self):
+        
         for i in range(len(self.path) - 1):
             start = self.path[i]
             end = self.path[i + 1]
@@ -106,11 +122,16 @@ class Customer:
 
         if self.pixelPath[-1] == (self.targetX*64, self.targetY*64):
             self.seat = (self.targetX, self.targetY+1)
+
+        self.pathLeave = list(reversed(self.path))
+        self.pixelPathLeave = list(reversed(self.pixelPath))
+
     
     # customer order
     def startToOrder(self, cafeMenu):
         if self.isSeated == True and self.ordered == False:
-            self.orderNumber = random.randint(1,3)
+            # self.orderNumber = random.randint(1,3)
+            self.orderNumber = 1
             self.ordered = True
             for i in range(self.orderNumber):
                 self.orderDishes.append(cafeMenu.menu[random.randint(0,9)])
@@ -120,16 +141,20 @@ class Customer:
             print(self.orderDishes)
 
     def leaveCafe(self):
-        self.visited = set()
-        self.targetX, self.targetY = 0, 4
-        self.path = [self.seat]
-        self.pixelPath = []
-        if self.move(self.seat[0], self.seat[1]-1, self.directions):
-            self.boardPathToPixelPath()
-            self.pixelPath.append((-self.speed*v, 256) for v in range(0,80//self.speed+1))
-            return self.pixelPath
-        else:
-            return None
+    #     self.visited = set()
+    #     self.targetX, self.targetY = 0, 4
+    #     self.path = [self.seat]
+    #     self.pixelPath = []
+    #     if self.move(self.seat[0], self.seat[1]-1, self.directions):
+    #         self.boardPathToPixelPath()
+    #         self.pixelPath.append((-self.speed*v, 256) for v in range(0,80//self.speed+1))
+    #         return self.pixelPath
+    #     else:
+    #         return None
+        for i in range(len(self.path)):
+            self.pathLeave.append(self.path[len(self.path)-1-i])
+        for i in range(len(self.pixelPath)):
+            self.pixelPathLeave.append(self.pixelPath[len(self.pixelPath)-1-i])
         
     def resetCustomer(self):
         self.customerPosX = 0
@@ -143,6 +168,8 @@ class Customer:
         self.visited = set()
         self.path = []
         self.pixelPath = [(-self.speed*v, 256) for v in range(80//self.speed+1,0,-1)]
+        self.pathLeave = []
+        self.pixelPathLeave = []
 
         self.isSeated = False
 
@@ -154,10 +181,15 @@ class Customer:
 
         self.nextCustomerDelay = random.randint(1, 10)*10
         self.currentStep = 0
+        self.currentStepLeaving = 0
 
         self.timeStepRecorded = False
 
-        self.currDishOnDesk = Plate()             
+        self.currDishOnDesk = Plate()
+
+        self.eatingTimeStamps = None
+
+        self.hasLeft = False
 
 
 ########################################
@@ -179,6 +211,8 @@ class Cafe:
         self.customerTimeStamps = []
         self.currWalkingInCustomer = None
 
+        self.currLeavingCustomer = None
+
     # next customers
     def letCustomerIn(self):
         if self.availableSeats != []:
@@ -194,9 +228,11 @@ class Cafe:
             nextCustomer.moveCustomer()
             nextCustomer.path.append((nextCustomer.targetX, nextCustomer.targetY+1))
             nextCustomer.boardPathToPixelPath()
+            # nextCustomer.leaveCafe()
             
             self.nextCustomers.append(nextCustomer)
             self.occupiedSeats.append(nextCustomer.seat)
+            # print('occupied seats:', self.occupiedSeats)
             self.queue.remove(nextCustomer)
             self.availableSeats.remove(nextCustomer.seat)
         
@@ -207,14 +243,33 @@ class Cafe:
             customer.timeStepRecorded = True
 
     def letCustomerLeave(self):
-        for customer in self.insideCustomers:
-            if customer.eaten == customer.orderNumber:
-                customer.leaveCafe()
+        if self.currLeavingCustomer == None:
+            for customer in self.insideCustomers:
+                if customer.eaten == customer.orderNumber:
+                    self.currLeavingCustomer = customer
+                
+                break
+        else:
+            customer = self.currLeavingCustomer
+            # print(customer.seat)
+            # print(customer.path)
+            # print(customer.pathLeave)
+            # print(customer.pixelPathLeave)
+            # print(f'currLeavingCustomer: {customer.name}')
+            # print(self.insideCustomers)
+            if customer in self.insideCustomers:
                 self.insideCustomers.remove(customer)
+
+            if customer not in self.queue:
                 self.queue.append(customer)
+            if customer.seat in self.occupiedSeats:
                 self.occupiedSeats.remove(customer.seat)
+            print('occupied seats:????', self.occupiedSeats)
+
+            if customer.seat not in self.availableSeats:
                 self.availableSeats.append(customer.seat)
-                customer.resetCustomer()
+            if customer.hasLeft:
+                self.currLeavingCustomer = None
 
     def walkInOneByOne(self):
         if self.currWalkingInCustomer == None:
