@@ -9,7 +9,6 @@ from menu import *
 from ingredient import *
 from customer import *
 from kitchen import *
-from cafe import *
 
 # All of the images used are drawn by me.
 # The images are based on Detective Conan by Gosho Aoyama.
@@ -21,9 +20,9 @@ def onAppStart(app):
     app.desks = [(1, 8), (3, 8), (5, 8), (6, 8)]
     app.availableSeating = [(1, 7), (1, 9), (3, 7), (3, 9), (5, 7), (5, 9), (6, 7), (6, 9)]
 
-    app.currentCustomerStep = 0
+    # app.currentCustomerStep = 0
 
-    app.counterCustomer = 0
+    # app.counterCustomer = 0
 
     app.spriteIndex = 0
     app.counterSprite = 0
@@ -109,20 +108,39 @@ def game_onStep(app):
     else:
         amuro.isMoving = False
 
-    if app.counterCustomer >= 60:
-        if app.currentCustomerStep < len(currentCustomer.pixelPath) - 1:
-            app.currentCustomerStep += 1
+    poirotCafe.cafeTime += 1
+    print(poirotCafe.cafeTime)
+        
+    customerControll()
 
-    app.counterCustomer += 1
+    for i in range(len(poirotCafe.availableSeats)):
+        poirotCafe.letCustomerIn()
+
+
+    # delay 2 seconds to let the customer go into the cafe
+
+    if poirotCafe.cafeTime >= 60:
+        for customer in poirotCafe.insideCustomers:
+            poirotCafe.recordTimeStep(customer)
+            if customer.currentStep < len(customer.pixelPath) - 1:
+                customer.currentStep += 1     
+
+    print(poirotCafe.customerTimeStamps)       
+
+    # if app.counterCustomer >= 60:
+    #     if app.currentCustomerStep < len(currentCustomer.pixelPath) - 1:
+    #         app.currentCustomerStep += 1
+
+    # app.counterCustomer += 1
 
     if app.counterSprite % 5 == 0:
         app.spriteIndex = (app.spriteIndex + 1) % len(amuro.spriteAnimatedImages)
     app.counterSprite += 1
 
-    customerControll(app)
 
-    if currentCustomer.ordered == False:
-        currentCustomer.startToOrder(cafeMenu)
+    for customer in poirotCafe.insideCustomers:
+        if customer.ordered == False:
+            customer.startToOrder(cafeMenu)
 
     chopping.cookFood()
     pan.cookFood()
@@ -270,14 +288,31 @@ def drawHoldPlate():
             drawImage(f'./images/cooked/{item.name}CookedImage.PNG', amuro.playerPosX, amuro.playerPosY, width=64, height=64)
 
 def drawCustomers(app):
-    posX, posY = currentCustomer.pixelPath[app.currentCustomerStep]
-    drawImage(currentCustomer.image, posX+35, posY+21, width=128, height=128, align='center')
+    # posX, posY = currentCustomer.pixelPath[app.currentCustomerStep]
+    # drawImage(currentCustomer.image, posX+35, posY+21, width=128, height=128, align='center')
 
-def customerControll(app):
-    posX, posY = currentCustomer.pixelPath[app.currentCustomerStep]
-    if (posX, posY) == (currentCustomer.targetX*64, (currentCustomer.targetY+1)*64):
-        currentCustomer.isSeated = True
-        currentCustomer.seat = (currentCustomer.targetX, currentCustomer.targetY+1)
+    for customer in poirotCafe.insideCustomers:
+
+        if poirotCafe.customerTimeStamps != []:
+            prevCustomerStamp = poirotCafe.customerTimeStamps[-1]
+            if poirotCafe.cafeTime >= prevCustomerStamp + customer.nextCustomerDelay:
+                posX, posY = customer.pixelPath[customer.currentStep]
+                drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
+        else:
+            posX, posY = customer.pixelPath[customer.currentStep]
+            drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
+
+
+
+def customerControll():
+    # posX, posY = currentCustomer.pixelPath[app.currentCustomerStep]
+    # if (posX, posY) == (currentCustomer.targetX*64, (currentCustomer.targetY+1)*64):
+    #     currentCustomer.isSeated = True
+    for customer in poirotCafe.insideCustomers:
+        posX, posY = customer.pixelPath[customer.currentStep]
+        if (posX, posY) == (customer.targetX*64, (customer.targetY+1)*64):
+            customer.isSeated = True
+            
 
 def drawMovingAmuro(app):
     if amuro.isMoving:
