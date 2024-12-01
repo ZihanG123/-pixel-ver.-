@@ -21,18 +21,33 @@ class Kitchen:
     def cookFood(self):
         if self.ingredientInside != None:
             currCookingIng = self.ingredientInside
-            if self.cookingCounter <= currCookingIng.cookTime*30:
-                self.cookingCounter += 1
-                if self.cookingCounter % 30 == 0:
-                    self.cookingCounterSeconds += 1
+
+            if self.cookingCounter < currCookingIng.cookTime*30:
+                if not currCookingIng.cookedOnce:
+                    self.cookingCounter += 1
+                    print(currCookingIng, self.cookingCounter)
+                    if self.cookingCounter % 30 == 0:
+                        self.cookingCounterSeconds += 1
+                        print(self.cookingCounterSeconds)
             else:
-                currCookingIng.cooked = True
-                currCookingIng.isCooking = False
                 self.cookingCounter = 0
                 self.cookingCounterSeconds = 0
+                currCookingIng.cooked = True
+                currCookingIng.isCooking = False
                 self.isCooking = False
                 currCookingIng.cookedOnce = True
                 # currCookingIng.image = f'./images/cooked/{currCookingIng.name}CookedImage.PNG'
+
+    def drawCookingIngredient(self):
+        print(f'{self.name}', self.ingredientInside)
+        if self.ingredientInside != None:
+            currCookingIng = self.ingredientInside
+            drawImage(currCookingIng.image, self.selectionCoor[0]*64, self.selectionCoor[1]*64, width=64, height=64)
+            if not currCookingIng.cookedOnce:
+                if currCookingIng.cookTime-self.cookingCounterSeconds > 0:
+                    drawLabel(str(currCookingIng.cookTime-self.cookingCounterSeconds), 
+                        self.selectionCoor[0]*64+8, self.selectionCoor[1]*64+8, 
+                        size=20, align='center', font='monospace', bold=True, fill='white')
 
 
 

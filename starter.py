@@ -95,7 +95,9 @@ def game_redrawAll(app):
 
     drawSelectionCookFood()
 
-    drawCookingIngredient()
+    chopping.drawCookingIngredient()
+    pan.drawCookingIngredient()
+    fryer.drawCookingIngredient()
 
 
 def game_onStep(app):
@@ -121,8 +123,9 @@ def game_onStep(app):
     if currentCustomer.ordered == False:
         currentCustomer.startToOrder(cafeMenu)
 
-    for utensil in [chopping, pan, fryer]:
-        utensil.cookFood()
+    chopping.cookFood()
+    pan.cookFood()
+    fryer.cookFood()
 
 
 def game_onKeyPress(app, key):
@@ -251,18 +254,6 @@ def drawHoldIngredient():
     if (amuro.currentHoldIngredient != None):
         drawImage('./images/hold/holdBGImage.PNG', amuro.playerPosX, amuro.playerPosY, width=64, height=64)
         drawImage(amuro.currentHoldIngredient.image, amuro.playerPosX, amuro.playerPosY, width=64, height=64)
-
-def drawCookingIngredient():
-    for utensil in [chopping, pan, fryer]:
-        print(f'{utensil.name}', utensil.ingredientInside)
-        if utensil.ingredientInside != None:
-            currCookingIng = utensil.ingredientInside
-            drawImage(currCookingIng.image, utensil.selectionCoor[0]*64, utensil.selectionCoor[1]*64, width=64, height=64)
-            if not currCookingIng.cookedOnce:
-                if currCookingIng.cookTime-utensil.cookingCounterSeconds > 0:
-                    drawLabel(str(currCookingIng.cookTime-utensil.cookingCounterSeconds), 
-                        utensil.selectionCoor[0]*64+8, utensil.selectionCoor[1]*64+8, 
-                        size=20, align='center', font='monospace', bold=True, fill='white')
 
 # draw the plate at position (3,4)
 def drawPlate():
