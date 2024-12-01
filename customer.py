@@ -4,7 +4,7 @@ import random
 class Customer:
 
     # name should be string
-    def __init__(self, name, validBoard, target):
+    def __init__(self, name, validBoard, target, eatingTime):
         self.name = name
         self.image = f'./images/customers/{self.name}Image.PNG'
         self.customerPosX = 0
@@ -14,18 +14,20 @@ class Customer:
         self.validBoard = validBoard
 
         self.targetX = target[0]
-        self.targetY = target[1]
+        self.targetY = target[1]-1
 
         self.visited = set()
         self.path = []
         self.pixelPath = [(-self.speed*v, 256) for v in range(80//self.speed+1,0,-1)]
 
         self.isSeated = False
-        self.seat = None
+        self.seat = (self.targetX, self.targetY+1)
 
         self.ordered = False
         self.orderNumber = 0
         self.orderDishes = []
+
+        self.eatingTime = eatingTime
         
     def isValidMove(self, x, y):
             return (0 <= x < len(self.validBoard) and 0 <= y < len(self.validBoard[0]) 
@@ -80,7 +82,7 @@ class Customer:
         self.pixelPath.append((self.path[-1][0]*64, self.path[-1][1]*64))
 
         if self.pixelPath[-1] == (self.targetX*64, self.targetY*64):
-            self.seat = (self.targetX, self.targetY)
+            self.seat = (self.targetX, self.targetY+1)
     
     # customer order
     def startToOrder(self, cafeMenu):
@@ -94,12 +96,37 @@ class Customer:
             print(self.orderNumber)
             print(self.orderDishes)
 
+class Cafe:
+    def __init__(self):
+        self.seats = [(1, 7), (3, 7), (5, 7), (6, 7)] 
+        self.occupiedSeats = []
+        self.availableSeats = [(1, 7), (3, 7), (5, 7), (6, 7)]
+        self.insideCustomers = []
+        self.queue = customersAll
+
+    def letCustomerIn(self):
+        if self.availableSeats != []:
+            currQueueNum = len(self.queue)
+            nextCustomer = random.randint(0, currQueueNum)
+            availableSeatingNum = len(self.availableSeats)
+            nextCustomer.seat = self.availableSeats[random.randint(0, availableSeatingNum-1)]
+            nextCustomer.targetX, nextCustomer.targetY = nextCustomer.seat[0], nextCustomer.seat[1]-1
+            
+            self.insideCustomers.append(nextCustomer)
+            self.occupiedSeats.add(nextCustomer.seat)
+            self.queue.remove(nextCustomer)
+
+    def letCustomerLeave(self):
+        
 
 ##########
 # initialize customers
 ##########
 
-availableSeating = [(1, 6), (3, 6), (5, 6), (6, 6)]
+poirotCafe = Cafe()
+
+availableSeating = poirotCafe.availableSeats()
+availableSeatingNum = len(availableSeating)
 
 
 validBoard = [
@@ -129,9 +156,9 @@ sera = Customer('sera', validBoard, availableSeating[random.randint(0, 3)])
 suzuki = Customer('suzuki', validBoard, availableSeating[random.randint(0, 3)])
 
 
-customers = [akai, ai, conan, heiji, jin, kazuha, kid, matsuda, ran, sera, suzuki]
+customersAll = [akai, ai, conan, heiji, jin, kazuha, kid, matsuda, ran, sera, suzuki]
 
-currentCustomer = customers[random.randint(0, 9)]
+currentCustomer = customersAll[random.randint(0, 9)]
 
 currentCustomer.moveCustomer()
 currentCustomer.path.append((currentCustomer.targetX, currentCustomer.targetY+1))
@@ -139,3 +166,4 @@ currentCustomer.boardPathToPixelPath()
 
 # print(currentCustomer.pixelPath)
 print(currentCustomer.seat)
+print((currentCustomer.targetX, currentCustomer.targetY+1))

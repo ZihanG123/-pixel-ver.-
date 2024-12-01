@@ -79,6 +79,8 @@ class Player():
         self.selectionToUtensil = {(4,4,0):chopping, (5,4,0):pan, (6,4,0):fryer}
         self.nameToUtensil = {'chopping':chopping, 'pan':pan, 'fryer':fryer}
 
+        self.servedCustomerNum = 0
+
     
     # move the player
     def move(self,key):

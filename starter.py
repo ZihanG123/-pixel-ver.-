@@ -9,6 +9,7 @@ from menu import *
 from ingredient import *
 from customer import *
 from kitchen import *
+from cafe import *
 
 # All of the images used are drawn by me.
 # The images are based on Detective Conan by Gosho Aoyama.
@@ -274,8 +275,9 @@ def drawCustomers(app):
 
 def customerControll(app):
     posX, posY = currentCustomer.pixelPath[app.currentCustomerStep]
-    if (posX, posY) == (currentCustomer.targetX*64, currentCustomer.targetY*64):
+    if (posX, posY) == (currentCustomer.targetX*64, (currentCustomer.targetY+1)*64):
         currentCustomer.isSeated = True
+        currentCustomer.seat = (currentCustomer.targetX, currentCustomer.targetY+1)
 
 def drawMovingAmuro(app):
     if amuro.isMoving:
