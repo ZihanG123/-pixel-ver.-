@@ -1,7 +1,3 @@
-from cmu_graphics import *
-from PIL import Image
-
-
 class Ingredient:
 
     # name should be a string

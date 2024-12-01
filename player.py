@@ -267,13 +267,30 @@ class Player():
 
     # put back the dish to the table (3,4)
     def putBackDish(self):
-        if (self.currentHoldPlate.currentIngredients != [] and self.selection in [(3,4), (1,8), (3,8), (5,8), (6,8)] and
-            self.currentPlate.currentIngredients == []):
+        if (self.currentHoldPlate.currentIngredients != []):
+            if self.selection == (3,4) and self.currentPlate.currentIngredients == []:
 
-            self.currentPlate = self.currentHoldPlate
-            self.currentHoldPlate = Plate()
-            self.currentPlate.posX = self.selection[0]
-            self.currentPlate.posY = self.selection[1]
+                self.currentPlate = self.currentHoldPlate
+                self.currentHoldPlate = Plate()
+                self.currentPlate.posX = self.selection[0]
+                self.currentPlate.posY = self.selection[1]
+            elif self.selection in [(1,8), (3,8), (5,8), (6,8)]:
+                print('????????????????????')
+                for customer in poirotCafe.insideCustomers:
+                    if self.selection[0] == customer.seat[0] and self.selection[1]-1 == customer.seat[1]:
+                        if customer.currDishOnDesk == Plate():
+                            print('...............????????..')
+                            print(customer.currDishOnDesk)
+                            for dish in customer.orderDishes:
+                                if self.currentHoldPlate == dish:
+                                    print('.................')
+                                    customer.currDishOnDesk = self.currentHoldPlate
+                                    customer.currDishOnDesk.posX, customer.currDishOnDesk.posY = self.selection[0], self.selection[1]
+                                    self.currentHoldPlate = Plate()
+                                    break
+
+                
+
 
     def updateDish(self):
         if self.selection in [(3,4), (1,8), (3,8), (5,8), (6,8)]:

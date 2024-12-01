@@ -1,7 +1,6 @@
-from cmu_graphics import *
-from PIL import Image
-
 # class for the plate that the player currently have
+from ingredient import *
+
 class Plate:
     def __init__(self):
         self.currentIngredients = []
@@ -30,13 +29,28 @@ class Plate:
         return hash(str(self))
 
     def __eq__(self, other):
-        self.currentIngredients = sorted(self.currentIngredients)
-        other.currentIngredients = sorted(other.currentIngredients)
-        if len(self.currentIngredients) != other.currentIngredients:
-            return False
-        else:
-            for i in range(len(self.currentIngredients)):
-                if self.currentIngredients[i] != other.currentIngredients[i]:
+        # self.currentIngredients = sorted(self.currentIngredients)
+        # other.currentIngredients = sorted(other.currentIngredients)
+        if isinstance(other, Plate):
+            if self.currentIngredients == [] and other.currentIngredients == []:
+                return True
+            else:
+                if len(self.currentIngredients) != len(other.currentIngredients):
                     return False
-                
-        return True
+                for i in range(len(self.currentIngredients)):
+                    if self.currentIngredients[i] != other.currentIngredients[i]:
+                        return False
+            return True
+        else:
+            if len(self.currentIngredients) != len(other.ingredientsNeeded):
+                return False
+            else:
+                for i in range(len(self.currentIngredients)):
+                    if self.currentIngredients[i] != other.ingredientsNeeded[i]:
+                        return False
+
+                    # if not self.currentIngredients[i].cooked:
+                    #     print(self.currentIngredients[i], self.currentIngredients[i].cooked)
+                    #     print('33333333')
+                    #     return False
+            return True

@@ -1,5 +1,6 @@
-from PIL import *
 import random
+
+from plate import *
 
 class Customer:
 
@@ -33,10 +34,13 @@ class Customer:
 
         self.directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
-        self.nextCustomerDelay = random.randint(1, 10)*10
+        self.nextCustomerDelay = random.randint(7, 14)*10
+        # self.nextCustomerDelay = 40
         self.currentStep = 0
 
         self.timeStepRecorded = False
+
+        self.currDishOnDesk = Plate()
 
     def __repr__(self):
         return f'{self.name}'
@@ -153,6 +157,9 @@ class Customer:
 
         self.timeStepRecorded = False
 
+        self.currDishOnDesk = Plate()             
+
+
 ########################################
 # Cafe class
 ########################################
@@ -220,6 +227,16 @@ class Cafe:
                 self.nextCustomers.pop()
                 if len(poirotCafe.nextCustomers) > 0:
                     self.currWalkingInCustomer = self.nextCustomers[-1]
+
+
+
+########################################
+# Seat class
+########################################
+
+class Seat:
+    def __init__(self):
+        pass
 
 
 ##########

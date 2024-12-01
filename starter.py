@@ -99,11 +99,17 @@ def game_redrawAll(app):
 
     drawSelectionCookFood()
 
-    chopping.drawCookingIngredient()
-    pan.drawCookingIngredient()
-    fryer.drawCookingIngredient()
+    drawCookingIngredient(chopping)
+    drawCookingIngredient(pan)
+    drawCookingIngredient(fryer)
+
+    # chopping.drawCookingIngredient()
+    # pan.drawCookingIngredient()
+    # fryer.drawCookingIngredient()
 
     takeCustomerOrder()
+
+    checkCurrDishOnDesk()
 
 
 def game_onStep(app):
@@ -195,13 +201,13 @@ def game_onKeyPress(app, key):
         if (amuro.currentPlate.currentIngredients != [] and 
             amuro.selection in [(3,4), (1,8), (3,8), (5,8), (6,8)] and 
             amuro.currentHoldPlate.currentIngredients == []):
-            amuro.updateDish()
+            # amuro.updateDish()
             amuro.pickUpDish()
         
         elif (amuro.currentHoldPlate.currentIngredients != [] and 
             amuro.selection in [(3,4), (1,8), (3,8), (5,8), (6,8)] and
             amuro.currentPlate.currentIngredients == []):
-            amuro.updateDish()
+            # amuro.updateDish()
             amuro.putBackDish()
 
     if key == 'a':
@@ -304,7 +310,6 @@ def drawHoldIngredient():
 
 # draw the plate at position (3,4)
 def drawPlate():
-    print(amuro.currentPlate.posX, amuro.currentPlate.posX)
     if len(amuro.currentPlate.currentIngredients) != 0:
         for item in amuro.currentPlate.currentIngredients:
             drawImage(f'./images/cooked/{item.name}CookedImage.PNG', amuro.currentPlate.posX*64, amuro.currentPlate.posY*64, width=64, height=64)
@@ -371,10 +376,28 @@ def takeCustomerOrder():
             if amuro.selection[0] == customer.seat[0] and amuro.selection[1]-1 == customer.seat[1]:
                 drawImage('./images/dialogueImage.PNG', 0, 0, width=640, height=640)
                 drawLabel('I would like ', 8, 576+10, size=16, font='monospace', align='left', bold=True)
-                i = 16
+                i = 12
                 for dish in customer.orderDishes:
                     drawLabel(f' - {str(dish)}', 8, 576+8+i, size=16, font='monospace', align='left', bold=True)
-                    i += 16
+                    i += 12
+
+def checkCurrDishOnDesk():
+    for customer in poirotCafe.insideCustomers:
+        if customer.currDishOnDesk != Plate():
+            for item in customer.currDishOnDesk.currentIngredients:
+                drawImage(f'./images/cooked/{item.name}CookedImage.PNG', customer.currDishOnDesk.posX*64, customer.currDishOnDesk.posY*64, width=64, height=64)
+
+def drawCookingIngredient(utensil):
+        # print(f'{self.name}', self.ingredientInside)
+        if utensil.ingredientInside != None:
+            currCookingIng = utensil.ingredientInside
+            drawImage(currCookingIng.image, utensil.selectionCoor[0]*64, utensil.selectionCoor[1]*64, width=64, height=64)
+            if not currCookingIng.cookedOnce:
+                if currCookingIng.cookTime-utensil.cookingCounterSeconds > 0:
+                    drawLabel(str(currCookingIng.cookTime-utensil.cookingCounterSeconds), 
+                        utensil.selectionCoor[0]*64+8, utensil.selectionCoor[1]*64+8, 
+                        size=20, align='center', font='monospace', bold=True, fill='white')
+
 
 
 ###################

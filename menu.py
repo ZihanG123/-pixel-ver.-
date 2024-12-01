@@ -1,6 +1,3 @@
-from cmu_graphics import *
-from PIL import Image
-
 from plate import *
 from dish import *
 

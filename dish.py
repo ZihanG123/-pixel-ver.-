@@ -1,13 +1,10 @@
-from cmu_graphics import *
-from PIL import Image
 from ingredient import *
-
 # class for all the dishes in the menu
 class Dish:
 
     # name should be string
     # ingredientsNeeded should be a list of strings
-    def __init__(self,name,ingredientsNeeded):
+    def __init__(self, name, ingredientsNeeded):
         
         # name for dish
         self.name = name
@@ -20,15 +17,13 @@ class Dish:
     # check if every ingredient in plate is the same as every ingredient in dish
     # other is Plate
     def __eq__(self, other):
-        self.ingredientsNeeded = sorted(self.ingredientsNeeded)
-        other.currentIngredients = sorted(other.currentIngredients)
+        # self.ingredientsNeeded = sorted(self.ingredientsNeeded)
+        # other.currentIngredients = sorted(other.currentIngredients)
         if len(self.ingredientsNeeded) != other.currentIngredients:
             return False
         else:
             for i in range(len(self.ingredientsNeeded)):
-                if self.ingredientsNeeded[i] != other.currentIngredients[i]:
-                    return False
-                if not self.ingredientsNeeded[i].cooked:
+                if self.ingredientsNeeded[i] != len(other.currentIngredients[i]):
                     return False
                 
         return True
@@ -37,6 +32,9 @@ class Dish:
     def __repr__(self):
         # return f'{self.name}: ' + '+ '.join(str(ingredient) for ingredient in self.ingredientsNeeded)
         return f'{self.name}'
+    
+    def __hash__(self):
+        return hash(str(self))
 
     
 #######
@@ -45,14 +43,14 @@ class Dish:
 
 sandwich = Dish('sandwich',[plate, bread, mayonnaise, ham, lettuce])
 
-chickenCurryRice = Dish('chicken curry rice', [plate, rice, curry, chicken])
-tonkatsuCurryRice = Dish('tonkatsu curry rice', [plate, rice, curry, tonkatsu])
-tempuraCurryRice = Dish('tempura curry rice', [plate, rice, curry, tempura])
+chickenCurryRice = Dish('chicken curry rice', [plate, curry, rice, chicken])
+tonkatsuCurryRice = Dish('tonkatsu curry rice', [plate, curry, rice, tonkatsu])
+tempuraCurryRice = Dish('tempura curry rice', [plate, curry, rice, tempura])
 
-chickenCurrySpaghetti = Dish('chicken curry spaghetti', [plate, spaghetti, curry, chicken])
-tonkatsuCurrySpaghetti = Dish('tonkatsu curry spaghetti', [plate, spaghetti, curry, tonkatsu])
-tempuraCurrySpaghetti = Dish('tempura curry spaghetti', [plate, spaghetti, curry, tempura])
+chickenCurrySpaghetti = Dish('chicken curry spaghetti', [plate, curry, spaghetti, chicken])
+tonkatsuCurrySpaghetti = Dish('tonkatsu curry spaghetti', [plate, curry, spaghetti, tonkatsu])
+tempuraCurrySpaghetti = Dish('tempura curry spaghetti', [plate, curry, spaghetti, tempura])
 
-chickenTomatoSauceSpaghetti = Dish('chicken tomato sauce spaghetti', [plate, spaghetti, ketchup, chicken])
-tonkatsuTomatoSauceSpaghetti = Dish('tonkatsu tomato sauce spaghetti', [plate, spaghetti, ketchup, tonkatsu])
-tempuraTomatoSauceSpaghetti = Dish('tempura tomato sauce spaghetti', [plate, spaghetti, ketchup, tempura])
+chickenTomatoSauceSpaghetti = Dish('chicken tomato sauce spaghetti', [plate, ketchup, spaghetti, chicken])
+tonkatsuTomatoSauceSpaghetti = Dish('tonkatsu tomato sauce spaghetti', [plate, ketchup, spaghetti, tonkatsu])
+tempuraTomatoSauceSpaghetti = Dish('tempura tomato sauce spaghetti', [plate, ketchup, spaghetti, tempura])
