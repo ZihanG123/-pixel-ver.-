@@ -107,7 +107,7 @@ def game_redrawAll(app):
     # pan.drawCookingIngredient()
     # fryer.drawCookingIngredient()
 
-    takeCustomerOrder()
+    drawTakeCustomerOrder()
 
     checkCurrDishOnDesk()
 
@@ -217,6 +217,7 @@ def game_onKeyPress(app, key):
         amuro.doCookFoodSelection()
         amuro.cookFood()
         amuro.pickUpCookedIng()
+        amuro.startDialogue()
 
 def game_onKeyRelease(app, key):
     if app.keyHeld == key:
@@ -370,8 +371,10 @@ def drawMovingAmuro(app):
         elif amuro.playerDirX == 0 and amuro.playerDirY == 0:
             drawImage('./images/amuroFrontImage.PNG', amuro.playerPosX, amuro.playerPosY-8, width=128, height=128, align='center')
 
-def takeCustomerOrder():
-    if poirotCafe.insideCustomers != [] and amuro.selection in [(1,8), (3,8), (5,8), (6,8)]:
+def drawTakeCustomerOrder():
+    if (poirotCafe.insideCustomers != [] and 
+        amuro.selection in [(1,8), (3,8), (5,8), (6,8)] and 
+        amuro.startCustomerDialogue):
         for customer in poirotCafe.insideCustomers:
             if amuro.selection[0] == customer.seat[0] and amuro.selection[1]-1 == customer.seat[1]:
                 drawImage('./images/dialogueImage.PNG', 0, 0, width=640, height=640)

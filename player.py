@@ -88,6 +88,8 @@ class Player():
 
         self.servedCustomerNum = 0
 
+        self.startCustomerDialogue = False
+
     
     # move the player
     def move(self,key):
@@ -275,18 +277,16 @@ class Player():
                 self.currentPlate.posX = self.selection[0]
                 self.currentPlate.posY = self.selection[1]
             elif self.selection in [(1,8), (3,8), (5,8), (6,8)]:
-                print('????????????????????')
                 for customer in poirotCafe.insideCustomers:
                     if self.selection[0] == customer.seat[0] and self.selection[1]-1 == customer.seat[1]:
                         if customer.currDishOnDesk == Plate():
-                            print('...............????????..')
-                            print(customer.currDishOnDesk)
+                            
                             for dish in customer.orderDishes:
                                 if self.currentHoldPlate == dish:
-                                    print('.................')
                                     customer.currDishOnDesk = self.currentHoldPlate
                                     customer.currDishOnDesk.posX, customer.currDishOnDesk.posY = self.selection[0], self.selection[1]
                                     self.currentHoldPlate = Plate()
+                                    print(customer.currDishOnDesk)
                                     break
 
                 
@@ -371,7 +371,9 @@ class Player():
                     self.currentHoldIngredient = utensil.ingredientInside
                     utensil.ingredientInside = None
 
-
+    def startDialogue(self):
+        if self.selection in [(1,8), (3,8), (5,8), (6,8)]:
+            self.startCustomerDialogue = not self.startCustomerDialogue
 
 
 #######
