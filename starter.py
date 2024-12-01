@@ -111,19 +111,29 @@ def game_onStep(app):
     poirotCafe.cafeTime += 1
     print(poirotCafe.cafeTime)
         
-    customerControll()
-
     for i in range(len(poirotCafe.availableSeats)):
         poirotCafe.letCustomerIn()
+    print(poirotCafe.nextCustomers)
 
+    if len(poirotCafe.nextCustomers) > 0:
+        poirotCafe.currWalkingInCustomer = poirotCafe.nextCustomers[-1]
+    print(poirotCafe.currWalkingInCustomer)
+    if poirotCafe.currWalkingInCustomer != None:
+        print(poirotCafe.currWalkingInCustomer.isSeated)
+
+    customerControll()
 
     # delay 2 seconds to let the customer go into the cafe
 
     if poirotCafe.cafeTime >= 60:
-        for customer in poirotCafe.insideCustomers:
-            poirotCafe.recordTimeStep(customer)
-            if customer.currentStep < len(customer.pixelPath) - 1:
-                customer.currentStep += 1     
+        customer = poirotCafe.currWalkingInCustomer
+        if customer.currentStep < len(customer.pixelPath) - 1:
+            if poirotCafe.customerTimeStamps == []:
+                customer.currentStep += 1
+            else:
+                prevCustomerStamp = poirotCafe.customerTimeStamps[-1]
+                if poirotCafe.cafeTime >= prevCustomerStamp + customer.nextCustomerDelay:
+                    customer.currentStep += 1
 
     print(poirotCafe.customerTimeStamps)       
 
@@ -139,6 +149,9 @@ def game_onStep(app):
 
 
     for customer in poirotCafe.insideCustomers:
+
+        poirotCafe.recordTimeStep(customer)
+
         if customer.ordered == False:
             customer.startToOrder(cafeMenu)
 
@@ -288,19 +301,25 @@ def drawHoldPlate():
             drawImage(f'./images/cooked/{item.name}CookedImage.PNG', amuro.playerPosX, amuro.playerPosY, width=64, height=64)
 
 def drawCustomers(app):
-    # posX, posY = currentCustomer.pixelPath[app.currentCustomerStep]
-    # drawImage(currentCustomer.image, posX+35, posY+21, width=128, height=128, align='center')
 
-    for customer in poirotCafe.insideCustomers:
-
-        if poirotCafe.customerTimeStamps != []:
-            prevCustomerStamp = poirotCafe.customerTimeStamps[-1]
-            if poirotCafe.cafeTime >= prevCustomerStamp + customer.nextCustomerDelay:
+    customer = poirotCafe.currWalkingInCustomer
+    if customer != None:
+        if not customer.isSeated:
+            if poirotCafe.customerTimeStamps != []:
+                prevCustomerStamp = poirotCafe.customerTimeStamps[-1]
+                if poirotCafe.cafeTime >= prevCustomerStamp + customer.nextCustomerDelay:
+                    print('..........')
+                    posX, posY = customer.pixelPath[customer.currentStep]
+                    drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
+            else:
+                print('???????????')
                 posX, posY = customer.pixelPath[customer.currentStep]
                 drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
-        else:
-            posX, posY = customer.pixelPath[customer.currentStep]
-            drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
+
+
+    for insideSeatedCustomer in poirotCafe.insideCustomers:
+        posX, posY = insideSeatedCustomer.pixelPath[-1]
+        drawImage(insideSeatedCustomer.image, posX+35, posY+21, width=128, height=128, align='center')
 
 
 
@@ -308,10 +327,13 @@ def customerControll():
     # posX, posY = currentCustomer.pixelPath[app.currentCustomerStep]
     # if (posX, posY) == (currentCustomer.targetX*64, (currentCustomer.targetY+1)*64):
     #     currentCustomer.isSeated = True
-    for customer in poirotCafe.insideCustomers:
-        posX, posY = customer.pixelPath[customer.currentStep]
-        if (posX, posY) == (customer.targetX*64, (customer.targetY+1)*64):
-            customer.isSeated = True
+    customer = poirotCafe.currWalkingInCustomer
+    posX, posY = customer.pixelPath[customer.currentStep]
+    if (posX, posY) == (customer.targetX*64, (customer.targetY+1)*64):
+        customer.isSeated = True
+        poirotCafe.insideCustomers.append(customer)
+        poirotCafe.walkInOneByOne()
+
             
 
 def drawMovingAmuro(app):

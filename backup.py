@@ -333,3 +333,38 @@
 #  and 
 #         not amuro.currentHoldIngredient.isCooking and 
 #         not amuro.currentHoldIngredient.inUtensil
+
+
+    # posX, posY = currentCustomer.pixelPath[app.currentCustomerStep]
+    # drawImage(currentCustomer.image, posX+35, posY+21, width=128, height=128, align='center')
+
+    # for customer in poirotCafe.insideCustomers:
+    #     if not customer.isSeated:
+
+    #         if poirotCafe.customerTimeStamps != []:
+    #             prevCustomerStamp = poirotCafe.customerTimeStamps[-1]
+    #             if poirotCafe.cafeTime >= prevCustomerStamp + customer.nextCustomerDelay:
+    #                 posX, posY = customer.pixelPath[customer.currentStep]
+    #                 drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
+    #         else:
+    #             posX, posY = customer.pixelPath[customer.currentStep]
+    #             drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
+
+    #     else:
+    #         posX, posY = customer.pixelPath[-1]
+    #         drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
+
+    # index = 0
+    # while index < len(poirotCafe.insideCustomers):
+    #     customer = poirotCafe.insideCustomers[index]
+    #     if poirotCafe.customerTimeStamps == []:
+    #         posX, posY = customer.pixelPath[customer.currentStep]
+    #         drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
+    #     else:
+    #         prevCustomerStamp = poirotCafe.customerTimeStamps[index-1]
+    #         if poirotCafe.cafeTime >= prevCustomerStamp + customer.nextCustomerDelay:
+    #             posX, posY = customer.pixelPath[customer.currentStep]
+    #             drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
+
+    #     if customer.isSeated:
+    #         index += 1

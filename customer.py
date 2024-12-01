@@ -162,6 +162,7 @@ class Cafe:
         self.seats = [(1, 7), (3, 7), (5, 7), (6, 7)] 
         self.occupiedSeats = []
         self.availableSeats = [(1, 7), (3, 7), (5, 7), (6, 7)]
+        self.nextCustomers = []
         self.insideCustomers = []
         self.queue = customersAll
 
@@ -169,7 +170,9 @@ class Cafe:
         self.timeSeconds = 0
 
         self.customerTimeStamps = []
+        self.currWalkingInCustomer = None
 
+    # next customers
     def letCustomerIn(self):
         if self.availableSeats != []:
             currQueueNum = len(self.queue)
@@ -185,15 +188,16 @@ class Cafe:
             nextCustomer.path.append((nextCustomer.targetX, nextCustomer.targetY+1))
             nextCustomer.boardPathToPixelPath()
             
-            self.insideCustomers.append(nextCustomer)
+            self.nextCustomers.append(nextCustomer)
             self.occupiedSeats.append(nextCustomer.seat)
             self.queue.remove(nextCustomer)
             self.availableSeats.remove(nextCustomer.seat)
+        
 
     def recordTimeStep(self, customer):
         if customer.isSeated and customer.timeStepRecorded == False:
-                self.customerTimeStamps.append(self.cafeTime)
-                customer.timeStepRecorded = True
+            self.customerTimeStamps.append(self.cafeTime)
+            customer.timeStepRecorded = True
 
     def letCustomerLeave(self):
         for customer in self.insideCustomers:
@@ -204,6 +208,19 @@ class Cafe:
                 self.occupiedSeats.remove(customer.seat)
                 self.availableSeats.append(customer.seat)
                 customer.resetCustomer()
+
+    def walkInOneByOne(self):
+        if self.currWalkingInCustomer == None:
+            if len(self.nextCustomers) > 0:
+                self.nextCustomers.pop()
+                if len(poirotCafe.nextCustomers) > 0:
+                    self.currWalkingInCustomer = self.nextCustomers[-1]
+        else:
+            if len(self.nextCustomers) > 0:
+                self.nextCustomers.pop()
+                if len(poirotCafe.nextCustomers) > 0:
+                    self.currWalkingInCustomer = self.nextCustomers[-1]
+
 
 
 
