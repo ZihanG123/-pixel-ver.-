@@ -222,8 +222,6 @@ class Cafe:
                     self.currWalkingInCustomer = self.nextCustomers[-1]
 
 
-
-
 ##########
 # initialize customers
 ##########

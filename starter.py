@@ -15,7 +15,7 @@ from kitchen import *
 
 def onAppStart(app):
     app.stepsPerSecond = 10
-    
+
     app.keyHeld = None
 
     app.chairs = [(1, 7), (3, 7), (5, 7), (6, 7)]
@@ -102,6 +102,8 @@ def game_redrawAll(app):
     chopping.drawCookingIngredient()
     pan.drawCookingIngredient()
     fryer.drawCookingIngredient()
+
+    takeCustomerOrder()
 
 
 def game_onStep(app):
@@ -329,7 +331,6 @@ def drawCustomers(app):
         drawImage(insideSeatedCustomer.image, posX+35, posY+21, width=128, height=128, align='center')
 
 
-
 def customerControll():
     # posX, posY = currentCustomer.pixelPath[app.currentCustomerStep]
     # if (posX, posY) == (currentCustomer.targetX*64, (currentCustomer.targetY+1)*64):
@@ -341,8 +342,6 @@ def customerControll():
         poirotCafe.insideCustomers.append(customer)
         poirotCafe.walkInOneByOne()
 
-
-            
 
 def drawMovingAmuro(app):
     if amuro.isMoving:
@@ -360,6 +359,17 @@ def drawMovingAmuro(app):
             drawImage('./images/amuroLeftImage.PNG', amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
         elif amuro.playerDirX == 0 and amuro.playerDirY == 0:
             drawImage('./images/amuroFrontImage.PNG', amuro.playerPosX, amuro.playerPosY-8, width=128, height=128, align='center')
+
+def takeCustomerOrder():
+    if poirotCafe.insideCustomers != [] and amuro.selection in [(1,8), (3,8), (5,8), (6,8)]:
+        for customer in poirotCafe.insideCustomers:
+            if amuro.selection[0] == customer.seat[0] and amuro.selection[1]-1 == customer.seat[1]:
+                # drawImage()
+                drawLabel('I would like ', amuro.selection[0]*64, amuro.selection[1]*64, size=16, font='monospace')
+                i = amuro.selection[1]*64 + 4
+                for dish in customer.orderDishes:
+                    drawLabel(f' - {str(dish)}', amuro.selection[0]*64, amuro.selection[1]*64+i, size=16, font='monospace')
+                    i += 4
 
 
 ###################

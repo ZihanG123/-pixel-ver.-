@@ -4,6 +4,7 @@ from plate import *
 from dish import *
 from ingredient import *
 from kitchen import *
+from customer import *
 
 
 # class for the character the player is controlling
@@ -346,9 +347,8 @@ class Player():
                     self.currentHoldIngredient = utensil.ingredientInside
                     utensil.ingredientInside = None
 
-        
-    def takeCustomerOrder(self):
-        pass
+
+
 
 #######
 # initialize player
