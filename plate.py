@@ -5,6 +5,7 @@ from PIL import Image
 class Plate:
     def __init__(self):
         self.currentIngredients = []
+        self.posX, self.posY = 3, 4
 
     # ingredient is a string
     def addIngredients(self, ingredient):

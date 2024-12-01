@@ -192,12 +192,16 @@ def game_onKeyPress(app, key):
 
 
     if key == 'enter':
-        if (amuro.currentPlate.currentIngredients != [] and amuro.selection == (3,4) and 
+        if (amuro.currentPlate.currentIngredients != [] and 
+            amuro.selection in [(3,4), (1,8), (3,8), (5,8), (6,8)] and 
             amuro.currentHoldPlate.currentIngredients == []):
+            amuro.updateDish()
             amuro.pickUpDish()
         
-        elif (amuro.currentHoldPlate.currentIngredients != [] and amuro.selection == (3,4) and
+        elif (amuro.currentHoldPlate.currentIngredients != [] and 
+            amuro.selection in [(3,4), (1,8), (3,8), (5,8), (6,8)] and
             amuro.currentPlate.currentIngredients == []):
+            amuro.updateDish()
             amuro.putBackDish()
 
     if key == 'a':
@@ -300,9 +304,10 @@ def drawHoldIngredient():
 
 # draw the plate at position (3,4)
 def drawPlate():
+    print(amuro.currentPlate.posX, amuro.currentPlate.posX)
     if len(amuro.currentPlate.currentIngredients) != 0:
         for item in amuro.currentPlate.currentIngredients:
-            drawImage(f'./images/cooked/{item.name}CookedImage.PNG', 3*64, 4*64, width=64, height=64)
+            drawImage(f'./images/cooked/{item.name}CookedImage.PNG', amuro.currentPlate.posX*64, amuro.currentPlate.posY*64, width=64, height=64)
 
 
 # draw the plate when picked up
@@ -365,7 +370,6 @@ def takeCustomerOrder():
         for customer in poirotCafe.insideCustomers:
             if amuro.selection[0] == customer.seat[0] and amuro.selection[1]-1 == customer.seat[1]:
                 drawImage('./images/dialogueImage.PNG', 0, 0, width=640, height=640)
-                # print(customer.orderDishes)
                 drawLabel('I would like ', 8, 576+10, size=16, font='monospace', align='left', bold=True)
                 i = 16
                 for dish in customer.orderDishes:

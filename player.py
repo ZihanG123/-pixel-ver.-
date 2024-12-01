@@ -259,7 +259,7 @@ class Player():
 
     # pick up the dish currently have to the table (3,4)
     def pickUpDish(self):
-        if (self.currentPlate.currentIngredients != [] and self.selection == (3,4) and 
+        if (self.currentPlate.currentIngredients != [] and self.selection in [(3,4), (1,8), (3,8), (5,8), (6,8)] and 
             self.currentHoldPlate.currentIngredients == []):
 
             self.currentHoldPlate = self.currentPlate
@@ -267,11 +267,18 @@ class Player():
 
     # put back the dish to the table (3,4)
     def putBackDish(self):
-        if (self.currentHoldPlate.currentIngredients != [] and self.selection == (3,4) and
+        if (self.currentHoldPlate.currentIngredients != [] and self.selection in [(3,4), (1,8), (3,8), (5,8), (6,8)] and
             self.currentPlate.currentIngredients == []):
 
             self.currentPlate = self.currentHoldPlate
             self.currentHoldPlate = Plate()
+            self.currentPlate.posX = self.selection[0]
+            self.currentPlate.posY = self.selection[1]
+
+    def updateDish(self):
+        if self.selection in [(3,4), (1,8), (3,8), (5,8), (6,8)]:
+            self.currentPlate.posX = self.selection[0]
+            self.currentPlate.posY = self.selection[1]
 
     def holdFood(self):
         if self.selection in self.validDeskSelection:
