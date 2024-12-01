@@ -149,7 +149,7 @@ def game_onStep(app):
 
     # app.counterCustomer += 1
 
-    if app.counterSprite % 5 == 0:
+    if app.counterSprite % 2 == 0:
         app.spriteIndex = (app.spriteIndex + 1) % len(amuro.spriteAnimatedImages)
     app.counterSprite += 1
 
@@ -364,12 +364,13 @@ def takeCustomerOrder():
     if poirotCafe.insideCustomers != [] and amuro.selection in [(1,8), (3,8), (5,8), (6,8)]:
         for customer in poirotCafe.insideCustomers:
             if amuro.selection[0] == customer.seat[0] and amuro.selection[1]-1 == customer.seat[1]:
-                # drawImage()
-                drawLabel('I would like ', amuro.selection[0]*64, amuro.selection[1]*64, size=16, font='monospace')
-                i = amuro.selection[1]*64 + 4
+                drawImage('./images/dialogueImage.PNG', 0, 0, width=640, height=640)
+                # print(customer.orderDishes)
+                drawLabel('I would like ', 8, 576+10, size=16, font='monospace', align='left', bold=True)
+                i = 16
                 for dish in customer.orderDishes:
-                    drawLabel(f' - {str(dish)}', amuro.selection[0]*64, amuro.selection[1]*64+i, size=16, font='monospace')
-                    i += 4
+                    drawLabel(f' - {str(dish)}', 8, 576+8+i, size=16, font='monospace', align='left', bold=True)
+                    i += 16
 
 
 ###################
