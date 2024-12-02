@@ -183,7 +183,7 @@ def game_onStep(app):
     pan.cookFood()
     fryer.cookFood()
 
-    print('who is currently leaving:', poirotCafe.currLeavingCustomer)
+    # print('who is currently leaving:', poirotCafe.currLeavingCustomer)
 
 
 def game_onKeyPress(app, key):
@@ -459,7 +459,7 @@ def checkCurrDishOnDesk():
                         if customer.currDishOnDesk == dish:
                             customer.orderDishes.remove(dish)
                     customer.eaten += 1
-                    print(f'{customer.name} ate {customer.eaten} dish(es)')
+                    # print(f'{customer.name} ate {customer.eaten} dish(es)')
                     customer.currDishOnDesk = Plate()
 
 
