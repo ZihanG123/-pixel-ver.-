@@ -368,3 +368,14 @@
 
     #     if customer.isSeated:
     #         index += 1
+
+    #     self.visited = set()
+    #     self.targetX, self.targetY = 0, 4
+    #     self.path = [self.seat]
+    #     self.pixelPath = []
+    #     if self.move(self.seat[0], self.seat[1]-1, self.directions):
+    #         self.boardPathToPixelPath()
+    #         self.pixelPath.append((-self.speed*v, 256) for v in range(0,80//self.speed+1))
+    #         return self.pixelPath
+    #     else:
+    #         return None

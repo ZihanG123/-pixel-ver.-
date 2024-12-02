@@ -57,6 +57,8 @@ class Customer:
 
         self.hasLeft = False
 
+        self.hasGeneratedPath = False
+
     def __repr__(self):
         return f'{self.name}'
     
@@ -104,27 +106,31 @@ class Customer:
     
     # make the path to pixel path so the customer can move more smoothly
     def boardPathToPixelPath(self):
-        
-        for i in range(len(self.path) - 1):
-            start = self.path[i]
-            end = self.path[i + 1]
-            dx = (end[0] - start[0])*64
-            dy = (end[1] - start[1])*64
-            totalDistance = max(abs(dx), abs(dy))
-            steps = totalDistance // self.speed 
+        if not self.hasGeneratedPath:
+            for i in range(len(self.path) - 1):
+                start = self.path[i]
+                end = self.path[i + 1]
+                dx = (end[0] - start[0])*64
+                dy = (end[1] - start[1])*64
+                totalDistance = max(abs(dx), abs(dy))
+                steps = totalDistance // self.speed 
 
-            for step in range(steps):
-                px = start[0]*64 + (dx//steps) * step
-                py = start[1]*64 + (dy//steps) * step
-                self.pixelPath.append((px, py))
+                for step in range(steps):
+                    px = start[0]*64 + (dx//steps) * step
+                    py = start[1]*64 + (dy//steps) * step
+                    self.pixelPath.append((px, py))
 
-        self.pixelPath.append((self.path[-1][0]*64, self.path[-1][1]*64))
+            self.pixelPath.append((self.path[-1][0]*64, self.path[-1][1]*64))
 
-        if self.pixelPath[-1] == (self.targetX*64, self.targetY*64):
-            self.seat = (self.targetX, self.targetY+1)
+            if self.pixelPath[-1] == (self.targetX*64, self.targetY*64):
+                self.seat = (self.targetX, self.targetY+1)
 
-        self.pathLeave = list(reversed(self.path))
-        self.pixelPathLeave = list(reversed(self.pixelPath))
+
+            self.pathLeave = list(reversed(self.path))
+            self.pixelPathLeave = list(reversed(self.pixelPath))
+            self.pixelPathLeave.insert(0, (self.pixelPath[-1][0], self.pixelPath[-1][1]))
+
+            self.hasGeneratedPath = True
 
     
     # customer order
@@ -141,18 +147,10 @@ class Customer:
             print(self.orderDishes)
 
     def leaveCafe(self):
-    #     self.visited = set()
-    #     self.targetX, self.targetY = 0, 4
-    #     self.path = [self.seat]
-    #     self.pixelPath = []
-    #     if self.move(self.seat[0], self.seat[1]-1, self.directions):
-    #         self.boardPathToPixelPath()
-    #         self.pixelPath.append((-self.speed*v, 256) for v in range(0,80//self.speed+1))
-    #         return self.pixelPath
-    #     else:
-    #         return None
         for i in range(len(self.path)):
             self.pathLeave.append(self.path[len(self.path)-1-i])
+        # self.pathLeave = list(reversed(self.path))
+        # self.pixelPathLeave = list(reversed(self.pixelPath))
         for i in range(len(self.pixelPath)):
             self.pixelPathLeave.append(self.pixelPath[len(self.pixelPath)-1-i])
         
@@ -191,6 +189,8 @@ class Customer:
 
         self.hasLeft = False
 
+        self.hasGeneratedPath = False
+
 
 ########################################
 # Cafe class
@@ -217,7 +217,7 @@ class Cafe:
     def letCustomerIn(self):
         if self.availableSeats != []:
             currQueueNum = len(self.queue)
-            print(currQueueNum)
+            print(self.queue)
             nextCustomer = self.queue[random.randint(0, currQueueNum-1)]
             print(nextCustomer)
             print(nextCustomer.nextCustomerDelay)
@@ -228,6 +228,9 @@ class Cafe:
             nextCustomer.moveCustomer()
             nextCustomer.path.append((nextCustomer.targetX, nextCustomer.targetY+1))
             nextCustomer.boardPathToPixelPath()
+            # print('/////////////////////////////////', nextCustomer.path)
+            # print('?????????????????????????????????', nextCustomer.pixelPath)
+            # print('.................................', nextCustomer.pixelPathLeave)
             # nextCustomer.leaveCafe()
             
             self.nextCustomers.append(nextCustomer)
@@ -242,34 +245,18 @@ class Cafe:
             self.customerTimeStamps.append(self.cafeTime)
             customer.timeStepRecorded = True
 
-    def letCustomerLeave(self):
+    def letCustomerLeave(self, potentialCustomer):
         if self.currLeavingCustomer == None:
-            for customer in self.insideCustomers:
-                if customer.eaten == customer.orderNumber:
-                    self.currLeavingCustomer = customer
-                
-                break
-        else:
-            customer = self.currLeavingCustomer
+            if potentialCustomer.eaten == potentialCustomer.orderNumber:
+                self.currLeavingCustomer = potentialCustomer
+            
             # print(customer.seat)
             # print(customer.path)
             # print(customer.pathLeave)
             # print(customer.pixelPathLeave)
             # print(f'currLeavingCustomer: {customer.name}')
             # print(self.insideCustomers)
-            if customer in self.insideCustomers:
-                self.insideCustomers.remove(customer)
 
-            if customer not in self.queue:
-                self.queue.append(customer)
-            if customer.seat in self.occupiedSeats:
-                self.occupiedSeats.remove(customer.seat)
-            print('occupied seats:????', self.occupiedSeats)
-
-            if customer.seat not in self.availableSeats:
-                self.availableSeats.append(customer.seat)
-            if customer.hasLeft:
-                self.currLeavingCustomer = None
 
     def walkInOneByOne(self):
         if self.currWalkingInCustomer == None:

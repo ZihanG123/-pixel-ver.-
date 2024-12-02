@@ -131,6 +131,7 @@ def game_onStep(app):
 
     if len(poirotCafe.nextCustomers) > 0:
         poirotCafe.currWalkingInCustomer = poirotCafe.nextCustomers[-1]
+    
     # print(poirotCafe.currWalkingInCustomer)
     # if poirotCafe.currWalkingInCustomer != None:
         # print(poirotCafe.currWalkingInCustomer.isSeated)
@@ -151,7 +152,7 @@ def game_onStep(app):
 
     if poirotCafe.currLeavingCustomer != None:
         customer = poirotCafe.currLeavingCustomer
-        if customer.currentStepLeaving < len(customer.pixelPath) - 2:
+        if customer.currentStepLeaving < len(customer.pixelPath) - 1:
             customer.currentStepLeaving += 1
 
     # print(poirotCafe.customerTimeStamps)       
@@ -174,7 +175,7 @@ def game_onStep(app):
         if customer.ordered == False:
             customer.startToOrder(cafeMenu)
         
-    poirotCafe.letCustomerLeave()
+        poirotCafe.letCustomerLeave(customer)
 
     customerControllLeaving()
 
@@ -357,10 +358,11 @@ def drawCustomerLeaving():
     customer = poirotCafe.currLeavingCustomer
     if customer != None:
         # print(f'{customer.name} is leaving')
-        print('..............'+str(len(customer.pixelPathLeave)))
-        print(customer.currentStepLeaving)
-        posX, posY = customer.pixelPathLeave[customer.currentStepLeaving]
-        drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
+        # print('............', len(customer.pixelPathLeave))
+        # print('currentStepLeaving', customer.currentStepLeaving)
+        if customer.currentStepLeaving > 0:
+            posX, posY = customer.pixelPathLeave[customer.currentStepLeaving]
+            drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
 
 
 def drawCustomersEating(app):
@@ -381,10 +383,32 @@ def customerControll():
 def customerControllLeaving():
     customer = poirotCafe.currLeavingCustomer
     if customer != None:
+        if customer in poirotCafe.insideCustomers:
+            poirotCafe.insideCustomers.remove(customer)
+        # print('len customer.pixelPathLeave', len(customer.pixelPathLeave))
+        # print('customer.currentStepLeaving', customer.currentStepLeaving)
         posX, posY = customer.pixelPathLeave[customer.currentStepLeaving]
         if (posX, posY) == (customer.pixelPathLeave[-1][0], customer.pixelPathLeave[-1][1]):
             customer.hasLeft = True
+            customer.isSeated = False
+            print('customer has left?', customer.hasLeft)
+
+            if customer in poirotCafe.nextCustomers:
+                poirotCafe.nextCustomers.remove(customer)
+
+            if customer not in poirotCafe.queue:
+                poirotCafe.queue.append(customer)
+            if customer.seat in poirotCafe.occupiedSeats:
+                poirotCafe.occupiedSeats.remove(customer.seat)
+            print('occupied seats:????', poirotCafe.occupiedSeats)
+
+            if customer.seat not in poirotCafe.availableSeats:
+                poirotCafe.availableSeats.append(customer.seat)
+            if customer.hasLeft:
+                poirotCafe.currLeavingCustomer = None
+
             customer.resetCustomer()
+
 
 
 def drawMovingAmuro(app):
@@ -412,10 +436,10 @@ def drawTakeCustomerOrder():
             if amuro.selection[0] == customer.seat[0] and amuro.selection[1]-1 == customer.seat[1]:
                 drawImage('./images/dialogueImage.PNG', 0, 0, width=640, height=640)
                 drawLabel('I would like ', 8, 576+10, size=16, font='monospace', align='left', bold=True)
-                i = 12
+                i = 14
                 for dish in customer.orderDishes:
                     drawLabel(f' - {str(dish)}', 8, 576+8+i, size=16, font='monospace', align='left', bold=True)
-                    i += 12
+                    i += 14
 
 def checkCurrDishOnDesk():
     for customer in poirotCafe.insideCustomers:
