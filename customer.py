@@ -136,7 +136,7 @@ class Customer:
     # customer order
     def startToOrder(self, cafeMenu):
         if self.isSeated == True and self.ordered == False:
-            # self.orderNumber = random.randint(1,3)
+            # self.orderNumber = random.randint(1,2)
             self.orderNumber = 1
             self.ordered = True
             for i in range(self.orderNumber):
@@ -300,17 +300,17 @@ validBoard = [
 ]
 
 
-akai = Customer('akai', validBoard, 3)
-ai = Customer('ai', validBoard, 7)
-conan = Customer('conan', validBoard, 6)
-heiji = Customer('heiji', validBoard, 4)
-jin = Customer('jin', validBoard, 2)
-kazuha = Customer('kazuha', validBoard, 5)
-kid = Customer('kid', validBoard, 4)
-matsuda = Customer('matsuda', validBoard, 3)
-ran = Customer('ran', validBoard, 5)
-sera = Customer('sera', validBoard, 4)
-suzuki = Customer('suzuki', validBoard, 5)
+akai = Customer('akai', validBoard, 6)
+ai = Customer('ai', validBoard, 10)
+conan = Customer('conan', validBoard, 9)
+heiji = Customer('heiji', validBoard, 7)
+jin = Customer('jin', validBoard, 8)
+kazuha = Customer('kazuha', validBoard, 8)
+kid = Customer('kid', validBoard, 7)
+matsuda = Customer('matsuda', validBoard, 6)
+ran = Customer('ran', validBoard, 8)
+sera = Customer('sera', validBoard, 7)
+suzuki = Customer('suzuki', validBoard, 8)
 
 customersAll = [akai, ai, conan, heiji, jin, kazuha, kid, matsuda, ran, sera, suzuki]
 

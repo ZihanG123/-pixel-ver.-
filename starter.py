@@ -152,7 +152,7 @@ def game_onStep(app):
 
     if poirotCafe.currLeavingCustomer != None:
         customer = poirotCafe.currLeavingCustomer
-        if customer.currentStepLeaving < len(customer.pixelPath) - 1:
+        if customer.currentStepLeaving < len(customer.pixelPathLeave) - 1:
             customer.currentStepLeaving += 1
 
     # print(poirotCafe.customerTimeStamps)       
@@ -182,6 +182,8 @@ def game_onStep(app):
     chopping.cookFood()
     pan.cookFood()
     fryer.cookFood()
+
+    print('who is currently leaving:', poirotCafe.currLeavingCustomer)
 
 
 def game_onKeyPress(app, key):
@@ -391,7 +393,7 @@ def customerControllLeaving():
         if (posX, posY) == (customer.pixelPathLeave[-1][0], customer.pixelPathLeave[-1][1]):
             customer.hasLeft = True
             customer.isSeated = False
-            print('customer has left?', customer.hasLeft)
+            # print('customer has left?', customer.hasLeft)
 
             if customer in poirotCafe.nextCustomers:
                 poirotCafe.nextCustomers.remove(customer)
@@ -400,7 +402,7 @@ def customerControllLeaving():
                 poirotCafe.queue.append(customer)
             if customer.seat in poirotCafe.occupiedSeats:
                 poirotCafe.occupiedSeats.remove(customer.seat)
-            print('occupied seats:????', poirotCafe.occupiedSeats)
+            # print('occupied seats:????', poirotCafe.occupiedSeats)
 
             if customer.seat not in poirotCafe.availableSeats:
                 poirotCafe.availableSeats.append(customer.seat)
@@ -448,6 +450,9 @@ def checkCurrDishOnDesk():
                 if poirotCafe.cafeTime <= customer.eatingTimeStamps + customer.eatingTime*10:
                     for item in customer.currDishOnDesk.currentIngredients:
                         drawImage(f'./images/cooked/{item.name}CookedImage.PNG', customer.currDishOnDesk.posX*64, customer.currDishOnDesk.posY*64, width=64, height=64)
+                    rectLen = customer.eatingTimeStamps + customer.eatingTime*10 - poirotCafe.cafeTime
+                    if rectLen > 0:
+                        drawRect(customer.seat[0]*64 + 32, customer.seat[1]*64 - 32, rectLen, 8, fill='steelBlue', align='center')
                 else:
                     customer.eatingTimeStamps = None
                     for dish in customer.orderDishes:
