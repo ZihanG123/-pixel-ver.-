@@ -10,8 +10,11 @@ from ingredient import *
 from customer import *
 from kitchen import *
 
+##################################
+# Citations:
 # All of the images used are drawn by me.
 # The images are based on Detective Conan by Gosho Aoyama.
+##################################
 
 def onAppStart(app):
     app.stepsPerSecond = 10
@@ -460,7 +463,7 @@ def checkCurrDishOnDesk():
                         drawImage(f'./images/cooked/{item.name}CookedImage.PNG', customer.currDishOnDesk.posX*64, customer.currDishOnDesk.posY*64, width=64, height=64)
                     rectLen = customer.eatingTimeStamps + customer.eatingTime*10 - poirotCafe.cafeTime
                     if rectLen > 0:
-                        drawRect(customer.seat[0]*64 + 32, customer.seat[1]*64 - 32, rectLen, 8, fill='steelBlue', align='center')
+                        drawRect(customer.seat[0]*64 + 32, customer.seat[1]*64 - 40, rectLen, 8, fill='steelBlue', align='center')
                 else:
                     customer.eatingTimeStamps = None
                     for dish in customer.orderDishes:

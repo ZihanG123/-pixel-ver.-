@@ -1,4 +1,6 @@
-### 11/29
+### 12/1
 
 * 改cooked食物image区别
-* multiple customers
+* 是否能fix glitch
+* cache
+* 加时间限制和highest score
