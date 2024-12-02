@@ -354,6 +354,14 @@ def drawCustomersWalkingIn():
     for insideSeatedCustomer in poirotCafe.insideCustomers:
         posX, posY = insideSeatedCustomer.pixelPath[-1]
         drawImage(insideSeatedCustomer.image, posX+35, posY+21, width=128, height=128, align='center')
+    
+    # if poirotCafe.currLeavingCustomer != None:
+    #     customer = poirotCafe.currLeavingCustomer
+    #     if customer.isSeated:
+    #         posX, posY = customer.pixelPath[-1]
+    #         drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
+
+
 
 def drawCustomerLeaving():
 
@@ -387,12 +395,12 @@ def customerControllLeaving():
     if customer != None:
         if customer in poirotCafe.insideCustomers:
             poirotCafe.insideCustomers.remove(customer)
+        customer.isSeated = False
         # print('len customer.pixelPathLeave', len(customer.pixelPathLeave))
         # print('customer.currentStepLeaving', customer.currentStepLeaving)
         posX, posY = customer.pixelPathLeave[customer.currentStepLeaving]
         if (posX, posY) == (customer.pixelPathLeave[-1][0], customer.pixelPathLeave[-1][1]):
             customer.hasLeft = True
-            customer.isSeated = False
             # print('customer has left?', customer.hasLeft)
 
             if customer in poirotCafe.nextCustomers:

@@ -129,7 +129,8 @@ class Customer:
             self.pathLeave = list(reversed(self.path))
             self.pixelPathLeave = list(reversed(self.pixelPath))
             self.pixelPathLeave.insert(0, (self.pixelPath[-1][0], self.pixelPath[-1][1]))
-
+            self.pixelPathLeave.insert(0, (self.pixelPath[-1][0], self.pixelPath[-1][1]))
+            
             self.hasGeneratedPath = True
 
     
