@@ -32,6 +32,12 @@ def onAppStart(app):
     app.spriteIndex = 0
     app.counterSprite = 0
 
+    app.cafeDrawn = False
+    app.customerDesksDrawn = False
+    app.cafeKitchenDesksBottomDrawn = False
+    app.kitchenWareBottomDrawn = False
+    app.trashCanDrawn = False
+
 ################
 # start screen
 ################
@@ -64,16 +70,26 @@ def instructions_onKeyPress(app, key):
 ################
 
 def game_redrawAll(app):
-    drawImage('./images/cafeImage.PNG', 0, 0, width=640, height=640)
-    addCafeCustomerDesks(app)
-    addCafeKitchenDesksBottom()
-    addKitchenWareBottom()
-    addTrashCan()
+    if not app.cafeDrawn:
+        drawImage('./images/cafeImage.PNG', 0, 0, width=640, height=640)
+        # app.cafeDrawn = True
+    if not app.customerDesksDrawn:
+        addCafeCustomerDesks(app)
+    if not app.cafeKitchenDesksBottomDrawn:
+        addCafeKitchenDesksBottom(app)
+    if not app.kitchenWareBottomDrawn:
+        addKitchenWareBottom(app)
+    if not app.trashCanDrawn:
+        addTrashCan(app)
 
-    drawSelectionTrashCan()
-    drawSelectionIngredient()
+    if amuro.selection == (7,2):
+        drawSelectionTrashCan()
+    
+    if amuro.selection in [(3,2), (3.5,2), (4,2), (4.5,2), (5,2), (5.5,2), (6,2)]:
+        drawSelectionIngredient()
 
-    drawSelectionCustomerDesk()
+    if amuro.selection in [(1,8), (3,8), (5,8), (6,8)]:
+        drawSelectionCustomerDesk()
 
     # draw moving amuro
     drawMovingAmuro(app)    
@@ -82,7 +98,8 @@ def game_redrawAll(app):
     addKitchenWareTop()
     addCafeChairs(app)
 
-    drawSelectionDesk()
+    if amuro.selection in [(3,4), (4,4), (5,4), (6,4), (2,3)]:
+        drawSelectionDesk()
 
     #########################
     # print(amuro.playerPosX, amuro.playerPosY)
@@ -91,16 +108,18 @@ def game_redrawAll(app):
     # for utensil in [chopping, pan, fryer]:
     #     print(f'{utensil.name}', utensil.ingredientInside)
 
+    if amuro.currentHoldIngredient != None:
+        drawHoldIngredient()
 
-    drawHoldIngredient()
+    if len(amuro.currentPlate.currentIngredients) != 0:
+        drawPlate()
 
-    drawPlate()
-
-    drawHoldPlate()
+    if len(amuro.currentHoldPlate.currentIngredients) != 0:
+        drawHoldPlate()
 
     drawCustomersWalkingIn()
-
-    drawSelectionCookFood()
+    if amuro.selection in [(4,4,0), (5,4,0), (6,4,0)]:
+        drawSelectionCookFood()
 
     drawCookingIngredient(chopping)
     drawCookingIngredient(pan)
@@ -113,6 +132,7 @@ def game_redrawAll(app):
     drawTakeCustomerOrder()
 
     checkCurrDishOnDesk()
+
 
     drawCustomerLeaving()
 
@@ -246,33 +266,37 @@ def game_onKeyRelease(app, key):
 def addCafeCustomerDesks(app):
     for i in app.desks:
          drawImage('./images/desk1Image.PNG', i[0]*64, i[1]*64, width=64, height=64)
+    # app.customerDesksDrawn = True
 
 def addCafeKitchenDesksTop():
     for i in range(224, 417, 64):
         drawImage('./images/desk2TopImage.PNG', i, 288, width=64, height=64, align='center')
 
-def addCafeKitchenDesksBottom():
+def addCafeKitchenDesksBottom(app):
     drawImage('./images/desk2Image.PNG', 160, 224, width=64, height=64, align='center')
     drawImage('./images/desk2Image.PNG', 160, 288, width=64, height=64, align='center')
     for i in range(224,417,64):
         drawImage('./images/desk2BottomImage.PNG', i, 288, width=64, height=64, align='center')
+    # app.cafeKitchenDesksBottomDrawn = True
 
 def addCafeChairs(app):
     for i in app.chairs:
         drawImage('./images/chairImage.PNG', i[0]*64, i[1]*64, width=64, height=64)
 
-def addTrashCan():
+def addTrashCan(app):
     drawImage('./images/trashcanImage.PNG', 480, 160, width=64, height=64, align='center')
+    # app.trashCanDrawn = True
 
 def addKitchenWareTop():
     drawImage('./images/fryerTopImage.PNG', 6*64, 4*64, width=64, height=64)
     drawImage('./images/panTopImage.PNG', 5*64, 4*64, width=64, height=64)
     drawImage('./images/choppingTopImage.PNG', 4*64, 4*64, width=64, height=64)
 
-def addKitchenWareBottom():
+def addKitchenWareBottom(app):
     drawImage('./images/fryerBottomImage.PNG', 6*64, 4*64, width=64, height=64)
     drawImage('./images/panBottomImage.PNG', 5*64, 4*64, width=64, height=64)
     drawImage('./images/choppingBottomImage.PNG', 4*64, 4*64, width=64, height=64)
+    # app.kitchenWareBottomDrawn = True
 
 
 def drawSelectionDesk():
