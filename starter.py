@@ -96,6 +96,25 @@ def onAppStart(app):
     app.tempuraCookedImage = CMUImage(Image.open('./images/cooked/tempuraCookedImage.PNG'))
     app.tonkatsuCookedImage = CMUImage(Image.open('./images/cooked/tonkatsuCookedImage.PNG'))
 
+    app.breadCookedHoldImage = CMUImage(Image.open('./images/cookedHold/breadCookedHoldImage.PNG'))
+    app.chickenCookedHoldImage = CMUImage(Image.open('./images/cookedHold/chickenCookedHoldImage.PNG'))
+    app.curryCookedHoldImage = CMUImage(Image.open('./images/cookedHold/curryCookedHoldImage.PNG'))
+    app.hamCookedHoldImage = CMUImage(Image.open('./images/cookedHold/hamCookedHoldImage.PNG'))
+    app.ketchupCookedHoldImage = CMUImage(Image.open('./images/cookedHold/ketchupCookedHoldImage.PNG'))
+    app.lettuceCookedHoldImage = CMUImage(Image.open('./images/cookedHold/lettuceCookedHoldImage.PNG'))
+    app.mayonnaiseCookedHoldImage = CMUImage(Image.open('./images/cookedHold/mayonnaiseCookedHoldImage.PNG'))
+    app.plateCookedHoldImage = CMUImage(Image.open('./images/cookedHold/plateCookedHoldImage.PNG'))
+    app.riceCookedHoldImage = CMUImage(Image.open('./images/cookedHold/riceCookedHoldImage.PNG'))
+    app.spaghettiCookedHoldImage = CMUImage(Image.open('./images/cookedHold/spaghettiCookedHoldImage.PNG'))
+    app.tempuraCookedHoldImage = CMUImage(Image.open('./images/cookedHold/tempuraCookedHoldImage.PNG'))
+    app.tonkatsuCookedHoldImage = CMUImage(Image.open('./images/cookedHold/tonkatsuCookedHoldImage.PNG'))
+
+    app.selectionCookingImage = CMUImage(Image.open('./images/selectionCookingImage.PNG'))
+
+
+    app.scoreCustomer = 0
+    app.scoreDishes = 0
+
 ################
 # start screen
 ################
@@ -152,6 +171,9 @@ def gameOver_onKeyPress(app, key):
 ################
 
 def game_redrawAll(app):
+    if poirotCafe.cafeTime >= 5*60*30:
+        setActiveScreen('gameOver')
+
     drawImage(app.cafeImage, 0, 0, width=640, height=640)
     addCafeCustomerDesks(app)
     addCafeKitchenDesksBottom(app)
@@ -197,9 +219,9 @@ def game_redrawAll(app):
     if amuro.selection in [(4,4,0), (5,4,0), (6,4,0)]:
         drawSelectionCookFood(app)
 
-    drawCookingIngredient(chopping)
-    drawCookingIngredient(pan)
-    drawCookingIngredient(fryer)
+    drawCookingIngredient(chopping, app)
+    drawCookingIngredient(pan, app)
+    drawCookingIngredient(fryer, app)
 
     # chopping.drawCookingIngredient()
     # pan.drawCookingIngredient()
@@ -276,7 +298,7 @@ def game_onStep(app):
         
         poirotCafe.letCustomerLeave(customer)
 
-    customerControllLeaving()
+    customerControllLeaving(app)
 
     chopping.cookFood()
     pan.cookFood()
@@ -421,7 +443,11 @@ def drawSelectionIngredient(app):
 def drawHoldIngredient(app):
     if (amuro.currentHoldIngredient != None):
         drawImage(app.holdBGImage, amuro.playerPosX, amuro.playerPosY, width=64, height=64)
-        drawImage(amuro.currentHoldIngredient.image, amuro.playerPosX, amuro.playerPosY, width=64, height=64)
+        if not amuro.currentHoldIngredient.cooked:
+            drawImage(amuro.currentHoldIngredient.image, amuro.playerPosX, amuro.playerPosY, width=64, height=64)
+        else:
+            amuro.currentHoldIngredient.image = eval(f'app.{amuro.currentHoldIngredient.name}CookedHoldImage')
+            drawImage(amuro.currentHoldIngredient.image, amuro.playerPosX, amuro.playerPosY, width=64, height=64)
 
 # draw the plate at position (3,4)
 def drawPlate(app):
@@ -463,9 +489,7 @@ def drawCustomersWalkingIn(app):
     #         drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
 
 
-
 def drawCustomerLeaving(app):
-
     customer = poirotCafe.currLeavingCustomer
     if customer != None:
         print(f'{customer.name} is currently walking leaving')
@@ -491,7 +515,7 @@ def customerControll():
             poirotCafe.insideCustomers.append(customer)
             poirotCafe.walkInOneByOne()
 
-def customerControllLeaving():
+def customerControllLeaving(app):
     customer = poirotCafe.currLeavingCustomer
     if customer != None:
         if customer in poirotCafe.insideCustomers:
@@ -503,7 +527,8 @@ def customerControllLeaving():
         if (posX, posY) == (customer.pixelPathLeave[-1][0], customer.pixelPathLeave[-1][1]):
             customer.hasLeft = True
             # print('customer has left?', customer.hasLeft)
-
+            app.scoreCustomer += 1
+            app.scoreDishes += 1
             if customer in poirotCafe.nextCustomers:
                 poirotCafe.nextCustomers.remove(customer)
 
@@ -519,8 +544,6 @@ def customerControllLeaving():
                 poirotCafe.currLeavingCustomer = None
 
             customer.resetCustomer()
-
-
 
 def drawMovingAmuro(app):
     if amuro.isMoving:
@@ -571,19 +594,19 @@ def checkCurrDishOnDesk(app):
                     # print(f'{customer.name} ate {customer.eaten} dish(es)')
                     customer.currDishOnDesk = Plate()
 
-
-def drawCookingIngredient(utensil):
+def drawCookingIngredient(utensil, app):
         # print(f'{self.name}', self.ingredientInside)
         if utensil.ingredientInside != None:
             currCookingIng = utensil.ingredientInside
-            drawImage(currCookingIng.image, utensil.selectionCoor[0]*64, utensil.selectionCoor[1]*64, width=64, height=64)
+            drawImage(app.selectionCookingImage, utensil.selectionCoor[0]*64, utensil.selectionCoor[1]*64, width=64, height=64, opacity=40)
+            if currCookingIng.cooked:
+                currCookingIng.image = eval(f'app.{currCookingIng.name}CookedHoldImage')
+            drawImage(currCookingIng.image, utensil.selectionCoor[0]*64-4, utensil.selectionCoor[1]*64-8, width=64, height=64)
             if not currCookingIng.cookedOnce:
                 if currCookingIng.cookTime-utensil.cookingCounterSeconds > 0:
                     drawLabel(str(currCookingIng.cookTime-utensil.cookingCounterSeconds), 
                         utensil.selectionCoor[0]*64+8, utensil.selectionCoor[1]*64+8, 
                         size=20, align='center', font='monospace', bold=True, fill='white')
-
-
 
 ###################
 def main():

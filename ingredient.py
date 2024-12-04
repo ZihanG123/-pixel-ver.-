@@ -7,6 +7,7 @@ class Ingredient:
     def __init__(self, name, cooked, cookTime, utensil):
 
         self.name = name
+
         self.image = CMUImage(Image.open(f'./images/hold/{name}HoldImage.PNG'))
         self.cooked = cooked
         self.cookTime = cookTime
@@ -26,6 +27,15 @@ class Ingredient:
         return (isinstance(other, Ingredient) and 
                 self.name == other.name and 
                 self.cooked == other.cooked)
+    
+    def resetIngredient(self, name, cooked, cookTime, utensil):
+        self.image = CMUImage(Image.open(f'./images/hold/{name}HoldImage.PNG'))
+        self.cooked = cooked
+        self.cookTime = cookTime
+        self.cookingUtensil = utensil
+        self.isCooking = False
+        self.inUtensil = False
+        self.cookedOnce = False
 
 ########
 # initialize ingredients

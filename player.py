@@ -197,6 +197,7 @@ class Player():
                     self.currentHoldIngredient.cooked =  True
                 else:
                     self.currentHoldIngredient.cooked = False
+                self.currentHoldIngredient.image = CMUImage(Image.open(f'./images/hold/{self.currentHoldIngredient.name}HoldImage.PNG'))
                 self.currentHoldIngredient = None
 
 

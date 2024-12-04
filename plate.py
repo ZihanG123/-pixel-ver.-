@@ -20,6 +20,17 @@ class Plate:
 
     # throw away current plate to trash can
     def throwAway(self):
+        if self.currentIngredients != []:
+            for ingredient in self.currentIngredients:
+                ingredient.isCooking = False
+                ingredient.inUtensil = False
+                ingredient.cookedOnce = False
+                if ingredient.name in ['ketchup', 'curry', 'mayonnaise', 'plate']:
+                    ingredient.cooked =  True
+                else:
+                    ingredient.cooked = False
+                ingredient.image = CMUImage(Image.open(f'./images/hold/{ingredient.name}HoldImage.PNG'))
+
         self.currentIngredients = []
 
     def __repr__(self):
