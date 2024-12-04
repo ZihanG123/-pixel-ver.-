@@ -33,6 +33,7 @@ else:
 
 
 def onAppStart(app):
+    
     app.stepsPerSecond = 30
 
     app.keyHeld = None
@@ -128,9 +129,10 @@ def start_redrawAll(app):
 
 def start_onKeyPress(app, key):
     if key == 'space':
-        poirotCafe.cafeTime = 0
-        app.minute = 0
-        app.second = 0
+        # poirotCafe.cafeTime = 0
+        # app.minute = 0
+        # app.second = 0
+        resetGame(app, poirotCafe, amuro, customersAll, ingredientAll, chopping, pan, fryer)
         setActiveScreen('game')
     elif key == 'enter':
         setActiveScreen('instructions1')
@@ -301,7 +303,7 @@ def game_onStep(app):
 
     # app.counterCustomer += 1
 
-    if app.counterSprite % 2 == 0:
+    if app.counterSprite % 4 == 0:
         app.spriteIndex = (app.spriteIndex + 1) % len(amuro.spriteAnimatedImages)
     app.counterSprite += 1
 
@@ -480,7 +482,6 @@ def drawHoldPlate(app):
             drawImage(eval(f'app.{item.name}CookedImage'), amuro.playerPosX, amuro.playerPosY, width=64, height=64)
 
 def drawCustomersWalkingIn(app):
-
     customer = poirotCafe.currWalkingInCustomer
     if customer != None:
         print(f'{customer.name} is currently walking in', {customer.isSeated})
@@ -630,6 +631,41 @@ def drawCafeTime(app):
         drawLabel(f'{app.minute}:0{app.second}', 554.6, 45, size=25, font='monospace', bold=True, align='left')
     else:
         drawLabel(f'{app.minute}:{app.second}', 554.6, 45, size=25, font='monospace', bold=True, align='left')
+
+def resetGame(app, poirotCafe, amuro, customersAll, ingredientAll, chopping, pan, fryer):
+    poirotCafe.cafeTime = 0
+    app.minute = 0
+    app.second = 0
+    app.spriteIndex = 0
+    app.counterSprite = 0
+    app.keyHeld = None
+    app.scoreCustomer = 0
+    app.scoreDishes = 0
+
+    ##########
+    
+    amuro = Player(480, 216, 'amuro')
+    amuro.getCafeValidMovement()
+
+    ##########
+
+    for customer in customersAll:
+        customer.resetCustomer()
+
+    ##########
+    chopping.resetKitchen()
+    pan.resetKitchen()
+    fryer.resetKitchen()
+
+    poirotCafe = Cafe()
+
+    #########
+
+    for ingredient in ingredientAll:
+        ingredient.resetIngredient()
+
+    #########
+
 
 ###################
 def main():

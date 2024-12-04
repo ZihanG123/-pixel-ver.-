@@ -28,11 +28,12 @@ class Ingredient:
                 self.name == other.name and 
                 self.cooked == other.cooked)
     
-    def resetIngredient(self, name, cooked, cookTime, utensil):
-        self.image = CMUImage(Image.open(f'./images/hold/{name}HoldImage.PNG'))
-        self.cooked = cooked
-        self.cookTime = cookTime
-        self.cookingUtensil = utensil
+    def resetIngredient(self):
+        self.image = CMUImage(Image.open(f'./images/hold/{self.name}HoldImage.PNG'))
+        if self.name in ['ketchup', 'curry', 'mayonnaise', 'plate']:
+            self.cooked = True
+        else:
+            self.cooked = False
         self.isCooking = False
         self.inUtensil = False
         self.cookedOnce = False
@@ -53,5 +54,7 @@ chicken = Ingredient('chicken', False, 5, 'fryer')
 tonkatsu = Ingredient('tonkatsu', False, 5, 'fryer')
 tempura = Ingredient('tempura', False, 5, 'fryer')
 spaghetti = Ingredient('spaghetti', False, 7, 'pan')
+
+ingredientAll = [ketchup, curry, bread, mayonnaise, ham, lettuce, plate, rice, chicken, tonkatsu, tempura, spaghetti]
 
 ###################

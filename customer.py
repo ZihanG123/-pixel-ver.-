@@ -348,8 +348,8 @@ customersAll = [akai, ai, conan, heiji, jin, kazuha, kid, matsuda, ran, sera, su
 
 poirotCafe = Cafe()
 
-availableSeating = poirotCafe.availableSeats
-availableSeatingNum = len(availableSeating)
+# availableSeating = poirotCafe.availableSeats
+# availableSeatingNum = len(availableSeating)
 
 
 # currentCustomer = customersAll[random.randint(0, 9)]

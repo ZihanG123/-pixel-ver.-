@@ -381,6 +381,14 @@ class Player():
         if self.selection in [(1,8), (3,8), (5,8), (6,8)]:
             self.startCustomerDialogue = not self.startCustomerDialogue
 
+    def resetPlayer(self):
+        self.currentPlate = Plate()
+        self.currentHoldPlate = Plate()
+        self.currentHoldIngredient = None
+        self.servedCustomerNum = 0
+
+        self.startCustomerDialogue = False
+
 
 #######
 # initialize player

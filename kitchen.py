@@ -39,6 +39,12 @@ class Kitchen:
                 currCookingIng.cookedOnce = True
                 # currCookingIng.image = f'./images/cooked/{currCookingIng.name}CookedImage.PNG'
 
+    def resetKitchen(self):
+        self.isCooking = False
+        self.cookingCounter = 0
+        self.cookingCounterSeconds = 0
+        self.ingredientInside = None
+
     # def drawCookingIngredient(self):
     #     # print(f'{self.name}', self.ingredientInside)
     #     if self.ingredientInside != None:
