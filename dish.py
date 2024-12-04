@@ -19,12 +19,13 @@ class Dish:
     def __eq__(self, other):
         # self.ingredientsNeeded = sorted(self.ingredientsNeeded)
         # other.currentIngredients = sorted(other.currentIngredients)
-        if len(self.ingredientsNeeded) != other.currentIngredients:
-            return False
-        else:
-            for i in range(len(self.ingredientsNeeded)):
-                if self.ingredientsNeeded[i] != len(other.currentIngredients[i]):
-                    return False
+        if other != None:
+            if len(self.ingredientsNeeded) != other.currentIngredients:
+                return False
+            else:
+                for i in range(len(self.ingredientsNeeded)):
+                    if self.ingredientsNeeded[i] != len(other.currentIngredients[i]):
+                        return False
                 
         return True
     

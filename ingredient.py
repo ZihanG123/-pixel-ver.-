@@ -44,16 +44,16 @@ class Ingredient:
 
 ketchup = Ingredient('ketchup', True, None, None)
 curry = Ingredient('curry', True, None, None)
-bread = Ingredient('bread', False, 3, 'chopping')
+bread = Ingredient('bread', False, 2, 'chopping')
 mayonnaise = Ingredient('mayonnaise', True, None, None)
-ham = Ingredient('ham', False, 3, 'chopping')
-lettuce = Ingredient('lettuce', False, 3, 'chopping')
+ham = Ingredient('ham', False, 2, 'chopping')
+lettuce = Ingredient('lettuce', False, 2, 'chopping')
 plate = Ingredient('plate', True, None, None)
-rice = Ingredient('rice', False, 7, 'pan')
-chicken = Ingredient('chicken', False, 5, 'fryer')
-tonkatsu = Ingredient('tonkatsu', False, 5, 'fryer')
-tempura = Ingredient('tempura', False, 5, 'fryer')
-spaghetti = Ingredient('spaghetti', False, 7, 'pan')
+rice = Ingredient('rice', False, 6, 'pan')
+chicken = Ingredient('chicken', False, 4, 'fryer')
+tonkatsu = Ingredient('tonkatsu', False, 4, 'fryer')
+tempura = Ingredient('tempura', False, 4, 'fryer')
+spaghetti = Ingredient('spaghetti', False, 6, 'pan')
 
 ingredientAll = [ketchup, curry, bread, mayonnaise, ham, lettuce, plate, rice, chicken, tonkatsu, tempura, spaghetti]
 

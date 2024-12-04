@@ -246,7 +246,7 @@ def game_redrawAll(app):
 
 def game_onStep(app):
     # if poirotCafe.cafeTime >= 5*60*30+29:
-    if poirotCafe.cafeTime >= 1*60*30+29:
+    if poirotCafe.cafeTime >= 1.5*60*30+29:
         setActiveScreen('gameOver')
 
     if app.keyHeld in ['up', 'down', 'left', 'right']:
@@ -484,7 +484,7 @@ def drawHoldPlate(app):
 def drawCustomersWalkingIn(app):
     customer = poirotCafe.currWalkingInCustomer
     if customer != None:
-        if poirotCafe.cafeTime % 30 == 0:
+        if poirotCafe.cafeTime % 60 == 0:
             print(f'{customer.name} is currently walking in', {customer.isSeated})
         if not customer.isSeated:
             if poirotCafe.customerTimeStamps != []:
@@ -505,7 +505,8 @@ def drawCustomersWalkingIn(app):
 def drawCustomerLeaving(app):
     customer = poirotCafe.currLeavingCustomer
     if customer != None:
-        print(f'{customer.name} is currently walking leaving')
+        if poirotCafe.cafeTime % 60 == 0:
+            print(f'{customer.name} is currently walking leaving')
         # print(f'{customer.name} is leaving')
         # print('............', len(customer.pixelPathLeave))
         # print('currentStepLeaving', customer.currentStepLeaving)
@@ -533,6 +534,12 @@ def customerControllLeaving(app):
     if customer != None:
         if customer in poirotCafe.insideCustomers:
             poirotCafe.insideCustomers.remove(customer)
+        if not app.recordedLeftCustomer:
+            app.scoreCustomer += 1
+            app.scoreDishes += customer.orderNumber
+            app.scoreTime += customer.eatingTime
+            app.recordedLeftCustomer = True
+
         customer.isSeated = False
         # print('len customer.pixelPathLeave', len(customer.pixelPathLeave))
         # print('customer.currentStepLeaving', customer.currentStepLeaving)
@@ -540,11 +547,7 @@ def customerControllLeaving(app):
         if (posX, posY) == (customer.pixelPathLeave[-1][0], customer.pixelPathLeave[-1][1]):
             customer.hasLeft = True
             # print('customer has left?', customer.hasLeft)
-            if not app.recordedLeftCustomer:
-                app.scoreCustomer += 1
-                app.scoreDishes += customer.orderNumber
-                app.scoreTime += customer.eatingTime
-                app.recordedLeftCustomer = True
+
             if customer in poirotCafe.nextCustomers:
                 poirotCafe.nextCustomers.remove(customer)
 
@@ -604,12 +607,13 @@ def checkCurrDishOnDesk(app):
                         drawRect(customer.seat[0]*64 + 32, customer.seat[1]*64 - 40, rectLen, 8, fill='steelBlue', align='center')
                 else:
                     customer.eatingTimeStamps = None
-                    for dish in customer.orderDishes:
-                        if customer.currDishOnDesk == dish:
-                            customer.orderDishes.remove(dish)
-                    customer.eaten += 1
-                    # print(f'{customer.name} ate {customer.eaten} dish(es)')
-                    customer.currDishOnDesk = Plate()
+                    if customer.orderDishes != []:
+                        for dish in customer.orderDishes:
+                            if customer.currDishOnDesk == dish:
+                                customer.orderDishes.remove(dish)
+                        customer.eaten += 1
+                        # print(f'{customer.name} ate {customer.eaten} dish(es)')
+                        customer.currDishOnDesk = Plate()
 
 def drawCookingIngredient(utensil, app):
         # print(f'{self.name}', self.ingredientInside)

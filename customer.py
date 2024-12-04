@@ -138,7 +138,7 @@ class Customer:
     def startToOrder(self, cafeMenu):
         if self.isSeated == True and self.ordered == False:
             self.orderNumber = randint(1,2)
-            # self.orderNumber = 1
+            # self.orderNumber = 2
             self.ordered = True
             for i in range(self.orderNumber):
                 menuLen = len(cafeMenu.menu)
@@ -221,12 +221,12 @@ class Cafe:
     def letCustomerIn(self):
         if self.availableSeats != []:
             currQueueNum = len(self.queue)
-            print(self.queue)
+            # print(self.queue)
             if self.prevWalkingInCustomer != None and self.currWalkingInCustomer != None:
                 if self.prevWalkingInCustomer.isSeated and self.currWalkingInCustomer.isSeated:
                     nextCustomer = self.queue[randint(0, currQueueNum-1)]
-                    print('next customer will be: ', nextCustomer)
-                    print(nextCustomer.nextCustomerDelay)
+                    # print('next customer will be: ', nextCustomer)
+                    # print(nextCustomer.nextCustomerDelay)
                     
                     nextCustomer.seat = self.availableSeats[randint(0, len(self.availableSeats)-1)]
                     nextCustomer.targetX, nextCustomer.targetY = nextCustomer.seat[0], nextCustomer.seat[1]-1
@@ -244,11 +244,11 @@ class Cafe:
                     # print('occupied seats:', self.occupiedSeats)
                     self.queue.remove(nextCustomer)
                     self.availableSeats.remove(nextCustomer.seat)
-                    print('nextCustomers List:', self.nextCustomers)
+                    # print('nextCustomers List:', self.nextCustomers)
             else:
                 nextCustomer = self.queue[randint(0, currQueueNum-1)]
-                print('next customer will be: ', nextCustomer)
-                print(nextCustomer.nextCustomerDelay)
+                # print('next customer will be: ', nextCustomer)
+                # print(nextCustomer.nextCustomerDelay)
                 
                 nextCustomer.seat = self.availableSeats[randint(0, len(self.availableSeats)-1)]
                 nextCustomer.targetX, nextCustomer.targetY = nextCustomer.seat[0], nextCustomer.seat[1]-1
@@ -266,7 +266,7 @@ class Cafe:
                 # print('occupied seats:', self.occupiedSeats)
                 self.queue.remove(nextCustomer)
                 self.availableSeats.remove(nextCustomer.seat)
-                print('nextCustomers List:', self.nextCustomers)
+                # ('nextCustomers List:', self.nextCustomers)
         
 
     def recordTimeStep(self, customer):
@@ -294,8 +294,8 @@ class Cafe:
                 if len(self.nextCustomers) > 0:
                     self.currWalkingInCustomer = self.nextCustomers[-1]
         else:
-            print('self.prevWalkingInCustomer is', self.prevWalkingInCustomer)
-            print('self.prevWalkingInCustomer is', self.prevWalkingInCustomer)
+            # print('self.prevWalkingInCustomer is', self.prevWalkingInCustomer)
+            # print('self.prevWalkingInCustomer is', self.prevWalkingInCustomer)
             if self.prevWalkingInCustomer.isSeated and self.currWalkingInCustomer.isSeated:
                 if len(self.nextCustomers) > 0:
                     self.nextCustomers.pop()
