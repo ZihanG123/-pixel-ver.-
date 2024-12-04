@@ -128,6 +128,9 @@ def start_redrawAll(app):
 
 def start_onKeyPress(app, key):
     if key == 'space':
+        poirotCafe.cafeTime = 0
+        app.minute = 0
+        app.second = 0
         setActiveScreen('game')
     elif key == 'enter':
         setActiveScreen('instructions1')
@@ -240,6 +243,10 @@ def game_redrawAll(app):
 
 
 def game_onStep(app):
+    # if poirotCafe.cafeTime >= 5*60*30+29:
+    if poirotCafe.cafeTime >= 5*30+29:
+        setActiveScreen('gameOver')
+
     if app.keyHeld in ['up', 'down', 'left', 'right']:
         amuro.move(app.keyHeld)
         # amuro.loadSpritePilImages()
