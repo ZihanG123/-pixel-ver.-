@@ -385,3 +385,5 @@
     #     if customer.isSeated:
     #         posX, posY = customer.pixelPath[-1]
     #         drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
+
+# {'posX':(216,232), 'posY':(192,240), 'dirX':-1, 'dirY':0, 'selection':(2,3)}

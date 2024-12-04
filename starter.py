@@ -170,7 +170,7 @@ def instructions2_onKeyPress(app, key):
 def gameOver_redrawAll(app):
     drawImage(app.gameOverImage, 0, 0, width=640, height=640)
     finalScore = app.scoreCustomer * app.scoreDishes + app.scoreTime
-    drawLabel(str(finalScore), 320, 150, size=40, bold=True)
+    drawLabel(str(finalScore), 320, 150, size=70, bold=True, font='monospace')
 
 # def gameOver_onKeyPress(app, key):
 #     if key == 'space':
@@ -181,8 +181,6 @@ def gameOver_redrawAll(app):
 ################
 
 def game_redrawAll(app):
-    if poirotCafe.cafeTime >= 5*60*30:
-        setActiveScreen('gameOver')
 
     drawImage(app.cafeImage, 0, 0, width=640, height=640)
     addCafeCustomerDesks(app)
@@ -206,7 +204,7 @@ def game_redrawAll(app):
     addKitchenWareTop(app)
     addCafeChairs(app)
 
-    if amuro.selection in [(3,4), (4,4), (5,4), (6,4), (2,3)]:
+    if amuro.selection in [(3,4), (4,4), (5,4), (6,4)]:
         drawSelectionDesk(app)
 
     #########################
@@ -248,7 +246,7 @@ def game_redrawAll(app):
 
 def game_onStep(app):
     # if poirotCafe.cafeTime >= 5*60*30+29:
-    if poirotCafe.cafeTime >= 5*30+29:
+    if poirotCafe.cafeTime >= 1*60*30+29:
         setActiveScreen('gameOver')
 
     if app.keyHeld in ['up', 'down', 'left', 'right']:
@@ -416,7 +414,7 @@ def addKitchenWareBottom(app):
 
 
 def drawSelectionDesk(app):
-    if amuro.selection != (0,0) and amuro.selection in [(3,4), (4,4), (5,4), (6,4), (2,3)]:
+    if amuro.selection != (0,0) and amuro.selection in [(3,4), (4,4), (5,4), (6,4)]:
         drawImage(app.selectionDeskImage, amuro.selection[0]*64, amuro.selection[1]*64, width=64, height=64, opacity=40)
 
     if amuro.selection == (5,4):

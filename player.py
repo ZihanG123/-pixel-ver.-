@@ -50,7 +50,6 @@ class Player():
         {'posX':(264,320), 'posY':(224,240), 'dirX':0, 'dirY':1, 'selection':(4,4)},
         {'posX':(328,384), 'posY':(224,240), 'dirX':0, 'dirY':1, 'selection':(5,4)},
         {'posX':(392,448), 'posY':(224,240), 'dirX':0, 'dirY':1, 'selection':(6,4)},
-        {'posX':(216,232), 'posY':(192,240), 'dirX':-1, 'dirY':0, 'selection':(2,3)},
         {'posX':(464,512), 'posY':(184,224), 'dirX':0, 'dirY':-1, 'selection':(7,2)},
         {'posX':(528,536), 'posY':(120,176), 'dirX':-1, 'dirY':0, 'selection':(7,2)},]
 
