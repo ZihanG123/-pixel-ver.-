@@ -115,6 +115,9 @@ def onAppStart(app):
     app.scoreCustomer = 0
     app.scoreDishes = 0
 
+    app.minute = 0
+    app.second = 0
+
 ################
 # start screen
 ################
@@ -231,8 +234,9 @@ def game_redrawAll(app):
 
     checkCurrDishOnDesk(app)
 
-
     drawCustomerLeaving(app)
+
+    drawCafeTime(app)
 
 
 def game_onStep(app):
@@ -244,6 +248,12 @@ def game_onStep(app):
         amuro.isMoving = False
 
     poirotCafe.cafeTime += 1
+    if poirotCafe.cafeTime % 1800 == 0:
+        app.minute += 1
+    app.second = app.second % 60
+    
+    if poirotCafe.cafeTime % 30 == 0:
+        app.second += 1
     # print(poirotCafe.cafeTime)
         
     poirotCafe.letCustomerIn()
@@ -607,6 +617,12 @@ def drawCookingIngredient(utensil, app):
                     drawLabel(str(currCookingIng.cookTime-utensil.cookingCounterSeconds), 
                         utensil.selectionCoor[0]*64+8, utensil.selectionCoor[1]*64+8, 
                         size=20, align='center', font='monospace', bold=True, fill='white')
+
+def drawCafeTime(app):
+    if app.second < 10:
+        drawLabel(f'{app.minute}:0{app.second}', 554.6, 45, size=25, font='monospace', bold=True, align='left')
+    else:
+        drawLabel(f'{app.minute}:{app.second}', 554.6, 45, size=25, font='monospace', bold=True, align='left')
 
 ###################
 def main():
