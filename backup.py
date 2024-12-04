@@ -379,3 +379,9 @@
     #         return self.pixelPath
     #     else:
     #         return None
+
+    # if poirotCafe.currLeavingCustomer != None:
+    #     customer = poirotCafe.currLeavingCustomer
+    #     if customer.isSeated:
+    #         posX, posY = customer.pixelPath[-1]
+    #         drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')

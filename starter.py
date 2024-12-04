@@ -29,9 +29,6 @@ else:
     highestScore = 0
 
 
-
-
-
 def onAppStart(app):
     
     app.stepsPerSecond = 30
@@ -118,6 +115,9 @@ def onAppStart(app):
 
     app.minute = 0
     app.second = 0
+    app.scoreTime = 0
+
+    app.recordedLeftCustomer = False
 
 ################
 # start screen
@@ -132,7 +132,7 @@ def start_onKeyPress(app, key):
         # poirotCafe.cafeTime = 0
         # app.minute = 0
         # app.second = 0
-        resetGame(app, poirotCafe, amuro, customersAll, ingredientAll, chopping, pan, fryer)
+        # resetGame(app, poirotCafe, amuro, customersAll, ingredientAll, chopping, pan, fryer)
         setActiveScreen('game')
     elif key == 'enter':
         setActiveScreen('instructions1')
@@ -169,10 +169,12 @@ def instructions2_onKeyPress(app, key):
 
 def gameOver_redrawAll(app):
     drawImage(app.gameOverImage, 0, 0, width=640, height=640)
+    finalScore = app.scoreCustomer * app.scoreDishes + app.scoreTime
+    drawLabel(str(finalScore), 320, 150, size=40, bold=True)
 
-def gameOver_onKeyPress(app, key):
-    if key == 'space':
-        setActiveScreen('start')
+# def gameOver_onKeyPress(app, key):
+#     if key == 'space':
+#         setActiveScreen('start')
 
 ################
 # game screen
@@ -484,7 +486,8 @@ def drawHoldPlate(app):
 def drawCustomersWalkingIn(app):
     customer = poirotCafe.currWalkingInCustomer
     if customer != None:
-        print(f'{customer.name} is currently walking in', {customer.isSeated})
+        if poirotCafe.cafeTime % 30 == 0:
+            print(f'{customer.name} is currently walking in', {customer.isSeated})
         if not customer.isSeated:
             if poirotCafe.customerTimeStamps != []:
                 prevCustomerStamp = poirotCafe.customerTimeStamps[-1]
@@ -500,12 +503,6 @@ def drawCustomersWalkingIn(app):
         posX, posY = insideSeatedCustomer.pixelPath[-1]
         drawImage(insideSeatedCustomer.image, posX+35, posY+21, width=128, height=128, align='center')
     
-    # if poirotCafe.currLeavingCustomer != None:
-    #     customer = poirotCafe.currLeavingCustomer
-    #     if customer.isSeated:
-    #         posX, posY = customer.pixelPath[-1]
-    #         drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
-
 
 def drawCustomerLeaving(app):
     customer = poirotCafe.currLeavingCustomer
@@ -545,8 +542,11 @@ def customerControllLeaving(app):
         if (posX, posY) == (customer.pixelPathLeave[-1][0], customer.pixelPathLeave[-1][1]):
             customer.hasLeft = True
             # print('customer has left?', customer.hasLeft)
-            app.scoreCustomer += 1
-            app.scoreDishes += 1
+            if not app.recordedLeftCustomer:
+                app.scoreCustomer += 1
+                app.scoreDishes += customer.orderNumber
+                app.scoreTime += customer.eatingTime
+                app.recordedLeftCustomer = True
             if customer in poirotCafe.nextCustomers:
                 poirotCafe.nextCustomers.remove(customer)
 
@@ -562,6 +562,7 @@ def customerControllLeaving(app):
                 poirotCafe.currLeavingCustomer = None
 
             customer.resetCustomer()
+            app.recordedLeftCustomer = False
 
 def drawMovingAmuro(app):
     if amuro.isMoving:
@@ -641,6 +642,9 @@ def resetGame(app, poirotCafe, amuro, customersAll, ingredientAll, chopping, pan
     app.keyHeld = None
     app.scoreCustomer = 0
     app.scoreDishes = 0
+    app.scoreTime = 0
+
+    app.recordedLeftCustomer = False
 
     ##########
     
