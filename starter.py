@@ -1,6 +1,5 @@
 from cmu_graphics import *
 from PIL import Image
-from urllib.request import urlopen
 
 from player import *
 from dish import *
@@ -251,8 +250,8 @@ def game_redrawAll(app):
 
 
 def game_onStep(app):
-    # if poirotCafe.cafeTime >= 5*60*30+29:
-    if poirotCafe.cafeTime >= 5*30+29:
+    if poirotCafe.cafeTime >= 5*60*30+29:
+    # if poirotCafe.cafeTime >= 5*30+29:
         setActiveScreen('gameOver')
 
     if app.keyHeld in ['up', 'down', 'left', 'right']:
