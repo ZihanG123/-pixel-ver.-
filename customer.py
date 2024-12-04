@@ -137,11 +137,12 @@ class Customer:
     # customer order
     def startToOrder(self, cafeMenu):
         if self.isSeated == True and self.ordered == False:
-            # self.orderNumber = random.randint(1,2)
-            self.orderNumber = 1
+            self.orderNumber = randint(1,2)
+            # self.orderNumber = 1
             self.ordered = True
             for i in range(self.orderNumber):
-                self.orderDishes.append(cafeMenu.menu[randint(0,9)])
+                menuLen = len(cafeMenu.menu)
+                self.orderDishes.append(cafeMenu.menu[randint(0,menuLen-1)])
         
         if self.orderNumber != 0:
             print(self.orderNumber)

@@ -47,6 +47,10 @@ chickenCurryRice = Dish('chicken curry rice', [plate, curry, rice, chicken])
 tonkatsuCurryRice = Dish('tonkatsu curry rice', [plate, curry, rice, tonkatsu])
 tempuraCurryRice = Dish('tempura curry rice', [plate, curry, rice, tempura])
 
+chickenTomatoSauceRice = Dish('chicken tomato sauce rice', [plate, ketchup, rice, chicken])
+tonkatsuTomatoSauceRice = Dish('tonkatsu tomato sauce rice', [plate, ketchup, rice, tonkatsu])
+tempuraTomatoSauceRice = Dish('tempura tomato sauce rice', [plate, ketchup, rice, tempura])
+
 chickenCurrySpaghetti = Dish('chicken curry spaghetti', [plate, curry, spaghetti, chicken])
 tonkatsuCurrySpaghetti = Dish('tonkatsu curry spaghetti', [plate, curry, spaghetti, tonkatsu])
 tempuraCurrySpaghetti = Dish('tempura curry spaghetti', [plate, curry, spaghetti, tempura])

@@ -11,4 +11,4 @@ class Menu:
 
 cafeMenu = Menu([sandwich, chickenCurryRice, tonkatsuCurryRice, tempuraCurryRice, chickenCurrySpaghetti, 
             tonkatsuCurrySpaghetti, tempuraCurrySpaghetti, chickenTomatoSauceSpaghetti, tonkatsuTomatoSauceSpaghetti, 
-            tempuraTomatoSauceSpaghetti])
+            tempuraTomatoSauceSpaghetti, chickenTomatoSauceRice, tonkatsuTomatoSauceRice, tempuraTomatoSauceRice])

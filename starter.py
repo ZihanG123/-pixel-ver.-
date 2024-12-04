@@ -10,11 +10,27 @@ from ingredient import *
 from customer import *
 from kitchen import *
 
+import os
+
 ##################################
 # Citations:
 # All of the images used are drawn by me.
 # The images are based on Detective Conan by Gosho Aoyama.
 ##################################
+
+highestScore = 0
+
+################
+# This part of the code is adapted from https://youtu.be/DCqV1ARz-Yw?si=LM2TChuTPqd7Pbva
+if os.path.exists('score.txt'):
+    with open('score.txt', 'r') as file:
+        highestScore = int(file.read())
+else:
+    highestScore = 0
+
+
+
+
 
 def onAppStart(app):
     app.stepsPerSecond = 30
@@ -35,6 +51,8 @@ def onAppStart(app):
     app.startScreenImage = CMUImage(Image.open('./images/startScreenImage.PNG'))
     app.instructionsScreen1Image = CMUImage(Image.open('./images/instructionsScreen1Image.PNG'))
     app.instructionsScreen2Image = CMUImage(Image.open('./images/instructionsScreen2Image.PNG'))
+    app.gameOverImage = CMUImage(Image.open('./images/gameOverScreenImage.PNG'))
+
     app.cafeImage = CMUImage(Image.open('./images/cafeImage.PNG'))
     
     app.desk1Image = CMUImage(Image.open('./images/desk1Image.PNG'))
@@ -119,11 +137,22 @@ def instructions2_onKeyPress(app, key):
         setActiveScreen('instructions1')
 
 ################
+# gameOver screen
+################
+
+def gameOver_redrawAll(app):
+    drawImage(app.gameOverImage, 0, 0, width=640, height=640)
+
+def gameOver_onKeyPress(app, key):
+    if key == 'space':
+        setActiveScreen('start')
+
+################
 # game screen
 ################
 
 def game_redrawAll(app):
-    drawImage('./images/cafeImage.PNG', 0, 0, width=640, height=640)
+    drawImage(app.cafeImage, 0, 0, width=640, height=640)
     addCafeCustomerDesks(app)
     addCafeKitchenDesksBottom(app)
     addKitchenWareBottom(app)
