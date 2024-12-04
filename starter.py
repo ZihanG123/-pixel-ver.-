@@ -181,8 +181,7 @@ def game_onStep(app):
     poirotCafe.cafeTime += 1
     # print(poirotCafe.cafeTime)
         
-    for i in range(len(poirotCafe.availableSeats)):
-        poirotCafe.letCustomerIn()
+    poirotCafe.letCustomerIn()
     # print(poirotCafe.nextCustomers)
 
     if len(poirotCafe.nextCustomers) > 0:
@@ -517,7 +516,7 @@ def checkCurrDishOnDesk(app):
                 if poirotCafe.cafeTime <= customer.eatingTimeStamps + customer.eatingTime*30:
                     for item in customer.currDishOnDesk.currentIngredients:
                         drawImage(eval(f'app.{item.name}CookedImage'), customer.currDishOnDesk.posX*64, customer.currDishOnDesk.posY*64, width=64, height=64)
-                    rectLen = customer.eatingTimeStamps + customer.eatingTime*10 - poirotCafe.cafeTime
+                    rectLen = customer.eatingTimeStamps + customer.eatingTime*30 - poirotCafe.cafeTime
                     if rectLen > 0:
                         drawRect(customer.seat[0]*64 + 32, customer.seat[1]*64 - 40, rectLen, 8, fill='steelBlue', align='center')
                 else:

@@ -221,27 +221,51 @@ class Cafe:
         if self.availableSeats != []:
             currQueueNum = len(self.queue)
             print(self.queue)
-            nextCustomer = self.queue[randint(0, currQueueNum-1)]
-            print('next customer will be: ', nextCustomer)
-            print(nextCustomer.nextCustomerDelay)
-            
-            nextCustomer.seat = self.availableSeats[randint(0, len(self.availableSeats)-1)]
-            nextCustomer.targetX, nextCustomer.targetY = nextCustomer.seat[0], nextCustomer.seat[1]-1
+            if self.prevWalkingInCustomer != None and self.currWalkingInCustomer != None:
+                if self.prevWalkingInCustomer.isSeated and self.currWalkingInCustomer.isSeated:
+                    nextCustomer = self.queue[randint(0, currQueueNum-1)]
+                    print('next customer will be: ', nextCustomer)
+                    print(nextCustomer.nextCustomerDelay)
+                    
+                    nextCustomer.seat = self.availableSeats[randint(0, len(self.availableSeats)-1)]
+                    nextCustomer.targetX, nextCustomer.targetY = nextCustomer.seat[0], nextCustomer.seat[1]-1
 
-            nextCustomer.moveCustomer()
-            nextCustomer.path.append((nextCustomer.targetX, nextCustomer.targetY+1))
-            nextCustomer.boardPathToPixelPath()
-            # print('/////////////////////////////////', nextCustomer.path)
-            # print('?????????????????????????????????', nextCustomer.pixelPath)
-            # print('.................................', nextCustomer.pixelPathLeave)
-            # nextCustomer.leaveCafe()
-            
-            self.nextCustomers.append(nextCustomer)
-            self.occupiedSeats.append(nextCustomer.seat)
-            # print('occupied seats:', self.occupiedSeats)
-            self.queue.remove(nextCustomer)
-            self.availableSeats.remove(nextCustomer.seat)
-            print('nextCustomers List:', self.nextCustomers)
+                    nextCustomer.moveCustomer()
+                    nextCustomer.path.append((nextCustomer.targetX, nextCustomer.targetY+1))
+                    nextCustomer.boardPathToPixelPath()
+                    # print('/////////////////////////////////', nextCustomer.path)
+                    # print('?????????????????????????????????', nextCustomer.pixelPath)
+                    # print('.................................', nextCustomer.pixelPathLeave)
+                    # nextCustomer.leaveCafe()
+                    
+                    self.nextCustomers.append(nextCustomer)
+                    self.occupiedSeats.append(nextCustomer.seat)
+                    # print('occupied seats:', self.occupiedSeats)
+                    self.queue.remove(nextCustomer)
+                    self.availableSeats.remove(nextCustomer.seat)
+                    print('nextCustomers List:', self.nextCustomers)
+            else:
+                nextCustomer = self.queue[randint(0, currQueueNum-1)]
+                print('next customer will be: ', nextCustomer)
+                print(nextCustomer.nextCustomerDelay)
+                
+                nextCustomer.seat = self.availableSeats[randint(0, len(self.availableSeats)-1)]
+                nextCustomer.targetX, nextCustomer.targetY = nextCustomer.seat[0], nextCustomer.seat[1]-1
+
+                nextCustomer.moveCustomer()
+                nextCustomer.path.append((nextCustomer.targetX, nextCustomer.targetY+1))
+                nextCustomer.boardPathToPixelPath()
+                # print('/////////////////////////////////', nextCustomer.path)
+                # print('?????????????????????????????????', nextCustomer.pixelPath)
+                # print('.................................', nextCustomer.pixelPathLeave)
+                # nextCustomer.leaveCafe()
+                
+                self.nextCustomers.append(nextCustomer)
+                self.occupiedSeats.append(nextCustomer.seat)
+                # print('occupied seats:', self.occupiedSeats)
+                self.queue.remove(nextCustomer)
+                self.availableSeats.remove(nextCustomer.seat)
+                print('nextCustomers List:', self.nextCustomers)
         
 
     def recordTimeStep(self, customer):
@@ -269,7 +293,9 @@ class Cafe:
                 if len(self.nextCustomers) > 0:
                     self.currWalkingInCustomer = self.nextCustomers[-1]
         else:
-            if self.prevWalkingInCustomer.isSeated:
+            print('self.prevWalkingInCustomer is', self.prevWalkingInCustomer)
+            print('self.prevWalkingInCustomer is', self.prevWalkingInCustomer)
+            if self.prevWalkingInCustomer.isSeated and self.currWalkingInCustomer.isSeated:
                 if len(self.nextCustomers) > 0:
                     self.nextCustomers.pop()
                     if len(self.nextCustomers) > 0:
