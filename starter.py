@@ -33,7 +33,8 @@ def onAppStart(app):
     app.counterSprite = 0
 
     app.startScreenImage = CMUImage(Image.open('./images/startScreenImage.PNG'))
-    app.instructionsScreenImage = CMUImage(Image.open('./images/instructionsScreenImage.PNG'))
+    app.instructionsScreen1Image = CMUImage(Image.open('./images/instructionsScreen1Image.PNG'))
+    app.instructionsScreen2Image = CMUImage(Image.open('./images/instructionsScreen2Image.PNG'))
     app.cafeImage = CMUImage(Image.open('./images/cafeImage.PNG'))
     
     app.desk1Image = CMUImage(Image.open('./images/desk1Image.PNG'))
@@ -89,20 +90,33 @@ def start_onKeyPress(app, key):
     if key == 'space':
         setActiveScreen('game')
     elif key == 'enter':
-        setActiveScreen('instructions')
+        setActiveScreen('instructions1')
 
 ################
-# instructions screen
+# instructions 1 screen
 ################
 
-def instructions_redrawAll(app):
-    drawImage(app.instructionsScreenImage, 0, 0, width=640, height=640)
+def instructions1_redrawAll(app):
+    drawImage(app.instructionsScreen1Image, 0, 0, width=640, height=640)
 
-def instructions_onKeyPress(app, key):
-    if key == 'space':
-        setActiveScreen('game')
-    elif key == 'escape':
+def instructions1_onKeyPress(app, key):
+    if key == 'escape':
         setActiveScreen('start')
+    elif key == 'right':
+        setActiveScreen('instructions2')
+
+################
+# instructions 2 screen
+################
+
+def instructions2_redrawAll(app):
+    drawImage(app.instructionsScreen2Image, 0, 0, width=640, height=640)
+
+def instructions2_onKeyPress(app, key):
+    if key == 'escape':
+        setActiveScreen('start')
+    elif key == 'left':
+        setActiveScreen('instructions1')
 
 ################
 # game screen
@@ -256,7 +270,7 @@ def game_onKeyPress(app, key):
     if key == 'escape':
         setActiveScreen('start')
 
-    if key == 's' or key == 'w':
+    if key == 's':
         if amuro.selection == (5,4):
             amuro.select1selection = (5, amuro.select1selection[1] + 1)
             if amuro.select1selection[1] >= 6:
