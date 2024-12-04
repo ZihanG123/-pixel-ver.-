@@ -18,16 +18,15 @@ import os
 # The images are based on Detective Conan by Gosho Aoyama.
 ##################################
 
-highestScore = 0
 
 ################
 # This part of the code is adapted from https://youtu.be/DCqV1ARz-Yw?si=LM2TChuTPqd7Pbva
-if os.path.exists('score.txt'):
-    with open('score.txt', 'r') as file:
+if os.path.exists('./score.txt'):
+    with open('./score.txt', 'r') as file:
         highestScore = int(file.read())
 else:
     highestScore = 0
-
+#################
 
 def onAppStart(app):
     
@@ -169,8 +168,19 @@ def instructions2_onKeyPress(app, key):
 
 def gameOver_redrawAll(app):
     drawImage(app.gameOverImage, 0, 0, width=640, height=640)
-    finalScore = app.scoreCustomer * app.scoreDishes + app.scoreTime
+    finalScore = app.scoreCustomer * app.scoreDishes + app.scoreTime//app.scoreCustomer
     drawLabel(str(finalScore), 320, 150, size=70, bold=True, font='monospace')
+    global highestScore
+
+    ###############
+    # This part of the code is adapted from https://youtu.be/DCqV1ARz-Yw?si=LM2TChuTPqd7Pbva
+    if finalScore > highestScore:
+        highestScore = finalScore
+        with open('./score.txt', 'w') as file:
+            file.write(str(highestScore))
+    ###############
+
+    drawLabel(str(highestScore), 320, 330, size=40, bold=True, font='monospace')
 
 # def gameOver_onKeyPress(app, key):
 #     if key == 'space':
@@ -246,7 +256,7 @@ def game_redrawAll(app):
 
 def game_onStep(app):
     # if poirotCafe.cafeTime >= 5*60*30+29:
-    if poirotCafe.cafeTime >= 1.5*60*30+29:
+    if poirotCafe.cafeTime >= 5*30+29:
         setActiveScreen('gameOver')
 
     if app.keyHeld in ['up', 'down', 'left', 'right']:
