@@ -182,10 +182,6 @@ def gameOver_redrawAll(app):
 
     drawLabel(str(highestScore), 320, 330, size=40, bold=True, font='monospace')
 
-# def gameOver_onKeyPress(app, key):
-#     if key == 'space':
-#         setActiveScreen('start')
-
 ################
 # game screen
 ################

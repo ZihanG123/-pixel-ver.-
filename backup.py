@@ -387,3 +387,18 @@
     #         drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
 
 # {'posX':(216,232), 'posY':(192,240), 'dirX':-1, 'dirY':0, 'selection':(2,3)}
+
+# def gameOver_onKeyPress(app, key):
+#     if key == 'space':
+#         setActiveScreen('start')
+
+    # def drawCookingIngredient(self):
+    #     # print(f'{self.name}', self.ingredientInside)
+    #     if self.ingredientInside != None:
+    #         currCookingIng = self.ingredientInside
+    #         drawImage(currCookingIng.image, self.selectionCoor[0]*64, self.selectionCoor[1]*64, width=64, height=64)
+    #         if not currCookingIng.cookedOnce:
+    #             if currCookingIng.cookTime-self.cookingCounterSeconds > 0:
+    #                 drawLabel(str(currCookingIng.cookTime-self.cookingCounterSeconds), 
+    #                     self.selectionCoor[0]*64+8, self.selectionCoor[1]*64+8, 
+    #                     size=20, align='center', font='monospace', bold=True, fill='white')
