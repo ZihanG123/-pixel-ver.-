@@ -17,7 +17,7 @@ from kitchen import *
 ##################################
 
 def onAppStart(app):
-    app.stepsPerSecond = 10
+    app.stepsPerSecond = 30
 
     app.keyHeld = None
 
@@ -64,6 +64,18 @@ def onAppStart(app):
 
     app.dialogueImage = CMUImage(Image.open('./images/dialogueImage.PNG'))
 
+    app.breadCookedImage = CMUImage(Image.open('./images/cooked/breadCookedImage.PNG'))
+    app.chickenCookedImage = CMUImage(Image.open('./images/cooked/chickenCookedImage.PNG'))
+    app.curryCookedImage = CMUImage(Image.open('./images/cooked/curryCookedImage.PNG'))
+    app.hamCookedImage = CMUImage(Image.open('./images/cooked/hamCookedImage.PNG'))
+    app.ketchupCookedImage = CMUImage(Image.open('./images/cooked/ketchupCookedImage.PNG'))
+    app.lettuceCookedImage = CMUImage(Image.open('./images/cooked/lettuceCookedImage.PNG'))
+    app.mayonnaiseCookedImage = CMUImage(Image.open('./images/cooked/mayonnaiseCookedImage.PNG'))
+    app.plateCookedImage = CMUImage(Image.open('./images/cooked/plateCookedImage.PNG'))
+    app.riceCookedImage = CMUImage(Image.open('./images/cooked/riceCookedImage.PNG'))
+    app.spaghettiCookedImage = CMUImage(Image.open('./images/cooked/spaghettiCookedImage.PNG'))
+    app.tempuraCookedImage = CMUImage(Image.open('./images/cooked/tempuraCookedImage.PNG'))
+    app.tonkatsuCookedImage = CMUImage(Image.open('./images/cooked/tonkatsuCookedImage.PNG'))
 
 ################
 # start screen
@@ -186,13 +198,14 @@ def game_onStep(app):
 
     if poirotCafe.cafeTime >= 20:
         customer = poirotCafe.currWalkingInCustomer
-        if customer.currentStep < len(customer.pixelPath) - 1:
-            if poirotCafe.customerTimeStamps == []:
-                customer.currentStep += 1
-            else:
-                prevCustomerStamp = poirotCafe.customerTimeStamps[-1]
-                if poirotCafe.cafeTime >= prevCustomerStamp + customer.nextCustomerDelay:
+        if customer != None:
+            if customer.currentStep < len(customer.pixelPath) - 1:
+                if poirotCafe.customerTimeStamps == []:
                     customer.currentStep += 1
+                else:
+                    prevCustomerStamp = poirotCafe.customerTimeStamps[-1]
+                    if poirotCafe.cafeTime >= prevCustomerStamp + customer.nextCustomerDelay and poirotCafe.prevWalkingInCustomer.isSeated:
+                        customer.currentStep += 1
 
     if poirotCafe.currLeavingCustomer != None:
         customer = poirotCafe.currLeavingCustomer
@@ -372,23 +385,24 @@ def drawHoldIngredient(app):
 def drawPlate(app):
     if len(amuro.currentPlate.currentIngredients) != 0:
         for item in amuro.currentPlate.currentIngredients:
-            drawImage(f'./images/cooked/{item.name}CookedImage.PNG', amuro.currentPlate.posX*64, amuro.currentPlate.posY*64, width=64, height=64)
+            drawImage(eval(f'app.{item.name}CookedImage'), amuro.currentPlate.posX*64, amuro.currentPlate.posY*64, width=64, height=64)
 
 
 # draw the plate when picked up
 def drawHoldPlate(app):
     if len(amuro.currentHoldPlate.currentIngredients) != 0:
         for item in amuro.currentHoldPlate.currentIngredients:
-            drawImage(f'./images/cooked/{item.name}CookedImage.PNG', amuro.playerPosX, amuro.playerPosY, width=64, height=64)
+            drawImage(eval(f'app.{item.name}CookedImage'), amuro.playerPosX, amuro.playerPosY, width=64, height=64)
 
 def drawCustomersWalkingIn(app):
 
     customer = poirotCafe.currWalkingInCustomer
     if customer != None:
+        print(f'{customer.name} is currently walking in', {customer.isSeated})
         if not customer.isSeated:
             if poirotCafe.customerTimeStamps != []:
                 prevCustomerStamp = poirotCafe.customerTimeStamps[-1]
-                if poirotCafe.cafeTime >= prevCustomerStamp + customer.nextCustomerDelay:
+                if poirotCafe.prevWalkingInCustomer.isSeated:
                     posX, posY = customer.pixelPath[customer.currentStep]
                     drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
             else:
@@ -412,6 +426,7 @@ def drawCustomerLeaving(app):
 
     customer = poirotCafe.currLeavingCustomer
     if customer != None:
+        print(f'{customer.name} is currently walking leaving')
         # print(f'{customer.name} is leaving')
         # print('............', len(customer.pixelPathLeave))
         # print('currentStepLeaving', customer.currentStepLeaving)
@@ -420,20 +435,19 @@ def drawCustomerLeaving(app):
             drawImage(customer.image, posX+35, posY+21, width=128, height=128, align='center')
 
 
-def drawCustomersEating(app):
-    pass
-
-
 def customerControll():
     # posX, posY = currentCustomer.pixelPath[app.currentCustomerStep]
     # if (posX, posY) == (currentCustomer.targetX*64, (currentCustomer.targetY+1)*64):
     #     currentCustomer.isSeated = True
     customer = poirotCafe.currWalkingInCustomer
-    posX, posY = customer.pixelPath[customer.currentStep]
-    if (posX, posY) == (customer.targetX*64, (customer.targetY+1)*64):
-        customer.isSeated = True
-        poirotCafe.insideCustomers.append(customer)
-        poirotCafe.walkInOneByOne()
+    if customer != None:
+        posX, posY = customer.pixelPath[customer.currentStep]
+        if (posX, posY) == (customer.targetX*64, (customer.targetY+1)*64):
+            customer.isSeated = True
+            poirotCafe.prevWalkingInCustomer = customer
+            poirotCafe.currWalkingInCustomer = None
+            poirotCafe.insideCustomers.append(customer)
+            poirotCafe.walkInOneByOne()
 
 def customerControllLeaving():
     customer = poirotCafe.currLeavingCustomer
@@ -500,9 +514,9 @@ def checkCurrDishOnDesk(app):
     for customer in poirotCafe.insideCustomers:
         if (customer.currDishOnDesk != Plate()):
             if customer.eatingTimeStamps != None:
-                if poirotCafe.cafeTime <= customer.eatingTimeStamps + customer.eatingTime*10:
+                if poirotCafe.cafeTime <= customer.eatingTimeStamps + customer.eatingTime*30:
                     for item in customer.currDishOnDesk.currentIngredients:
-                        drawImage(f'./images/cooked/{item.name}CookedImage.PNG', customer.currDishOnDesk.posX*64, customer.currDishOnDesk.posY*64, width=64, height=64)
+                        drawImage(eval(f'app.{item.name}CookedImage'), customer.currDishOnDesk.posX*64, customer.currDishOnDesk.posY*64, width=64, height=64)
                     rectLen = customer.eatingTimeStamps + customer.eatingTime*10 - poirotCafe.cafeTime
                     if rectLen > 0:
                         drawRect(customer.seat[0]*64 + 32, customer.seat[1]*64 - 40, rectLen, 8, fill='steelBlue', align='center')

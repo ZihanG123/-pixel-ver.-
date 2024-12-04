@@ -1,4 +1,6 @@
-import random
+from random import *
+from cmu_graphics import *
+from PIL import Image
 
 from plate import *
 
@@ -7,11 +9,11 @@ class Customer:
     # name should be string
     def __init__(self, name, validBoard, eatingTime):
         self.name = name
-        self.image = f'./images/customers/{self.name}Image.PNG'
+        self.image = CMUImage(Image.open(f'./images/customers/{self.name}Image.PNG'))
         self.customerPosX = 0
         self.customerPosY = 4
 
-        self.speed = 12
+        self.speed = 6
         self.validBoard = validBoard
 
         self.seat = None
@@ -40,7 +42,7 @@ class Customer:
 
         self.directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
-        self.nextCustomerDelay = random.randint(7, 14)*10
+        self.nextCustomerDelay = randint(20, 28)*30
         # self.nextCustomerDelay = 40
 
         # currentStep for walking in
@@ -92,7 +94,7 @@ class Customer:
         self.visited.add((x, y))
         self.path.append((x, y))
 
-        random.shuffle(directions)
+        # shuffle(directions)
 
         for dx, dy in directions:
             newX, newY = x + dx, y + dy
@@ -128,8 +130,6 @@ class Customer:
 
             self.pathLeave = list(reversed(self.path))
             self.pixelPathLeave = list(reversed(self.pixelPath))
-            self.pixelPathLeave.insert(0, (self.pixelPath[-1][0], self.pixelPath[-1][1]))
-            self.pixelPathLeave.insert(0, (self.pixelPath[-1][0], self.pixelPath[-1][1]))
             
             self.hasGeneratedPath = True
 
@@ -141,7 +141,7 @@ class Customer:
             self.orderNumber = 1
             self.ordered = True
             for i in range(self.orderNumber):
-                self.orderDishes.append(cafeMenu.menu[random.randint(0,9)])
+                self.orderDishes.append(cafeMenu.menu[randint(0,9)])
         
         if self.orderNumber != 0:
             print(self.orderNumber)
@@ -178,7 +178,7 @@ class Customer:
 
         self.eaten = 0
 
-        self.nextCustomerDelay = random.randint(1, 10)*10
+        self.nextCustomerDelay = randint(20, 28)*30
         self.currentStep = 0
         self.currentStepLeaving = 0
 
@@ -211,19 +211,21 @@ class Cafe:
 
         self.customerTimeStamps = []
         self.currWalkingInCustomer = None
+        self.prevWalkingInCustomer = None
 
         self.currLeavingCustomer = None
+
 
     # next customers
     def letCustomerIn(self):
         if self.availableSeats != []:
             currQueueNum = len(self.queue)
             print(self.queue)
-            nextCustomer = self.queue[random.randint(0, currQueueNum-1)]
-            print(nextCustomer)
+            nextCustomer = self.queue[randint(0, currQueueNum-1)]
+            print('next customer will be: ', nextCustomer)
             print(nextCustomer.nextCustomerDelay)
             
-            nextCustomer.seat = self.availableSeats[random.randint(0, len(self.availableSeats)-1)]
+            nextCustomer.seat = self.availableSeats[randint(0, len(self.availableSeats)-1)]
             nextCustomer.targetX, nextCustomer.targetY = nextCustomer.seat[0], nextCustomer.seat[1]-1
 
             nextCustomer.moveCustomer()
@@ -239,6 +241,7 @@ class Cafe:
             # print('occupied seats:', self.occupiedSeats)
             self.queue.remove(nextCustomer)
             self.availableSeats.remove(nextCustomer.seat)
+            print('nextCustomers List:', self.nextCustomers)
         
 
     def recordTimeStep(self, customer):
@@ -263,13 +266,14 @@ class Cafe:
         if self.currWalkingInCustomer == None:
             if len(self.nextCustomers) > 0:
                 self.nextCustomers.pop()
-                if len(poirotCafe.nextCustomers) > 0:
+                if len(self.nextCustomers) > 0:
                     self.currWalkingInCustomer = self.nextCustomers[-1]
         else:
-            if len(self.nextCustomers) > 0:
-                self.nextCustomers.pop()
-                if len(poirotCafe.nextCustomers) > 0:
-                    self.currWalkingInCustomer = self.nextCustomers[-1]
+            if self.prevWalkingInCustomer.isSeated:
+                if len(self.nextCustomers) > 0:
+                    self.nextCustomers.pop()
+                    if len(self.nextCustomers) > 0:
+                        self.currWalkingInCustomer = self.nextCustomers[-1]
 
 
 

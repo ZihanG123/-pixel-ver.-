@@ -23,11 +23,11 @@ class Kitchen:
         if self.ingredientInside != None:
             currCookingIng = self.ingredientInside
 
-            if self.cookingCounter < currCookingIng.cookTime*10:
+            if self.cookingCounter < currCookingIng.cookTime*30:
                 if not currCookingIng.cookedOnce:
                     self.cookingCounter += 1
                     # print(currCookingIng, self.cookingCounter)
-                    if self.cookingCounter % 10 == 0:
+                    if self.cookingCounter % 30 == 0:
                         self.cookingCounterSeconds += 1
                         # print(self.cookingCounterSeconds)
             else:

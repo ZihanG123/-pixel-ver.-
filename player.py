@@ -6,6 +6,9 @@ from ingredient import *
 from kitchen import *
 from customer import *
 
+from cmu_graphics import *
+from PIL import Image
+
 
 # class for the character the player is controlling
 class Player():
@@ -16,9 +19,9 @@ class Player():
         self.playerPosX = playerPosX
         self.playerPosY = playerPosY
         self.name = name
-        self.speed = 16
+        self.speed = 8
         self.isMoving = False
-        self.validSpaceImage = './images/cafeValidMovementImage.PNG'
+        self.validSpaceImage = CMUImage(Image.open('./images/cafeValidMovementImage.PNG'))
         self.validBoard = [[1]*640 for row in range(640)]
         self.selection = (0,0)
 

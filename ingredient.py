@@ -1,10 +1,13 @@
+from cmu_graphics import *
+from PIL import Image
+
 class Ingredient:
 
     # name should be a string
     def __init__(self, name, cooked, cookTime, utensil):
 
         self.name = name
-        self.image = f'./images/hold/{name}HoldImage.PNG'
+        self.image = CMUImage(Image.open(f'./images/hold/{name}HoldImage.PNG'))
         self.cooked = cooked
         self.cookTime = cookTime
         self.cookingUtensil = utensil
