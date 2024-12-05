@@ -264,8 +264,8 @@ def game_redrawAll(app):
 
 
 def game_onStep(app):
-    # if poirotCafe.cafeTime >= 5*60*30+29:
-    if poirotCafe.cafeTime >= 5*30+29:
+    if poirotCafe.cafeTime >= 5*60*30+29:
+    # if poirotCafe.cafeTime >= 5*30+29:
         setActiveScreen('gameOver')
 
     if app.keyHeld in ['up', 'down', 'left', 'right']:
@@ -636,6 +636,8 @@ def checkCurrDishOnDesk(app):
                         for dish in customer.orderDishes:
                             if customer.currDishOnDesk == dish:
                                 customer.orderDishes.remove(dish)
+                                for ingredient in dish.ingredientsNeeded:
+                                    ingredient.resetIngredient()
                         customer.eaten += 1
                         # print(f'{customer.name} ate {customer.eaten} dish(es)')
                         customer.currDishOnDesk = Plate()

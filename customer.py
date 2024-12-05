@@ -42,7 +42,7 @@ class Customer:
 
         self.directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
-        self.nextCustomerDelay = randint(20, 28)*30
+        self.nextCustomerDelay = randint(18, 24)*30
         # self.nextCustomerDelay = 40
 
         # currentStep for walking in
