@@ -113,7 +113,8 @@ class Player():
                 self.playerPosX = newPosX
                 self.playerPosY = newPosY
 
-    # this part of the code referenced the TP-related demos in the course notes
+    #########################
+    # This part of the code referenced the TP-related demos for sprites in the course notes
     def loadSpritePilImages(self):
         spritestrip = Image.open('./images/amuroAnimationFrontImage.PNG')
         self.spritePilImages = []
@@ -132,7 +133,7 @@ class Player():
             spriteImage = spritestrip.crop((0+128*i, 0, 128+128*i, 128))
             self.spritePilImages.append(spriteImage)
         return self.spritePilImages
-
+    #########################
 
     # get the valid coordinates that the player can move
     def getCafeValidMovement(self):

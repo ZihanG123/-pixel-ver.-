@@ -10,6 +10,7 @@ from customer import *
 from kitchen import *
 
 import os
+import pathlib
 
 ##################################
 # Citations:
@@ -117,12 +118,19 @@ def onAppStart(app):
 
     app.recordedLeftCustomer = False
 
+    ###############
+    # Music is by Japan Cafe BGM on Spotify
+    app.gameStartMusic = loadSound('gameStartMusic.mp3')
+    # https://open.spotify.com/intl-ja/track/2GQxMAWLmZTzQ0Vz5wpn7Z?si=77f34ea80cfc46b6
+
+
 ################
 # start screen
 ################
 
 def start_redrawAll(app):
     drawImage(app.startScreenImage, 0, 0, width=640, height=640)
+    app.gameStartMusic.play(loop=True)
 
 
 def start_onKeyPress(app, key):
@@ -141,6 +149,7 @@ def start_onKeyPress(app, key):
 
 def instructions1_redrawAll(app):
     drawImage(app.instructionsScreen1Image, 0, 0, width=640, height=640)
+    app.gameStartMusic.play(loop=True)
 
 def instructions1_onKeyPress(app, key):
     if key == 'escape':
@@ -154,6 +163,7 @@ def instructions1_onKeyPress(app, key):
 
 def instructions2_redrawAll(app):
     drawImage(app.instructionsScreen2Image, 0, 0, width=640, height=640)
+    app.gameStartMusic.play(loop=True)
 
 def instructions2_onKeyPress(app, key):
     if key == 'escape':
@@ -166,8 +176,12 @@ def instructions2_onKeyPress(app, key):
 ################
 
 def gameOver_redrawAll(app):
+    app.gameStartMusic.play(loop=True)
     drawImage(app.gameOverImage, 0, 0, width=640, height=640)
-    finalScore = app.scoreCustomer * app.scoreDishes + app.scoreTime//app.scoreCustomer
+    if app.scoreCustomer == 0:
+        finalScore = 0
+    else:
+        finalScore = (app.scoreCustomer + app.scoreDishes) * (app.scoreTime//app.scoreCustomer)
     drawLabel(str(finalScore), 320, 150, size=70, bold=True, font='monospace')
     global highestScore
 
@@ -186,7 +200,7 @@ def gameOver_redrawAll(app):
 ################
 
 def game_redrawAll(app):
-
+    app.gameStartMusic.play(loop=True)
     drawImage(app.cafeImage, 0, 0, width=640, height=640)
     addCafeCustomerDesks(app)
     addCafeKitchenDesksBottom(app)
@@ -250,8 +264,8 @@ def game_redrawAll(app):
 
 
 def game_onStep(app):
-    if poirotCafe.cafeTime >= 5*60*30+29:
-    # if poirotCafe.cafeTime >= 5*30+29:
+    # if poirotCafe.cafeTime >= 5*60*30+29:
+    if poirotCafe.cafeTime >= 5*30+29:
         setActiveScreen('gameOver')
 
     if app.keyHeld in ['up', 'down', 'left', 'right']:
@@ -308,9 +322,12 @@ def game_onStep(app):
 
     # app.counterCustomer += 1
 
+    ##############################
+    # This part of the code referenced the TP-related demos for sprites in the course notes
     if app.counterSprite % 4 == 0:
         app.spriteIndex = (app.spriteIndex + 1) % len(amuro.spriteAnimatedImages)
     app.counterSprite += 1
+    ##############################
 
 
     for customer in poirotCafe.insideCustomers:
@@ -572,9 +589,12 @@ def customerControllLeaving(app):
 
 def drawMovingAmuro(app):
     if amuro.isMoving:
+        ##############################
+        # This part of the code is adapted from the TP-related demos for sprites in the course notes
         amuro.loadSpritePilImages()
         amuro.spriteAnimatedImages = [CMUImage(pilImage) for pilImage in amuro.spritePilImages]
         drawImage(amuro.spriteAnimatedImages[app.spriteIndex], amuro.playerPosX, amuro.playerPosY, width=128, height=128, align='center')
+        ##############################
     else:
         if amuro.playerDirX == 0 and amuro.playerDirY == 1:
             drawImage(app.amuroFrontImage, amuro.playerPosX, amuro.playerPosY-8, width=128, height=128, align='center')
@@ -677,6 +697,16 @@ def resetGame(app, poirotCafe, amuro, customersAll, ingredientAll, chopping, pan
 
     #########
 
+##############################
+# This part of the code referenced the TP-related demo posted on Ed
+def loadSound(relativePath):
+    # Convert to absolute path (because pathlib.Path only takes absolute paths)
+    absolutePath = os.path.abspath(relativePath)
+    # Get local file URL
+    url = pathlib.Path(absolutePath).as_uri()
+    # Load Sound file from local URL
+    return Sound(url)
+##############################
 
 ###################
 def main():
