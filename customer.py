@@ -179,7 +179,7 @@ class Customer:
 
         self.eaten = 0
 
-        self.nextCustomerDelay = randint(20, 28)*30
+        self.nextCustomerDelay = randint(18, 24)*30
         self.currentStep = 0
         self.currentStepLeaving = 0
 
