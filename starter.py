@@ -506,8 +506,8 @@ def drawHoldPlate(app):
 def drawCustomersWalkingIn(app):
     customer = poirotCafe.currWalkingInCustomer
     if customer != None:
-        if poirotCafe.cafeTime % 60 == 0:
-            print(f'{customer.name} is currently walking in', {customer.isSeated})
+        # if poirotCafe.cafeTime % 60 == 0:
+            # print(f'{customer.name} is currently walking in', {customer.isSeated})
         if not customer.isSeated:
             if poirotCafe.customerTimeStamps != []:
                 prevCustomerStamp = poirotCafe.customerTimeStamps[-1]
@@ -527,8 +527,8 @@ def drawCustomersWalkingIn(app):
 def drawCustomerLeaving(app):
     customer = poirotCafe.currLeavingCustomer
     if customer != None:
-        if poirotCafe.cafeTime % 60 == 0:
-            print(f'{customer.name} is currently walking leaving')
+        # if poirotCafe.cafeTime % 60 == 0:
+            # print(f'{customer.name} is currently walking leaving')
         # print(f'{customer.name} is leaving')
         # print('............', len(customer.pixelPathLeave))
         # print('currentStepLeaving', customer.currentStepLeaving)

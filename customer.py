@@ -144,9 +144,9 @@ class Customer:
                 menuLen = len(cafeMenu.menu)
                 self.orderDishes.append(cafeMenu.menu[randint(0,menuLen-1)])
         
-        if self.orderNumber != 0:
-            print(self.orderNumber)
-            print(self.orderDishes)
+        # if self.orderNumber != 0:
+            # print(self.orderNumber)
+            # print(self.orderDishes)
 
     def leaveCafe(self):
         for i in range(len(self.path)):
